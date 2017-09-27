@@ -10,10 +10,6 @@ public class Main {
 
 		Dec_fac.exec();
 		Dec_room.exec();
-		Dec_room.exec();
-		Dec_room.exec();
-		Dec_room.exec();
-
 	}
 
 }
