@@ -26,7 +26,7 @@ http://gomafuace.seesaa.net/article/301560900.html
 
 ## githubのリポジトリからeclipseに入れる方法(プル)
 
-- 一番上(黄色の円柱があるところ、GeneticAlgo)のところで右クリック
+- 一番上(黄色の円柱があるところ、今回はGeneticAlgo)のところで右クリック
 
 - プルをクリック
 
