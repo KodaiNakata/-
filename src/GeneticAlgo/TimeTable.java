@@ -8,17 +8,17 @@ public class TimeTable {
 	private String f_Course;// コース
 	private String f_Subject;// 科目名
 	private String f_Teacher;// 担当の先生
+	private String f_ClassRoom;// 教室
 
 	/*
-	 * コンストラクタ
-	 * 0またはnullにする
+	 * コンストラクタ 0またはnull
 	 */
-	public TimeTable(){
-		f_DayOfWeek=null;
-		f_Grade=0;
-		f_Course=null;
-		f_Subject=null;
-		f_Teacher=null;
+	public TimeTable() {
+		f_DayOfWeek = null;
+		f_Grade = 0;
+		f_Course = null;
+		f_Subject = null;
+		f_Teacher = null;
 	}
 
 	/*
@@ -67,6 +67,15 @@ public class TimeTable {
 	}
 
 	/*
+	 * 教室のゲッター
+	 *
+	 * @return 教室
+	 */
+	public String getClassRoom() {
+		return f_ClassRoom;
+	}
+
+	/*
 	 * 曜日のセッター
 	 *
 	 * @param dayOfWeek 曜日
@@ -109,5 +118,14 @@ public class TimeTable {
 	 */
 	public void setTeacher(String teacher) {
 		f_Teacher = teacher;
+	}
+
+	/*
+	 * 教室のセッター
+	 *
+	 * @param class_room 教室
+	 */
+	public void setClassRoom(String class_room) {
+		f_ClassRoom = class_room;
 	}
 }
