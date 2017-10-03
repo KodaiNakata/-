@@ -12,4 +12,4 @@
 
 https://www.marineroad.com/staff-blog/16236.html
 
-http://d.hatena.ne.jp/architshin/20121129/1354165006
+http://gomafuace.seesaa.net/article/301560900.html
