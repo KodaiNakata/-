@@ -1,20 +1,20 @@
 # 遺伝的アルゴリズムを用いた教室割り当て
 
-## リポジトリの概要
+## 1.リポジトリの概要
 
 2017年の卒業研究のリポジトリとなる。
 
-## 用いるツール
+## 2.用いるツール
 
 - Eclipse (4.4LUNA)
 
-## Eclipseとgithubの連携方法
+## 3.Eclipseとgithubの連携方法
 
 https://www.marineroad.com/staff-blog/16236.html
 
 http://gomafuace.seesaa.net/article/301560900.html
 
-## パッケージ・エクスプローラーからgithubに上げる方法
+## 4.パッケージ・エクスプローラーからgithubに上げる方法
 
 - 左上の <>Code のところをクリック
 
@@ -24,7 +24,7 @@ http://gomafuace.seesaa.net/article/301560900.html
 
 - これで上がるはず・・・
 
-## githubのリポジトリからeclipseに入れる方法(プル)
+## 5.githubのリポジトリからeclipseに入れる方法(プル)
 
 - 一番上(黄色の円柱があるところ、今回はGeneticAlgo)のところで右クリック
 
@@ -32,6 +32,6 @@ http://gomafuace.seesaa.net/article/301560900.html
 
 - 更新されるはず・・・
 
-## 注意
+## ※Eclipseのエクスプローラーでの注意
 
-- ソースコードを新規追加するのはパッケージエクスプローラーで、EclipseのGitリポジトリーではデバッグや新規追加はできないが、ソースコードの中身は変更できる。
+- ソースコードを新規追加やデバッグするのはパッケージエクスプローラーで、EclipseのGitリポジトリーではデバッグや新規追加はできないが、ソースコードの中身は変更できる。
