@@ -6,7 +6,7 @@
 
 ## 用いるツール
 
-- Eclipse
+- Eclipse (4.4LUNA)
 
 ## Eclipseとgithubの連携方法
 
