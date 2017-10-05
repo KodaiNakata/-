@@ -3,6 +3,7 @@ package GeneticAlgo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 // 時間割を決めるためのクラス
 public class Decide_faculty implements iTimeTable {
@@ -10,8 +11,10 @@ public class Decide_faculty implements iTimeTable {
 	private static StringBuffer TITLE = new StringBuffer("遺伝的アルゴリズムを用いた時間割作成");
 	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 前期の時間割
 	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 後期の時間割
+	protected ArrayList<TimeTable> f_TimeTableData1 = new ArrayList<TimeTable>();// 1次の時間割のデータ
+	protected ArrayList<TimeTable> f_TimeTableData2 = new ArrayList<TimeTable>();// 2次の時間割のデータ
+	protected ArrayList<TimeTable> f_TimeTableData3 = new ArrayList<TimeTable>();// 3次の時間割のデータ
 	private static final String RESULT_FILE_NAME = "result.csv";// 時間割作成の結果のファイルの名前
-	// private ArrayList
 	protected static int PROG_COUNT;// プログラムを実行した回数
 
 	/*
@@ -23,6 +26,66 @@ public class Decide_faculty implements iTimeTable {
 			for (int period = 0; period < MAX_PERIOD; period++) {
 				f_PreviousTimeTables[day][period] = new TimeTable();
 				f_LatterTimeTables[day][period] = new TimeTable();
+			}
+		}
+	}
+
+	/*
+	 * 前期と後期の時間割の結果の表示
+	 */
+	private void result() {
+
+		// 前期の時間割の結果
+		for (int day = 0; day < MAX_DAY; day++) {
+
+			System.out.print(TimeTable.changeValueToDay(day) + "曜日");
+			for (int period = 0; period < MAX_PERIOD; period++) {
+
+				System.out.println((period + 1) + "限目");
+
+				for (int number = 0; number < f_PreviousTimeTables[day][period]
+						.getClassesOfGradesSize(); number++) {
+
+					System.out.print(f_PreviousTimeTables[day][period]
+							.getGrade() + "年,");// 学年
+					System.out.print(f_PreviousTimeTables[day][period]
+							.getClassesOfGrades(number).getCourseOrClass()
+							+ ",");// コース・クラス
+					System.out.print(f_PreviousTimeTables[day][period]
+							.getClassesOfGrades(number).getSubject() + ",");// 学年
+					System.out.print(f_PreviousTimeTables[day][period]
+							.getClassesOfGrades(number).getTeacher() + ",");// 担当者
+					System.out.println(f_PreviousTimeTables[day][period]
+							.getClassesOfGrades(number).getClassRoom());// 教室
+
+				}
+			}
+		}
+
+		// 後期の時間割の結果
+		for (int day = 0; day < MAX_DAY; day++) {
+
+			System.out.print(TimeTable.changeValueToDay(day) + "曜日");
+
+			for (int period = 0; period < MAX_PERIOD; period++) {
+
+				System.out.println((period + 1) + "限目");
+
+				for (int number = 0; number < f_LatterTimeTables[day][period]
+						.getClassesOfGradesSize(); number++) {
+
+					System.out.print(f_LatterTimeTables[day][period].getGrade()
+							+ "年,");// 学年
+					System.out.print(f_LatterTimeTables[day][period]
+							.getClassesOfGrades(number).getCourseOrClass()
+							+ ",");// コース・クラス
+					System.out.print(f_LatterTimeTables[day][period]
+							.getClassesOfGrades(number).getSubject() + ",");// 学年
+					System.out.print(f_LatterTimeTables[day][period]
+							.getClassesOfGrades(number).getTeacher() + ",");// 担当者
+					System.out.println(f_LatterTimeTables[day][period]
+							.getClassesOfGrades(number).getClassRoom());// 教室
+				}
 			}
 		}
 	}
@@ -41,19 +104,20 @@ public class Decide_faculty implements iTimeTable {
 
 		// 前期の時間割作成の結果を表示
 		for (int day = 0; day < MAX_DAY; day++) {
+
 			for (int period = 0; period < MAX_PERIOD; period++) {
 
 				for (int number = 0; number < f_PreviousTimeTables[day][period]
-						.getClassOfGrade().getCoursesOrClassesSize(); number++) {
+						.getClassesOfGradesSize(); number++) {
 					output.print(f_PreviousTimeTables[day][period]
-							.getClassOfGrade().getCoursesOrClasses(number)
+							.getClassesOfGrades(number).getCourseOrClass()
 							+ ",");
 					output.print(f_PreviousTimeTables[day][period]
-							.getClassOfGrade().getSubjects(number) + ",");
+							.getClassesOfGrades(number).getSubject() + ",");
 					output.print(f_PreviousTimeTables[day][period]
-							.getClassOfGrade().getTeacher(number) + ",");
+							.getClassesOfGrades(number).getTeacher() + ",");
 					output.print(f_PreviousTimeTables[day][period]
-							.getClassOfGrade().getClassRooms(number) + ",");
+							.getClassesOfGrades(number).getClassRoom() + ",");
 				}
 			}
 			output.println();
@@ -103,18 +167,20 @@ public class Decide_faculty implements iTimeTable {
 							timeTableData.setDayOfWeek(strData[0]);// 曜日
 							timeTableData.setPeriod(Integer
 									.parseInt(strData[1]));// 限
-							timeTableData.getClassOfGrade().addNumbers(
+							timeTableData.getClassOfGrade().setNumber(
 									Integer.parseInt(strData[2]));// コマ数
 							timeTableData
 									.setGrade(Integer.parseInt(strData[3]));// 学年
 							timeTableData.getClassOfGrade()
 									.setPreviousOrLatter(strData[4]);// 前期後期
-							timeTableData.getClassOfGrade().addSubjects(
+							timeTableData.getClassOfGrade().setSubject(
 									strData[5]);// 科目名
-							timeTableData.getClassOfGrade().addTeacher(
+							timeTableData.getClassOfGrade().setTeacher(
 									strData[6]);// 担当教員
-							timeTableData.getClassOfGrade().addClassRooms(
+							timeTableData.getClassOfGrade().setClassRoom(
 									strData[7]);// 教室
+
+							f_TimeTableData1.add(timeTableData);// 1次の時間割の動的配列に追加
 						}
 					}
 				}
@@ -149,24 +215,23 @@ public class Decide_faculty implements iTimeTable {
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						// 曜日が空白でないとき
-						if (strData[0] != null) {
-							timeTableData.setDayOfWeek(strData[0]);// 曜日
-							timeTableData.setPeriod(Integer
-									.parseInt(strData[1]));// 限
-							timeTableData.getClassOfGrade().addNumbers(
-									Integer.parseInt(strData[2]));// コマ数
-							timeTableData
-									.setGrade(Integer.parseInt(strData[3]));// 学年
-							timeTableData.getClassOfGrade()
-									.setPreviousOrLatter(strData[4]);// 前期後期
-							timeTableData.getClassOfGrade().addSubjects(
-									strData[5]);// 科目名
-							timeTableData.getClassOfGrade().addTeacher(
-									strData[6]);// 担当教員
-							timeTableData.getClassOfGrade().addClassRooms(
-									strData[7]);// 教室
-						}
+//						System.out.print(cols+"行目\t");
+//						System.out.print(strData[0]);
+//						System.out.println(strData[1] + "限目");
+						timeTableData.setDayOfWeek(strData[0]);// 曜日
+						timeTableData.setPeriod(Integer.parseInt(strData[1]));// 限
+						timeTableData.getClassOfGrade().setNumber(
+								Integer.parseInt(strData[2]));// コマ数
+						timeTableData.setGrade(Integer.parseInt(strData[3]));// 学年
+						timeTableData.getClassOfGrade().setPreviousOrLatter(
+								strData[4]);// 前期後期
+						timeTableData.getClassOfGrade().setSubject(strData[5]);// 科目名
+						timeTableData.getClassOfGrade().setTeacher(strData[6]);// 担当教員
+						timeTableData.getClassOfGrade()
+								.setClassRoom(strData[7]);// 教室
+
+						f_TimeTableData2.add(timeTableData);// 2次の時間割の動的配列に追加
+
 					}
 				}
 			}
@@ -200,19 +265,15 @@ public class Decide_faculty implements iTimeTable {
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						// コマ数が空白でないとき
-						if (strData[0] != null) {
-							timeTableData.getClassOfGrade().addNumbers(
-									Integer.parseInt(strData[0]));// コマ数
-							timeTableData
-									.setGrade(Integer.parseInt(strData[1]));// 学年
-							timeTableData.getClassOfGrade()
-									.setPreviousOrLatter(strData[2]);// 前期後期
-							timeTableData.getClassOfGrade().addSubjects(
-									strData[3]);// 科目名
-							timeTableData.getClassOfGrade().addTeacher(
-									strData[4]);// 担当教員
-						}
+						timeTableData.getClassOfGrade().setNumber(
+								Integer.parseInt(strData[0]));// コマ数
+						timeTableData.setGrade(Integer.parseInt(strData[1]));// 学年
+						timeTableData.getClassOfGrade().setPreviousOrLatter(
+								strData[2]);// 前期後期
+						timeTableData.getClassOfGrade().setSubject(strData[3]);// 科目名
+						timeTableData.getClassOfGrade().setTeacher(strData[4]);// 担当教員
+
+						f_TimeTableData3.add(timeTableData);// 3次の時間割の動的配列に追加
 					}
 				}
 			}
@@ -278,7 +339,7 @@ public class Decide_faculty implements iTimeTable {
 	 */
 	private boolean isFinishedProg() {
 		readFile();// ファイルを読み込む
-		// result();// 結果の表示
+		result();// 結果の表示
 		return true;
 	}
 

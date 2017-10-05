@@ -1,5 +1,7 @@
 package GeneticAlgo;
 
+import java.util.ArrayList;
+
 // 時間割のクラス
 public class TimeTable {
 
@@ -7,7 +9,8 @@ public class TimeTable {
 	private int f_Period;// 限目
 	private int f_Grade;// 学年
 	private ClassOfGrade f_ClassOfGrade;// 学年ごとの授業
-
+	private ArrayList<ClassOfGrade> f_ClassesOfGrades=new ArrayList<ClassOfGrade>();
+	
 	/*
 	 * コンストラクタ 0またはnull
 	 */
@@ -25,7 +28,8 @@ public class TimeTable {
 	 *
 	 * @return 曜日を数値に変えたもの
 	 */
-	public int changeValueDay(String day_of_week) {
+	public static int changeDayToValue(String day_of_week) {
+
 		switch (day_of_week) {
 		case "月":
 			return 0;
@@ -50,9 +54,50 @@ public class TimeTable {
 		}
 	}
 
+	/*
+	 * 値を曜日に変える
+	 *
+	 * @param value 値
+	 *
+	 * @return 値を曜日に変えたもの
+	 */
+	public static String changeValueToDay(int value){
+
+		switch(value){
+
+		case 0:
+			return "月";
+
+		case 1:
+			return "火";
+
+		case 2:
+			return "水";
+
+		case 3:
+			return "木";
+
+		case 4:
+			return "金";
+
+		case 5:
+			return "土";
+		}
+		return "不明";
+	}
 	// -------------------------------//
 	// ------------ゲッター-----------//
 	// -------------------------------//
+	/*
+	 * 学年ごとの授業のサイズのゲッター
+	 * 
+	 * @return 学年ごとの授業の動的配列のサイズ
+	 */
+	public int getClassesOfGradesSize(){
+		return f_ClassesOfGrades.size();
+	}
+	
+	
 	/*
 	 * 曜日のゲッター
 	 *
@@ -87,6 +132,14 @@ public class TimeTable {
 		return f_ClassOfGrade;
 	}
 
+	/*
+	 * 学年ごとの授業のゲッター(動的配列)
+	 * 
+	 * @param number 何番目
+	 */
+	public ClassOfGrade getClassesOfGrades(int number){
+		return f_ClassesOfGrades.get(number);
+	}
 	// -------------------------------//
 	// ------------セッター-----------//
 	// -------------------------------//
@@ -124,5 +177,16 @@ public class TimeTable {
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
 		f_ClassOfGrade = class_of_grade;
+	}
+	
+	/*
+	 * 学年ごとの授業のセッター(動的配列)
+	 * 
+	 * @param number 何番目
+	 * 
+	 * @param class_of_grade 学年ごとの授業
+	 */
+	public void setClassesOfGrades(int number,ClassOfGrade class_of_grade){
+		f_ClassesOfGrades.set(number, class_of_grade);
 	}
 }
