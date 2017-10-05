@@ -16,5 +16,5 @@ public interface iTimeTable {
 
 	public final int ORDER3_COLS = 113;// 3次のデータの行
 	public final int ORDER3_DATA = 5;// 3次のデータの数
-	public final String FILE3_NAME = "room_3.csv";// 3次のファイルの名前
+	public final String FILE3_NAME = "faculty_3.csv";// 3次のファイルの名前
 }
