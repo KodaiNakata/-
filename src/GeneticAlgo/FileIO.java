@@ -9,7 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-// ファイルの入出力関係のクラス
+/*
+ *  ファイルの入出力関係のクラス
+ *  @author Nakata
+ */
 public class FileIO {
 
 	/*

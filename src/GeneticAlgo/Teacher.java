@@ -2,7 +2,10 @@ package GeneticAlgo;
 
 import java.util.ArrayList;
 
-// 先生のクラス
+/*
+ *  先生のクラス
+ *  @author Nakata
+ */
 public class Teacher {
 
 	private String f_Name;// 氏名
