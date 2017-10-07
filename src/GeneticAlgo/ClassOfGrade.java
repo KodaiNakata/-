@@ -1,18 +1,23 @@
 package GeneticAlgo;
 
 
-// 学年ごとの授業のクラス
+/*
+ *  学年ごとの授業のクラス
+ *  @author Nakata
+ */
 public class ClassOfGrade {
 
+	private String f_DayOfWeek;// 曜日
+	private int f_Period;// 限目
+	private int f_Number;// コマ数
 	private int f_Grade;// 学年
 	private String f_PreviousOrLatter;// 前期後期
-	private int f_Number;// コマ数
-	private String f_CourseOrClass;// コース・クラス
 	private String f_Subject;// 科目
 	private String f_Teacher;// 先生の名前
+	private String f_CourseOrClass;// コース・クラス
+//	private String f_ClassRoom;// 教室
 	private Teacher f_Teachers;// 担当の先生(Teacherクラス)
-	private String f_ClassRoom;// 教室
-	
+
 //	// 動的配列
 //	private ArrayList<Intger> f_Grades=new ArrayList<Integer>();
 //	private ArrayList<Integer> f_Numbers = new ArrayList<Integer>();// コマ数
@@ -26,6 +31,8 @@ public class ClassOfGrade {
 	 * コンストラクタ
 	 */
 	public ClassOfGrade() {
+		f_DayOfWeek=null;
+		f_Period=0;
 		f_Grade = 0;
 		f_PreviousOrLatter = null;
 		f_Number = 0;
@@ -33,21 +40,37 @@ public class ClassOfGrade {
 		f_Subject = null;
 		f_Teacher=null;
 		f_Teachers = null;
-		f_ClassRoom = null;
+//		f_ClassRoom = null;
 	}
 
 	// ----------------------------//
 	// ----------ゲッター関数------//
 	// ----------------------------//
 	/*
+	 * 曜日のゲッター
+	 * @return 曜日
+	 */
+	public String getDayOfWeek(){
+		return f_DayOfWeek;
+	}
+
+	/*
+	 * 限目のゲッター
+	 * @return 限目
+	 */
+	public int getPeriod(){
+		return f_Period;
+	}
+
+	/*
 	 * コマ数のゲッター
-	 * 
+	 *
 	 * @return コマ数
 	 */
 	public int getNumber(){
 		return f_Number;
 	}
-	
+
 //	/*
 //	 * コマ数のゲッター
 //	 *
@@ -88,13 +111,13 @@ public class ClassOfGrade {
 
 	/*
 	 * コース・クラスのゲッター
-	 * 
+	 *
 	 * @return コースまたはクラス
 	 */
 	public String getCourseOrClass(){
 		return f_CourseOrClass;
 	}
-	
+
 //	/*
 //	 * コースまたはクラスのゲッター
 //	 *
@@ -117,13 +140,13 @@ public class ClassOfGrade {
 
 	/*
 	 * 科目のゲッター
-	 * 
+	 *
 	 * @return 科目名
 	 */
 	public String getSubject(){
 		return f_Subject;
 	}
-	
+
 //	/*
 //	 * 科目名のゲッター
 //	 *
@@ -170,7 +193,7 @@ public class ClassOfGrade {
 //	public int getTeacherSize(){
 //		return f_Teacher.size();
 //	}
-	
+
 //	/*
 //	 * Teacherクラスの先生のゲッター
 //	 *
@@ -211,14 +234,14 @@ public class ClassOfGrade {
 //		return f_ClassRooms.size();
 //	}
 
-	/*
-	 * 教室のゲッター
-	 * 
-	 * @return 教室
-	 */
-	public String getClassRoom(){
-		return f_ClassRoom;
-	}
+//	/*
+//	 * 教室のゲッター
+//	 *
+//	 * @return 教室
+//	 */
+//	public String getClassRoom(){
+//		return f_ClassRoom;
+//	}
 	// ----------------------------//
 	// ----------セッター関数------//
 	// ----------------------------//
@@ -234,14 +257,30 @@ public class ClassOfGrade {
 //	}
 
 	/*
+	 * 曜日のセッター
+	 * @param day_of_week 曜日
+	 */
+	public void setDayOfWeek(String day_of_week){
+		f_DayOfWeek=day_of_week;
+	}
+
+	/*
+	 * 限目のセッター
+	 * @param period 限目
+	 */
+	public void setPeriod(int period){
+		f_Period=period;
+	}
+
+	/*
 	 * コマ数のセッター
-	 * 
+	 *
 	 * @param number コマ数
 	 */
 	public void setNumber(int number){
 		f_Number=number;
 	}
-	
+
 	/*
 	 * 学年のセッター
 	 *
@@ -273,13 +312,13 @@ public class ClassOfGrade {
 
 	/*
 	 * コースまたはクラスのセッター
-	 * 
+	 *
 	 * @param course_or_class コースまたはクラス
 	 */
 	public void setCourseOrClass(String course_or_class){
 		f_CourseOrClass=course_or_class;
 	}
-	
+
 //	/*
 //	 * 科目名のセッター
 //	 *
@@ -293,13 +332,13 @@ public class ClassOfGrade {
 
 	/*
 	 * 科目名のセッター
-	 * 
-	 * @param subject 
+	 *
+	 * @param subject
 	 */
 	public void setSubject(String subject){
 		f_Subject=subject;
 	}
-	
+
 //	/*
 //	 * 先生のセッター
 //	 *
@@ -311,16 +350,16 @@ public class ClassOfGrade {
 //	public void setTeacher(int number,String teacher){
 //		f_Teacher.set(number,teacher);
 //	}
-	
+
 	/*
 	 * 先生のセッター
-	 * 
+	 *
 	 * @param teacher 先生
 	 */
 	public void setTeacher(String teacher){
 		f_Teacher=teacher;
 	}
-	
+
 //	/*
 //	 * Teacherクラスの先生のセッター
 //	 *
@@ -332,15 +371,15 @@ public class ClassOfGrade {
 //		f_Teachers.set(number, teacher);
 //	}
 
-	/*
-	 * 教室のセッター
-	 * 
-	 * @param class_room 教室
-	 */
-	public void setClassRoom(String class_room){
-		f_ClassRoom=class_room;
-	}
-	
+//	/*
+//	 * 教室のセッター
+//	 *
+//	 * @param class_room 教室
+//	 */
+//	public void setClassRoom(String class_room){
+//		f_ClassRoom=class_room;
+//	}
+
 //	/*
 //	 * 教室のセッター
 //	 *

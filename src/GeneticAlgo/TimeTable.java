@@ -2,23 +2,28 @@ package GeneticAlgo;
 
 import java.util.ArrayList;
 
-// 時間割のクラス
+/*
+ *  時間割のクラス
+ *  @author Nakata
+ */
 public class TimeTable {
 
 	private String f_DayOfWeek;// 曜日
 	private int f_Period;// 限目
-	private int f_Grade;// 学年
+//	private int f_Grade;// 学年
 	private ClassOfGrade f_ClassOfGrade;// 学年ごとの授業
+	private String f_ClassRoom;// 教室
 	private ArrayList<ClassOfGrade> f_ClassesOfGrades=new ArrayList<ClassOfGrade>();
-	
+
 	/*
 	 * コンストラクタ 0またはnull
 	 */
 	public TimeTable() {
 		f_DayOfWeek = null;
 		f_Period = 0;
-		f_Grade = 0;
+//		f_Grade = 0;
 		f_ClassOfGrade = new ClassOfGrade();
+		f_ClassRoom=null;
 	}
 
 	/*
@@ -90,14 +95,14 @@ public class TimeTable {
 	// -------------------------------//
 	/*
 	 * 学年ごとの授業のサイズのゲッター
-	 * 
+	 *
 	 * @return 学年ごとの授業の動的配列のサイズ
 	 */
 	public int getClassesOfGradesSize(){
 		return f_ClassesOfGrades.size();
 	}
-	
-	
+
+
 	/*
 	 * 曜日のゲッター
 	 *
@@ -116,12 +121,12 @@ public class TimeTable {
 		return f_Period;
 	}
 
-	/*
-	 * 学年のゲッター
-	 */
-	public int getGrade() {
-		return f_Grade;
-	}
+//	/*
+//	 * 学年のゲッター
+//	 */
+//	public int getGrade() {
+//		return f_Grade;
+//	}
 
 	/*
 	 * 学年ごとの授業のゲッター
@@ -134,11 +139,21 @@ public class TimeTable {
 
 	/*
 	 * 学年ごとの授業のゲッター(動的配列)
-	 * 
+	 *
 	 * @param number 何番目
+	 *
+	 * @return 学年ごとの授業(動的配列)
 	 */
 	public ClassOfGrade getClassesOfGrades(int number){
 		return f_ClassesOfGrades.get(number);
+	}
+
+	/*
+	 * 教室のゲッター
+	 * @return 教室
+	 */
+	public String getClassRoom(){
+		return f_ClassRoom;
 	}
 	// -------------------------------//
 	// ------------セッター-----------//
@@ -161,14 +176,14 @@ public class TimeTable {
 		f_Period = period;
 	}
 
-	/*
-	 * 学年のセッター
-	 *
-	 * @param grade 学年
-	 */
-	public void setGrade(int grade) {
-		f_Grade = grade;
-	}
+//	/*
+//	 * 学年のセッター
+//	 *
+//	 * @param grade 学年
+//	 */
+//	public void setGrade(int grade) {
+//		f_Grade = grade;
+//	}
 
 	/*
 	 * 学年ごとの授業のセッター
@@ -178,15 +193,24 @@ public class TimeTable {
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
 		f_ClassOfGrade = class_of_grade;
 	}
-	
+
 	/*
 	 * 学年ごとの授業のセッター(動的配列)
-	 * 
+	 *
 	 * @param number 何番目
-	 * 
+	 *
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void setClassesOfGrades(int number,ClassOfGrade class_of_grade){
 		f_ClassesOfGrades.set(number, class_of_grade);
+	}
+
+	/*
+	 * 教室のセッター
+	 *
+	 * @param class_room 教室
+	 */
+	public void setClassRoom(String class_room){
+		f_ClassRoom=class_room;
 	}
 }
