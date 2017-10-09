@@ -3,27 +3,27 @@ package GeneticAlgo;
 import java.util.ArrayList;
 
 /*
- *  æ¶‚ÌƒNƒ‰ƒX
+ *  å…ˆç”Ÿã®ã‚¯ãƒ©ã‚¹
  *  @author Nakata
  */
 public class Teacher {
 
-	private String f_Name;// –¼
-	private int f_NumOfBasicSeminar1;// Šî‘bƒ[ƒ~1‚ğ‚Á‚Ä‚¢‚é‚©
-	private int f_NumOfBasicSeminar2;// Šî‘bƒ[ƒ~2‚ğ‚Á‚Ä‚¢‚é‚©
-	private int f_HasEngineeringDesignExperience;// ƒGƒ“ƒWƒjƒAƒŠƒ“ƒOƒfƒUƒCƒ“ÀŒ±‚ğ‚Á‚Ä‚¢‚é‚©
-	private String f_ThemeOfElectricElectronicTraining;// “d‹C“dqHŠwÀK‚Ì‰½‚Ìƒe[ƒ}‚©
-	private int f_NumOfElectricElectronicTraining;// “d‹C“dqHŠwÀK‚ÌƒRƒ}”
-	private String f_ThemeOfElectricElectronicExperiment;// “d‹C“dqHŠwÀŒ±‚Ì‰½‚Ìƒe[ƒ}‚©
-	private int f_NumOfElectricElectronicExperiment;// “d‹C“dqHŠwÀŒ±‚ÌƒRƒ}”
-	private String f_ThemeOfEleInfoCommunicationExperiment;// ƒGƒŒîÀŒ±‚Ì‰½‚Ìƒe[ƒ}‚©
-	private String f_ThemeOfEnergyEnvironmentExperiment;// ƒGƒlŠÂÀŒ±‚Ì‰½‚Ìƒe[ƒ}‚©
-	private int f_NumOfGraduateStudySeminar;// ‘²Œ¤ƒ[ƒ~‚ÌƒRƒ}”
-	private ArrayList<String> f_ClassSubjects=new ArrayList<String>();// ö‹Æ‰È–Ú‚Ì“®“I”z—ñ
+	private String f_Name;// æ°å
+	private int f_NumOfBasicSeminar1;// åŸºç¤ã‚¼ãƒŸ1ã‚’æŒã£ã¦ã„ã‚‹ã‹
+	private int f_NumOfBasicSeminar2;// åŸºç¤ã‚¼ãƒŸ2ã‚’æŒã£ã¦ã„ã‚‹ã‹
+	private int f_HasEngineeringDesignExperience;// ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ãƒªãƒ³ã‚°ãƒ‡ã‚¶ã‚¤ãƒ³å®Ÿé¨“ã‚’æŒã£ã¦ã„ã‚‹ã‹
+	private String f_ThemeOfElectricElectronicTraining;// é›»æ°—é›»å­å·¥å­¦å®Ÿç¿’ã®ä½•ã®ãƒ†ãƒ¼ãƒã‹
+	private int f_NumOfElectricElectronicTraining;// é›»æ°—é›»å­å·¥å­¦å®Ÿç¿’ã®ã‚³ãƒæ•°
+	private String f_ThemeOfElectricElectronicExperiment;// é›»æ°—é›»å­å·¥å­¦å®Ÿé¨“ã®ä½•ã®ãƒ†ãƒ¼ãƒã‹
+	private int f_NumOfElectricElectronicExperiment;// é›»æ°—é›»å­å·¥å­¦å®Ÿé¨“ã®ã‚³ãƒæ•°
+	private String f_ThemeOfEleInfoCommunicationExperiment;// ã‚¨ãƒ¬æƒ…å®Ÿé¨“ã®ä½•ã®ãƒ†ãƒ¼ãƒã‹
+	private String f_ThemeOfEnergyEnvironmentExperiment;// ã‚¨ãƒç’°å®Ÿé¨“ã®ä½•ã®ãƒ†ãƒ¼ãƒã‹
+	private int f_NumOfGraduateStudySeminar;// å’ç ”ã‚¼ãƒŸã®ã‚³ãƒæ•°
+	private ArrayList<String> f_ClassSubjects=new ArrayList<String>();// æˆæ¥­ç§‘ç›®ã®å‹•çš„é…åˆ—
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-	 * null‚Ü‚½‚Í0‚É‚·‚é
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * nullã¾ãŸã¯0ã«ã™ã‚‹
 	 */
 	public Teacher(){
 		f_Name=null;
@@ -40,32 +40,32 @@ public class Teacher {
 	}
 
 	/*
-	 * –¼‚ÌƒQƒbƒ^[
-	 * @return –¼
+	 * æ°åã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * @return æ°å
 	 */
 	public String getName(){
 		return f_Name;
 	}
 
 	/*
-	 * –¼‚ÌƒZƒbƒ^[
-	 * @param name –¼
+	 * æ°åã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * @param name æ°å
 	 */
 	public void setName(String name){
 		f_Name=name;
 	}
 
 	/*
-	 * Šî‘bƒ[ƒ~1‚ÌƒRƒ}”‚ÌƒQƒbƒ^[
-	 * @return Šî‘bƒ[ƒ~1‚ÌƒRƒ}”
+	 * åŸºç¤ã‚¼ãƒŸ1ã®ã‚³ãƒæ•°ã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * @return åŸºç¤ã‚¼ãƒŸ1ã®ã‚³ãƒæ•°
 	 */
 	public int getNumOfBasicSeminar1(){
 		return f_NumOfBasicSeminar1;
 	}
 
 	/*
-	 * Šî‘bƒ[ƒ~1‚ÌƒRƒ}”‚ÌƒZƒbƒ^[
-	 * @param num ƒRƒ}”
+	 * åŸºç¤ã‚¼ãƒŸ1ã®ã‚³ãƒæ•°ã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * @param num ã‚³ãƒæ•°
 	 */
 	public void setNumOfBasicSeminar1(int num){
 		f_NumOfBasicSeminar1=num;

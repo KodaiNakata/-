@@ -6,188 +6,653 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /*
- * ‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ğŒˆ‚ß‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ã‚’æ±ºã‚ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * @author Nakata
  */
 public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
-	protected ArrayList<TimeTable> f_TimeTableData1 = new ArrayList<TimeTable>();// 1Ÿ‚ÌŠÔŠ„‚Ìƒf[ƒ^
-	protected ArrayList<TimeTable> f_TimeTableData2 = new ArrayList<TimeTable>();// 2Ÿ‚ÌŠÔŠ„‚Ìƒf[ƒ^
-	protected ArrayList<TimeTable> f_TimeTableData3 = new ArrayList<TimeTable>();// 3Ÿ‚ÌŠÔŠ„‚Ìƒf[ƒ^
+	protected ArrayList<TimeTable> f_TimeTableData1 = new ArrayList<TimeTable>();// 1æ¬¡ã®æ™‚é–“å‰²ã®ãƒ‡ãƒ¼ã‚¿
+	protected ArrayList<TimeTable> f_TimeTableData2 = new ArrayList<TimeTable>();// 2æ¬¡ã®æ™‚é–“å‰²ã®ãƒ‡ãƒ¼ã‚¿
+	protected ArrayList<TimeTable> f_TimeTableData3 = new ArrayList<TimeTable>();// 3æ¬¡ã®æ™‚é–“å‰²ã®ãƒ‡ãƒ¼ã‚¿
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	public Decide_roomAndDayAndPeriod() {
 		super();
 	}
 
 	/*
-	 * 3Ÿ‚ÌŠÔŠ„‚Ìì¬
+	 * 3æ¬¡ã®æ™‚é–“å‰²ã®ä½œæˆ
 	 */
-	private void makeTimeTable3(){
-
+	private void makeTimeTable3() {
+		setClassOfGrade3ToTimeTable3();// å­¦å¹´ã”ã¨ã®æˆæ¥­ã‚’æ™‚é–“å‰²ã«ã‚»ãƒƒãƒˆã™ã‚‹
 	}
 
 	/*
-	 * ƒvƒƒOƒ‰ƒ€‚ğÀs‚·‚é
+	 * å­¦å¹´ã”ã¨ã®æˆæ¥­ã‚’æ™‚é–“å‰²ã«ã‚»ãƒƒãƒˆã™ã‚‹
+	 */
+	private void setClassOfGrade3ToTimeTable3() {
+		
+
+		for (int number = 0; number < f_ClassOfGradeData3.size(); number++) {
+			TimeTable timeTableData = new TimeTable();
+			timeTableData.setClassOfGrade(f_ClassOfGradeData3.get(number));
+			f_TimeTableData3.add(timeTableData);
+//			f_TimeTableData3.get(number).setClassOfGrade(f_ClassOfGradeData3.get(number));
+
+			System.out.print(f_TimeTableData3.get(number).getClassOfGrade().getGrade()+"å¹´");
+			System.out.println(f_TimeTableData3.get(number).getClassOfGrade().getTeacher()+"å…ˆç”Ÿ");
+			System.out.println(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()+"ã‚¯ãƒ©ã‚¹");
+			// é‡è¤‡ãŒã‚ã‚‹é™ã‚Šç¹°ã‚Šè¿”ã™
+			do {
+
+				makeFirstTimeTable3(number);// æœ€åˆã®3æ¬¡ã®æ™‚é–“å‰²ã‚’æ±ºã‚ã‚‹
+			} while (checkDuplication());
+		}
+	}
+
+	/*
+	 * æœ€åˆã®3æ¬¡ã®æ™‚é–“å‰²ã‚’æ±ºã‚ã‚‹
+	 *
+	 * @param number ç•ªç›®
+	 */
+	private void makeFirstTimeTable3(int number) {
+		int randomDay = Calculation.getRnd(TimeTable.changeDayToValue("æœˆ"), TimeTable.changeDayToValue("åœŸ"));// æ›œæ—¥ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºå®š
+		int randomPeriod = Calculation.getRnd(1, 5);// é™ç›®ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºå®š
+		int randomClassRoom=Calculation.getRnd(TimeTable.changeRoomToValue("31-202"), TimeTable.changeRoomToValue("31-803"));// æ•™å®¤ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«æ±ºå®š
+		f_TimeTableData3.get(number).setDayOfWeek(TimeTable.changeValueToDay(randomDay));
+		f_TimeTableData3.get(number).setPeriod(randomPeriod);
+		f_TimeTableData3.get(number).setClassRoom(TimeTable.changeValueToRoom(randomClassRoom));
+	}
+
+	/*
+	 * é‡è¤‡ãŒãªã„ã‹ã®ãƒã‚§ãƒƒã‚¯
+	 *
+	 * @return true é‡è¤‡ã‚ã‚Š
+	 *
+	 * @return false é‡è¤‡ãªã—
+	 */
+	private boolean checkDuplication() {
+
+		for (int number = 0; number < f_TimeTableData3.size(); number++) {
+
+			// 1æ¬¡ã®æ™‚é–“å‰²ã¨é‡è¤‡ã™ã‚‹ã¨ã
+			if (checkDuplication1(number)) {
+				return true;
+			}
+
+			// 2æ¬¡ã®æ™‚é–“å‰²ã¨é‡è¤‡ã™ã‚‹ã¨ã
+			if (checkDuplication2(number)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/*
+	 * 1æ¬¡ã®æ™‚é–“å‰²ã¨é‡è¤‡ãŒãªã„ã‹ã®ãƒã‚§ãƒƒã‚¯
+	 *
+	 * @return true é‡è¤‡ã‚ã‚Š
+	 *
+	 * @return false é‡è¤‡ãªã—
+	 */
+	private boolean checkDuplication1(int number) {
+
+		for (int number1 = 0; number1 < f_TimeTableData1.size(); number1++) {
+
+			// åŒã˜æ›œæ—¥ã®ã¨ã
+			if (f_TimeTableData1.get(number1).getDayOfWeek()
+					.equals(f_TimeTableData3.get(number).getDayOfWeek())) {
+
+				// åŒã˜å‰æœŸãƒ»å¾ŒæœŸã®ã¨ã
+				if (f_TimeTableData1.get(number1).getClassOfGrade().getPreviousOrLatter()
+						.equals(f_TimeTableData3.get(number).getClassOfGrade().getPreviousOrLatter())) {
+
+					// åŒã˜å­¦å¹´ã®ã¨ã
+					if (f_TimeTableData1.get(number1).getClassOfGrade().getGrade() == f_TimeTableData3.get(number)
+							.getClassOfGrade().getGrade()) {
+
+						// åŒã˜é™ç›®ã®ã¨ã
+						if (f_TimeTableData1.get(number1).getPeriod() == f_TimeTableData3.get(number).getPeriod()) {
+
+							// åŒã˜å…ˆç”Ÿã®ã¨ã
+							if (f_TimeTableData1.get(number1).getClassOfGrade().getTeacher()
+									.equals(f_TimeTableData3.get(number).getClassOfGrade().getTeacher())) {
+								return true;
+							}
+
+							// åŒã˜æ•™å®¤ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassRoom()
+									.equals(f_TimeTableData3.get(number).getClassRoom())) {
+								return true;
+							}
+
+							// åŒã˜ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()
+									==(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass())) {
+								return true;
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="ab") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()==("a")) {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="b") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="å¶æ•°") {
+									return true;
+								}
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="bc") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="b") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="c") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="å¶æ•°") {
+									return true;
+								}
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+									|| f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()
+									=="å¶æ•°") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="a") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="b") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒcã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="c") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="ab") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="bc") {
+									return true;
+								}
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="a") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="ab") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="å¶æ•°") {
+									return true;
+								}
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="b") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã¾ãŸã¯bcã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="ab"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="bc") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="å¶æ•°") {
+									return true;
+								}
+							}
+
+							// 1æ¬¡ã®æ™‚é–“å‰²ãŒcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							else if (f_TimeTableData1.get(number1).getClassOfGrade().getCourseOrClass()=="c") {
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+								if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="bc") {
+									return true;
+								}
+
+								// 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+								else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()=="å¥‡æ•°"
+										|| f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+										=="å¶æ•°") {
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/*
+	 * 2æ¬¡ã®æ™‚é–“å‰²ã¨é‡è¤‡ãŒãªã„ã‹ã®ãƒã‚§ãƒƒã‚¯
+	 *
+	 * @return true é‡è¤‡ã‚ã‚Š
+	 *
+	 * @return false é‡è¤‡ãªã—
+	 */
+	private boolean checkDuplication2(int number) {
+
+		for (int number2 = 0; number2 < f_TimeTableData2.size(); number2++) {
+
+			// åŒã˜æ›œæ—¥ã®ã¨ã
+			if (f_TimeTableData2.get(number2).getDayOfWeek()
+					.equals(f_TimeTableData3.get(number).getDayOfWeek())) {
+
+				// åŒã˜å‰æœŸãƒ»å¾ŒæœŸã®ã¨ã
+				if (f_TimeTableData2.get(number2).getClassOfGrade().getPreviousOrLatter()
+						.equals(f_TimeTableData3.get(number).getClassOfGrade().getPreviousOrLatter())) {
+
+					// åŒã˜å­¦å¹´ã®ã¨ã
+					if (f_TimeTableData2.get(number2).getClassOfGrade().getGrade() == f_TimeTableData3.get(number)
+							.getClassOfGrade().getGrade()) {
+
+						// åŒã˜é™ç›®ã®ã¨ã
+						if (f_TimeTableData2.get(number2).getPeriod() == f_TimeTableData3.get(number).getPeriod()) {
+
+							return true;
+//							// åŒã˜å…ˆç”Ÿã®ã¨ã
+//							if (f_TimeTableData2.get(number2).getClassOfGrade().getTeacher()
+//									.equals(f_TimeTableData3.get(number).getClassOfGrade().getTeacher())) {
+//								return true;
+//							}
+//
+//							// åŒã˜æ•™å®¤ã®ã¨ã
+//							else if (f_TimeTableData2.get(number2).getClassRoom()
+//									.equals(f_TimeTableData3.get(number).getClassRoom())) {
+//								return true;
+//							}
+
+//							// åŒã˜ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹ã®ã¨ã
+//							else if (f_TimeTableData2.get(number2).getClassOfGrade().getCourseOrClass()
+//									.equals(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass())) {
+//								return true;
+//							}
+
+							// // 2æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("ab"))
+							// {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("a"))
+							// {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("b")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							// return true;
+							// }
+							// }
+							//
+							// // 2æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("bc"))
+							// {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("b"))
+							// {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("c")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							// return true;
+							// }
+							// }
+							//
+							// // 2æ¬¡ã®æ™‚é–“å‰²ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("a"))
+							// {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("b")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("c")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("ab")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("bc")) {
+							// return true;
+							// }
+							// }
+							//
+							// // 2æ¬¡ã®æ™‚é–“å‰²ãŒaã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("a"))
+							// {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("ab"))
+							// {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							// return true;
+							// }
+							// }
+							//
+							// // 2æ¬¡ã®æ™‚é–“å‰²ãŒbã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("b"))
+							// {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒabã‚¯ãƒ©ã‚¹ã¾ãŸã¯bcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("ab")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("bc")) {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							// return true;
+							// }
+							// }
+							//
+							// // 2æ¬¡ã®æ™‚é–“å‰²ãŒcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData2.get(number1).getClassOfGrade().getCourseOrClass().equals("c"))
+							// {
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒbcã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("bc"))
+							// {
+							// return true;
+							// }
+							//
+							// // 3æ¬¡ã®æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ãŒå¥‡æ•°ã‚¯ãƒ©ã‚¹ã¾ãŸã¯å¶æ•°ã‚¯ãƒ©ã‚¹ã®ã¨ã
+							// else if
+							// (f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("å¥‡æ•°")
+							// || f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()
+							// .equals("å¶æ•°")) {
+							// return true;
+							// }
+							// }
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/*
+	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å®Ÿè¡Œã™ã‚‹
 	 */
 	private void executeProg() {
 		int count = 0;
 		PROG_COUNT++;
-		super.startProg();// ƒvƒƒOƒ‰ƒ€ÀsŠJn
+		super.startProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œé–‹å§‹
 
 		do {
-			System.out.println("‰ñ”F" + (count + 1) + "‰ñ–Ú");
+			System.out.println("å›æ•°ï¼š" + (count + 1) + "å›ç›®");
 
-			// ƒvƒƒOƒ‰ƒ€‚ğI‚¦‚½‚Æ‚«
+			// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚ãˆãŸã¨ã
 			if (isFinishedProg()) {
 				break;
 			}
 			count++;
 		} while (true);
-		super.finishProg();// ƒvƒƒOƒ‰ƒ€ÀsI—¹
+		super.finishProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œçµ‚äº†
 	}
 
 	/*
-	 * ƒvƒƒOƒ‰ƒ€‚ğI—¹‚µ‚½‚©
+	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†ã—ãŸã‹
 	 *
-	 * @return true:I—¹
+	 * @return true:çµ‚äº†
 	 */
 	private boolean isFinishedProg() {
-		readFacultyFile();// ’S“–Ò‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş(3Ÿ‚Ìƒtƒ@ƒCƒ‹)
-		readRoomDayPeriodFile();// ‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş(1Ÿ‚Æ2Ÿ‚Ìƒtƒ@ƒCƒ‹)
-		makeTimeTable3();// 3Ÿ‚ÌŠÔŠ„‚ğì¬
+		readFacultyFile();// æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€(3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«)
+		readRoomDayPeriodFile();// æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€(1æ¬¡ã¨2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«)
+		makeTimeTable3();// 3æ¬¡ã®æ™‚é–“å‰²ã‚’ä½œæˆ
 		return true;
 	}
 
 	/*
-	 * Às‚·‚éˆ—
+	 * çµ‚äº†
+	 */
+	public void finish() {
+		writeRoomAndDayAndPeriodFile();// æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚€
+		super.finish();
+	}
+
+	/*
+	 * å®Ÿè¡Œã™ã‚‹å‡¦ç†
 	 *
-	 * @return 0:I—¹
+	 * @return 0:çµ‚äº†
 	 */
 	public int exe() {
 
 		for (;;) {
 			switch (super.menu()) {
 			case 1:
-				super.instruction();// à–¾
+				super.instruction();// èª¬æ˜
 				break;
 			case 2:
-				executeProg();// ƒvƒƒOƒ‰ƒ€‚ğÀs
+				executeProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å®Ÿè¡Œ
 				break;
 			case 3:
-				super.finish();// I—¹
+				finish();// çµ‚äº†
 				return 0;
 			}
 		}
 	}
+
 	// --------------------------------//
-	// ----------ƒtƒ@ƒCƒ‹ŠÖŒW----------//
+	// ----------ãƒ•ã‚¡ã‚¤ãƒ«é–¢ä¿‚----------//
 	// --------------------------------//
 	/*
-	 * ‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹‚ğ‘‚«‚Ş
+	 * æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚€
 	 */
 	public void writeRoomAndDayAndPeriodFile() {
-		// writeRoomAndDayAndPeriodFile1();// 1Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ‘‚«‚Ş
-		// writeRoomAndDayAndPeriodFile2();// 2Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ‘‚«‚Ş
-		writeRoomAndDayAndPeriodFile3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ‘‚«‚Ş
+		// writeRoomAndDayAndPeriodFile1();// 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’æ›¸ãè¾¼ã‚€
+		// writeRoomAndDayAndPeriodFile2();// 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’æ›¸ãè¾¼ã‚€
+		writeRoomAndDayAndPeriodFile3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’æ›¸ãè¾¼ã‚€
 	}
 
 	/*
-	 * 1Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒf[ƒ^)‚ğ‘‚«‚Ş
+	 * 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ‡ãƒ¼ã‚¿)ã‚’æ›¸ãè¾¼ã‚€
 	 */
 	private void writeRoomAndDayAndPeriodFile1() {
 
 		// PrintWriter output;
 		// output = FileIO.writeFile(FILE1_NAME, false);
 		//
-		// System.out.println("’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹" + FACULTY3_NAME + "‚É‘‚«‚İ‚Ü‚·B");
+		// System.out.println("æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«" + FACULTY3_NAME + "ã«æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
 		//
 		// for(int number=0;number<f_TimeTableData3.size();number++){
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// —j“ú
-		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ŒÀ
+		// æ›œæ—¥
+		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// é™
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ƒRƒ}”
+		// ã‚³ãƒæ•°
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// Šw”N
+		// å­¦å¹´
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‘OŠúŒãŠú
+		// å‰æœŸå¾ŒæœŸ
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‰È–Ú–¼
+		// ç§‘ç›®å
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ’S“–‹³ˆõ
+		// æ‹…å½“æ•™å“¡
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‹³º
+		// æ•™å®¤
 		// output.println();
 		// }
 	}
 
 	/*
-	 * 2Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒf[ƒ^)‚ğ‘‚«‚Ş
+	 * 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ‡ãƒ¼ã‚¿)ã‚’æ›¸ãè¾¼ã‚€
 	 */
 	private void writeRoomAndDayAndPeriodFile2() {
 
 		// PrintWriter output;
 		// output = FileIO.writeFile(FILE2_NAME, false);
 		//
-		// System.out.println("’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹" + FACULTY3_NAME + "‚É‘‚«‚İ‚Ü‚·B");
+		// System.out.println("æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«" + FACULTY3_NAME + "ã«æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
 		//
 		// for(int number=0;number<f_TimeTableData3.size();number++){
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// —j“ú
-		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ŒÀ
+		// æ›œæ—¥
+		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// é™
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ƒRƒ}”
+		// ã‚³ãƒæ•°
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// Šw”N
+		// å­¦å¹´
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‘OŠúŒãŠú
+		// å‰æœŸå¾ŒæœŸ
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‰È–Ú–¼
+		// ç§‘ç›®å
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ’S“–‹³ˆõ
+		// æ‹…å½“æ•™å“¡
 		// output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");//
-		// ‹³º
+		// æ•™å®¤
 		// output.println();
 		// }
 	}
 
 	/*
-	 * 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒf[ƒ^)‚ğ‘‚«‚Ş
+	 * 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ‡ãƒ¼ã‚¿)ã‚’æ›¸ãè¾¼ã‚€
 	 */
 	private void writeRoomAndDayAndPeriodFile3() {
 
 		PrintWriter output;
 		output = FileIO.writeFile(FILE3_NAME, false);
 
-		System.out.println("’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹" + FACULTY3_NAME + "‚É‘‚«‚İ‚Ü‚·B");
+		System.out.println("æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«" + FILE3_NAME + "ã«æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
 
 		for (int number = 0; number < f_TimeTableData3.size(); number++) {
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// —j“ú
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ŒÀ
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ƒRƒ}”
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// Šw”N
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‘OŠúŒãŠú
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‰È–Ú–¼
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ’S“–‹³ˆõ
-			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‹³º
-			output.println();
+			output.print(f_TimeTableData3.get(number).getDayOfWeek() + ",");// æ›œæ—¥
+			output.print(f_TimeTableData3.get(number).getPeriod() + ",");// é™
+			output.print(f_TimeTableData3.get(number).getClassOfGrade().getNumber()+ ",");// ã‚³ãƒæ•°
+			output.print(f_TimeTableData3.get(number).getClassOfGrade().getGrade()+ ",");// å­¦å¹´
+			output.print(f_TimeTableData3.get(number).getClassOfGrade().getPreviousOrLatter() + ",");// å‰æœŸå¾ŒæœŸ
+			output.print(f_TimeTableData3.get(number).getClassOfGrade().getSubject() + ",");// ç§‘ç›®å
+			output.print(f_TimeTableData3.get(number).getClassOfGrade().getTeacher() + ",");// æ‹…å½“æ•™å“¡
+			output.print(f_TimeTableData3.get(number).getClassRoom()+ ",");// æ•™å®¤
+			output.println(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass());// ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹
+//			output.println();
 		}
+		
+		output.close();
+		System.out.println(FILE3_NAME + "ã¸æ›¸ãè¾¼ã¿ã¾ã—ãŸã€‚");
 	}
 
 	/*
-	 * ‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+	 * æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readRoomDayPeriodFile() {
-		readRoomDayPeriodFile1();// 1Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
-		readRoomDayPeriodFile2();// 2Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
-		// readRoomDayPeriodFile3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+		readRoomDayPeriodFile1();// 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
+		readRoomDayPeriodFile2();// 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
+		// readRoomDayPeriodFile3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	}
 
 	/*
-	 * 1Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	 * 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readRoomDayPeriodFile1() {
 
@@ -195,39 +660,33 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 		BufferedReader input = FileIO.readFile(FILE1_NAME);
 
-		TimeTable timeTableData = new TimeTable();
 
 		try {
 			String line = new String();
 
-			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 			for (int cols = 0; cols < ORDER1_COLS; cols++) {
 
-				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 				if ((line = input.readLine()) != null) {
 
-					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						// —j“ú‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+						// æ›œæ—¥ãŒç©ºç™½ã§ãªã„ã¨ã
 						if (strData[0] != null) {
-							timeTableData.setDayOfWeek(strData[0]);// —j“ú
-							timeTableData.setPeriod(Integer
-									.parseInt(strData[1]));// ŒÀ–Ú
-							timeTableData.getClassOfGrade().setNumber(
-									Integer.parseInt(strData[2]));// ƒRƒ}”
-							timeTableData.getClassOfGrade().setGrade(
-									Integer.parseInt(strData[3]));// Šw”N
-							timeTableData.getClassOfGrade()
-									.setPreviousOrLatter(strData[4]);// ‘OŠúŒãŠú
-							timeTableData.getClassOfGrade().setSubject(
-									strData[5]);// ‰È–Ú–¼
-							timeTableData.getClassOfGrade().setTeacher(
-									strData[6]);// ’S“–‹³ˆõ
-							timeTableData.setClassRoom(strData[7]);// ‹³º
+							TimeTable timeTableData = new TimeTable();
+							timeTableData.setDayOfWeek(strData[0]);// æ›œæ—¥
+							timeTableData.setPeriod(Integer.parseInt(strData[1]));// é™ç›®
+							timeTableData.getClassOfGrade().setNumber(Integer.parseInt(strData[2]));// ã‚³ãƒæ•°
+							timeTableData.getClassOfGrade().setGrade(Integer.parseInt(strData[3]));// å­¦å¹´
+							timeTableData.getClassOfGrade().setPreviousOrLatter(strData[4]);// å‰æœŸå¾ŒæœŸ
+							timeTableData.getClassOfGrade().setSubject(strData[5]);// ç§‘ç›®å
+							timeTableData.getClassOfGrade().setTeacher(strData[6]);// æ‹…å½“æ•™å“¡
+							timeTableData.setClassRoom(strData[7]);// æ•™å®¤
 
-							f_TimeTableData1.add(timeTableData);// 1Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+							f_TimeTableData1.add(timeTableData);// 1æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 						}
 					}
 				}
@@ -239,7 +698,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	}
 
 	/*
-	 * 2Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	 * 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readRoomDayPeriodFile2() {
 
@@ -247,34 +706,31 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 		BufferedReader input = FileIO.readFile(FILE2_NAME);
 
-		TimeTable timeTableData = new TimeTable();
 
 		try {
 			String line = new String();
 
-			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 			for (int cols = 0; cols < ORDER2_COLS; cols++) {
 
-				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 				if ((line = input.readLine()) != null) {
 
-					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						timeTableData.setDayOfWeek(strData[0]);// —j“ú
-						timeTableData.setPeriod(Integer.parseInt(strData[1]));// ŒÀ–Ú
-						timeTableData.getClassOfGrade().setNumber(
-								Integer.parseInt(strData[2]));// ƒRƒ}”
-						timeTableData.getClassOfGrade().setGrade(
-								Integer.parseInt(strData[3]));// Šw”N
-						timeTableData.getClassOfGrade().setPreviousOrLatter(
-								strData[4]);// ‘OŠúŒãŠú
-						timeTableData.getClassOfGrade().setSubject(strData[5]);// ‰È–Ú–¼
-						timeTableData.getClassOfGrade().setTeacher(strData[6]);// ’S“–‹³ˆõ
-						timeTableData.setClassRoom(strData[7]);// ‹³º
+						TimeTable timeTableData = new TimeTable();
+						timeTableData.setDayOfWeek(strData[0]);// æ›œæ—¥
+						timeTableData.setPeriod(Integer.parseInt(strData[1]));// é™ç›®
+						timeTableData.getClassOfGrade().setNumber(Integer.parseInt(strData[2]));// ã‚³ãƒæ•°
+						timeTableData.getClassOfGrade().setGrade(Integer.parseInt(strData[3]));// å­¦å¹´
+						timeTableData.getClassOfGrade().setPreviousOrLatter(strData[4]);// å‰æœŸå¾ŒæœŸ
+						timeTableData.getClassOfGrade().setSubject(strData[5]);// ç§‘ç›®å
+						timeTableData.getClassOfGrade().setTeacher(strData[6]);// æ‹…å½“æ•™å“¡
+						timeTableData.setClassRoom(strData[7]);// æ•™å®¤
 
-						f_TimeTableData2.add(timeTableData);// 2Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+						f_TimeTableData2.add(timeTableData);// 2æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 
 					}
 				}
@@ -286,7 +742,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	}
 
 	// /*
-	// * 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	// * 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	// */
 	// private void readRoomDayPeriodFile3() {
 	//
@@ -299,24 +755,24 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	// try {
 	// String line = new String();
 	//
-	// // ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+	// // ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 	// for (int cols = 0; cols < ORDER3_COLS; cols++) {
 	//
-	// // “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+	// // èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 	// if ((line = input.readLine()) != null) {
 	//
-	// // ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+	// // ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 	// if (1 <= cols) {
 	// strData = line.split(",");
 	//
 	// classOfGradeData
-	// .setNumber(Integer.parseInt(strData[0]));// ƒRƒ}”
-	// classOfGradeData.setGrade(Integer.parseInt(strData[1]));// Šw”N
-	// classOfGradeData.setPreviousOrLatter(strData[2]);// ‘OŠúŒãŠú
-	// classOfGradeData.setSubject(strData[3]);// ‰È–Ú–¼
-	// classOfGradeData.setTeacher(strData[4]);// ’S“–‹³ˆõ
+	// .setNumber(Integer.parseInt(strData[0]));// ã‚³ãƒæ•°
+	// classOfGradeData.setGrade(Integer.parseInt(strData[1]));// å­¦å¹´
+	// classOfGradeData.setPreviousOrLatter(strData[2]);// å‰æœŸå¾ŒæœŸ
+	// classOfGradeData.setSubject(strData[3]);// ç§‘ç›®å
+	// classOfGradeData.setTeacher(strData[4]);// æ‹…å½“æ•™å“¡
 	//
-	// f_ClassOfGradeData3.add(classOfGradeData);// 3Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+	// f_ClassOfGradeData3.add(classOfGradeData);// 3æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 	// }
 	// }
 	// }
@@ -327,16 +783,16 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	// }
 
 	/*
-	 * ’S“–Ò‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+	 * æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readFacultyFile() {
 		// readFacultyFile1();
 		// readFacultyFile2();
-		readFacultyFile3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+		readFacultyFile3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	}
 
 	/*
-	 * 1Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	 * 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readFacultyFile1() {
 
@@ -344,32 +800,30 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 		BufferedReader input = FileIO.readFile(FACULTY1_NAME);
 
-		ClassOfGrade classOfGradeData = new ClassOfGrade();
 
 		try {
 			String line = new String();
 
-			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 			for (int cols = 0; cols < ORDER1_COLS; cols++) {
 
-				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 				if ((line = input.readLine()) != null) {
 
-					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						// —j“ú‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+						// æ›œæ—¥ãŒç©ºç™½ã§ãªã„ã¨ã
 						if (strData[0] != null) {
-							classOfGradeData.setNumber(Integer
-									.parseInt(strData[0]));// ƒRƒ}”
-							classOfGradeData.setGrade(Integer
-									.parseInt(strData[1]));// Šw”N
-							classOfGradeData.setPreviousOrLatter(strData[2]);// ‘OŠúŒãŠú
-							classOfGradeData.setSubject(strData[3]);// ‰È–Ú–¼
-							classOfGradeData.setTeacher(strData[4]);// ’S“–‹³ˆõ
+							ClassOfGrade classOfGradeData = new ClassOfGrade();
+							classOfGradeData.setNumber(Integer.parseInt(strData[0]));// ã‚³ãƒæ•°
+							classOfGradeData.setGrade(Integer.parseInt(strData[1]));// å­¦å¹´
+							classOfGradeData.setPreviousOrLatter(strData[2]);// å‰æœŸå¾ŒæœŸ
+							classOfGradeData.setSubject(strData[3]);// ç§‘ç›®å
+							classOfGradeData.setTeacher(strData[4]);// æ‹…å½“æ•™å“¡
 
-							f_ClassOfGradeData1.add(classOfGradeData);// 1Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+							f_ClassOfGradeData1.add(classOfGradeData);// 1æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 						}
 					}
 				}
@@ -381,7 +835,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	}
 
 	/*
-	 * 2Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	 * 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readFacultyFile2() {
 
@@ -389,29 +843,28 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 		BufferedReader input = FileIO.readFile(FACULTY2_NAME);
 
-		ClassOfGrade classOfGradeData = new ClassOfGrade();
 
 		try {
 			String line = new String();
 
-			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 			for (int cols = 0; cols < ORDER2_COLS; cols++) {
 
-				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 				if ((line = input.readLine()) != null) {
 
-					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						classOfGradeData
-								.setNumber(Integer.parseInt(strData[0]));// ƒRƒ}”
-						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// Šw”N
-						classOfGradeData.setPreviousOrLatter(strData[2]);// ‘OŠúŒãŠú
-						classOfGradeData.setSubject(strData[3]);// ‰È–Ú–¼
-						classOfGradeData.setTeacher(strData[4]);// ’S“–‹³ˆõ
+						ClassOfGrade classOfGradeData = new ClassOfGrade();
+						classOfGradeData.setNumber(Integer.parseInt(strData[0]));// ã‚³ãƒæ•°
+						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// å­¦å¹´
+						classOfGradeData.setPreviousOrLatter(strData[2]);// å‰æœŸå¾ŒæœŸ
+						classOfGradeData.setSubject(strData[3]);// ç§‘ç›®å
+						classOfGradeData.setTeacher(strData[4]);// æ‹…å½“æ•™å“¡
 
-						f_ClassOfGradeData2.add(classOfGradeData);// 2Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+						f_ClassOfGradeData2.add(classOfGradeData);// 2æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 
 					}
 				}
@@ -423,7 +876,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	}
 
 	/*
-	 * 3Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ“Ç‚İ‚Ş
+	 * 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’èª­ã¿è¾¼ã‚€
 	 */
 	private void readFacultyFile3() {
 
@@ -431,29 +884,28 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 		BufferedReader input = FileIO.readFile(FACULTY3_NAME);
 
-		ClassOfGrade classOfGradeData = new ClassOfGrade();
 
 		try {
 			String line = new String();
 
-			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 			for (int cols = 0; cols < ORDER3_COLS; cols++) {
 
-				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 				if ((line = input.readLine()) != null) {
 
-					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 					if (1 <= cols) {
 						strData = line.split(",");
 
-						classOfGradeData
-								.setNumber(Integer.parseInt(strData[0]));// ƒRƒ}”
-						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// Šw”N
-						classOfGradeData.setPreviousOrLatter(strData[2]);// ‘OŠúŒãŠú
-						classOfGradeData.setSubject(strData[3]);// ‰È–Ú–¼
-						classOfGradeData.setTeacher(strData[4]);// ’S“–‹³ˆõ
-
-						f_ClassOfGradeData3.add(classOfGradeData);// 3Ÿ‚ÌŠw”N‚²‚Æ‚Ìö‹Æ‚Ì“®“I”z—ñ‚É’Ç‰Á
+						ClassOfGrade classOfGradeData = new ClassOfGrade();
+						classOfGradeData.setNumber(Integer.parseInt(strData[0]));// ã‚³ãƒæ•°
+						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// å­¦å¹´
+						classOfGradeData.setPreviousOrLatter(strData[2]);// å‰æœŸå¾ŒæœŸ
+						classOfGradeData.setSubject(strData[3]);// ç§‘ç›®å
+						classOfGradeData.setTeacher(strData[4]);// æ‹…å½“æ•™å“¡
+						classOfGradeData.setCourseOrClass(strData[5]);// ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹
+						f_ClassOfGradeData3.add(classOfGradeData);// 3æ¬¡ã®å­¦å¹´ã”ã¨ã®æˆæ¥­ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 					}
 				}
 			}

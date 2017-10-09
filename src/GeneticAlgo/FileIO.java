@@ -10,15 +10,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /*
- *  ƒtƒ@ƒCƒ‹‚Ì“üo—ÍŠÖŒW‚ÌƒNƒ‰ƒX
+ *  ãƒ•ã‚¡ã‚¤ãƒ«ã®å…¥å‡ºåŠ›é–¢ä¿‚ã®ã‚¯ãƒ©ã‚¹
  *  @author Nakata
  */
 public class FileIO {
 
 	/*
-	 * ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 	 *
-	 * @param fileName:ƒtƒ@ƒCƒ‹‚Ì–¼‘O
+	 * @param fileName:ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
 	 */
 	public static BufferedReader readFile(String fileName) {
 
@@ -36,9 +36,9 @@ public class FileIO {
 	}
 
 	/*
-	 * ƒtƒ@ƒCƒ‹‚Ö‘‚«‚Ş
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãè¾¼ã‚€
 	 *
-	 * @param fileName:ƒtƒ@ƒCƒ‹‚Ì–¼‘O
+	 * @param fileName:ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
 	 */
 	public static PrintWriter writeFile(String fileName, boolean app) {
 		PrintWriter f_write = null;
@@ -55,8 +55,8 @@ public class FileIO {
 	}
 
 	/*
-	 * ’T‚µ‚½‚¢ƒtƒ@ƒCƒ‹‚ğƒ`ƒFƒbƒN
-	 * @param fileName:’T‚µ‚½‚¢ƒtƒ@ƒCƒ‹‚Ì–¼‘O
+	 * æ¢ã—ãŸã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚§ãƒƒã‚¯
+	 * @param fileName:æ¢ã—ãŸã„ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
 	 */
 	public static void checkTargetFile(String fileName) {
 
@@ -64,10 +64,10 @@ public class FileIO {
 
 		try{
 
-		// ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢‚Æ‚«
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„ã¨ã
 		if (!(targetFile.exists())) {
-			System.out.println(targetFile + "‚ª‘¶İ‚µ‚Ü‚¹‚ñB");
-			System.out.println(targetFile+"‚ğì¬‚µ‚Ü‚·B");
+			System.out.println(targetFile + "ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚");
+			System.out.println(targetFile+"ã‚’ä½œæˆã—ã¾ã™ã€‚");
 
 			// Writer writer = new FileWriter(scorefile);
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
@@ -76,13 +76,13 @@ public class FileIO {
 			pw.close();
 		}
 
-		// ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚Æ‚«
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã¨ã
 		else{
-			System.out.println(targetFile+"‚Í‘¶İ‚µ‚Ü‚·B");
+			System.out.println(targetFile+"ã¯å­˜åœ¨ã—ã¾ã™ã€‚");
 		}
 
 		}catch(IOException e){
-			System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+			System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 		}
 	}
 }
