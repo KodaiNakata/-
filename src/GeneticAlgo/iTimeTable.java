@@ -1,28 +1,28 @@
 package GeneticAlgo;
 
 /*
- *  ŠÔŠ„‚ÌƒCƒ“ƒ^[ƒtƒF[ƒX
+ *  æ™‚é–“å‰²ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹
  *  @author Nakata
  */
 public interface iTimeTable {
 
-	public final boolean DEBUG = true;// ƒfƒoƒbƒOƒ‚[ƒh
+	public final boolean DEBUG = true;// ãƒ‡ãƒãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰
 
-	public final int MAX_PERIOD = 5;// 5ŒÀ–Ú
-	public final int MAX_DAY = 6;// Œ—j‚©‚ç“y—j‚Ì6“úŠÔ
+	public final int MAX_PERIOD = 5;// 5é™ç›®
+	public final int MAX_DAY = 6;// æœˆæ›œã‹ã‚‰åœŸæ›œã®6æ—¥é–“
 
-	public final int ORDER1_COLS = 17;// 1Ÿ‚Ìƒf[ƒ^‚Ìs
-	public final int ORDER1_DATA = 8;// 1Ÿ‚Ìƒf[ƒ^‚Ì”
-	public final String FACULTY1_NAME="faculty_1.csv";// 1Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–Ò‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
-	public final String FILE1_NAME = "room_1.csv";// 1Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
+	public final int ORDER1_COLS = 17;// 1æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®è¡Œ
+	public final int ORDER1_DATA = 8;// 1æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®æ•°
+	public final String FACULTY1_NAME="faculty_1.csv";// 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
+	public final String FILE1_NAME = "room_1.csv";// 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
 
-	public final int ORDER2_COLS = 175;// 2Ÿ‚Ìƒf[ƒ^‚Ìs
-	public final int ORDER2_DATA = 8;// 2Ÿ‚Ìƒf[ƒ^‚Ì”
-	public final String FACULTY2_NAME="faculty_2.csv";// 2Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–Ò‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
-	public final String FILE2_NAME = "room_2.csv";// 2Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
+	public final int ORDER2_COLS = 175;// 2æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®è¡Œ
+	public final int ORDER2_DATA = 8;// 2æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®æ•°
+	public final String FACULTY2_NAME="faculty_2.csv";// 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
+	public final String FILE2_NAME = "room_2.csv";// 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
 
-	public final int ORDER3_COLS = 113;// 3Ÿ‚Ìƒf[ƒ^‚Ìs
-	public final int ORDER3_DATA = 5;// 3Ÿ‚Ìƒf[ƒ^‚Ì”
-	public final String FACULTY3_NAME = "faculty_3.csv";// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–Ò‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
-	public final String FILE3_NAME="room_3.csv";// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‹³º‚Æ‰½—j“ú‚Æ‰½ŒÀ–Ú‚ªŒˆ‚Ü‚Á‚½ƒtƒ@ƒCƒ‹)‚Ì–¼‘O
+	public final int ORDER3_COLS = 113;// 3æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®è¡Œ
+	public final int ORDER3_DATA = 6;// 3æ¬¡ã®ãƒ‡ãƒ¼ã‚¿ã®æ•°
+	public final String FACULTY3_NAME = "faculty_3.csv";// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
+	public final String FILE3_NAME="room_3.csv";// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ•™å®¤ã¨ä½•æ›œæ—¥ã¨ä½•é™ç›®ãŒæ±ºã¾ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«)ã®åå‰
 }

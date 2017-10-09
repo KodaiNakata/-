@@ -2,37 +2,37 @@ package GeneticAlgo;
 
 
 /*
- *  Šw”N‚²‚Æ‚Ìö‹Æ‚ÌƒNƒ‰ƒX
+ *  å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ã‚¯ãƒ©ã‚¹
  *  @author Nakata
  */
 public class ClassOfGrade {
 
-	private String f_DayOfWeek;// —j“ú
-	private int f_Period;// ŒÀ–Ú
-	private int f_Number;// ƒRƒ}”
-	private int f_Grade;// Šw”N
-	private String f_PreviousOrLatter;// ‘OŠúŒãŠú
-	private String f_Subject;// ‰È–Ú
-	private String f_Teacher;// æ¶‚Ì–¼‘O
-	private String f_CourseOrClass;// ƒR[ƒXEƒNƒ‰ƒX
-//	private String f_ClassRoom;// ‹³º
-	private Teacher f_Teachers;// ’S“–‚Ìæ¶(TeacherƒNƒ‰ƒX)
+//	private String f_DayOfWeek;// æ›œæ—¥
+//	private int f_Period;// é™ç›®
+	private int f_Number;// ã‚³ãƒæ•°
+	private int f_Grade;// å­¦å¹´
+	private String f_PreviousOrLatter;// å‰æœŸå¾ŒæœŸ
+	private String f_Subject;// ç§‘ç›®
+	private String f_Teacher;// å…ˆç”Ÿã®åå‰
+	private String f_CourseOrClass;// ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹
+//	private String f_ClassRoom;// æ•™å®¤
+	private Teacher f_Teachers;// æ‹…å½“ã®å…ˆç”Ÿ(Teacherã‚¯ãƒ©ã‚¹)
 
-//	// “®“I”z—ñ
+//	// å‹•çš„é…åˆ—
 //	private ArrayList<Intger> f_Grades=new ArrayList<Integer>();
-//	private ArrayList<Integer> f_Numbers = new ArrayList<Integer>();// ƒRƒ}”
-//	private ArrayList<String> f_CoursesOrClasses = new ArrayList<String>();// ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
-//	private ArrayList<String> f_Subjects = new ArrayList<String>();// ‰È–Ú–¼
-//	private ArrayList<String> f_Teacher=new ArrayList<String>();// ’S“–‚Ìæ¶
-//	private ArrayList<Teacher> f_Teachers = new ArrayList<Teacher>();// ’S“–‚Ìæ¶(TeacherƒNƒ‰ƒX)
-//	private ArrayList<String> f_ClassRooms = new ArrayList<String>();// ‹³º
+//	private ArrayList<Integer> f_Numbers = new ArrayList<Integer>();// ã‚³ãƒæ•°
+//	private ArrayList<String> f_CoursesOrClasses = new ArrayList<String>();// ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
+//	private ArrayList<String> f_Subjects = new ArrayList<String>();// ç§‘ç›®å
+//	private ArrayList<String> f_Teacher=new ArrayList<String>();// æ‹…å½“ã®å…ˆç”Ÿ
+//	private ArrayList<Teacher> f_Teachers = new ArrayList<Teacher>();// æ‹…å½“ã®å…ˆç”Ÿ(Teacherã‚¯ãƒ©ã‚¹)
+//	private ArrayList<String> f_ClassRooms = new ArrayList<String>();// æ•™å®¤
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	public ClassOfGrade() {
-		f_DayOfWeek=null;
-		f_Period=0;
+//		f_DayOfWeek=null;
+//		f_Period=0;
 		f_Grade = 0;
 		f_PreviousOrLatter = null;
 		f_Number = 0;
@@ -44,294 +44,294 @@ public class ClassOfGrade {
 	}
 
 	// ----------------------------//
-	// ----------ƒQƒbƒ^[ŠÖ”------//
+	// ----------ã‚²ãƒƒã‚¿ãƒ¼é–¢æ•°------//
 	// ----------------------------//
-	/*
-	 * —j“ú‚ÌƒQƒbƒ^[
-	 * @return —j“ú
-	 */
-	public String getDayOfWeek(){
-		return f_DayOfWeek;
-	}
+//	/*
+//	 * æ›œæ—¥ã®ã‚²ãƒƒã‚¿ãƒ¼
+//	 * @return æ›œæ—¥
+//	 */
+//	public String getDayOfWeek(){
+//		return f_DayOfWeek;
+//	}
+
+//	/*
+//	 * é™ç›®ã®ã‚²ãƒƒã‚¿ãƒ¼
+//	 * @return é™ç›®
+//	 */
+//	public int getPeriod(){
+//		return f_Period;
+//	}
 
 	/*
-	 * ŒÀ–Ú‚ÌƒQƒbƒ^[
-	 * @return ŒÀ–Ú
-	 */
-	public int getPeriod(){
-		return f_Period;
-	}
-
-	/*
-	 * ƒRƒ}”‚ÌƒQƒbƒ^[
+	 * ã‚³ãƒæ•°ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ƒRƒ}”
+	 * @return ã‚³ãƒæ•°
 	 */
 	public int getNumber(){
 		return f_Number;
 	}
 
 //	/*
-//	 * ƒRƒ}”‚ÌƒQƒbƒ^[
+//	 * ã‚³ãƒæ•°ã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return ƒRƒ}”
+//	 * @return ã‚³ãƒæ•°
 //	 */
 //	public int getNumbers(int number) {
 //		return f_Numbers.get(number);
 //	}
 
 //	/*
-//	 * ƒRƒ}”‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * ã‚³ãƒæ•°ã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return ƒRƒ}”‚ÌƒTƒCƒY
+//	 * @return ã‚³ãƒæ•°ã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getNumbersSize(){
 //		return f_Numbers.size();
 //	}
 
 	/*
-	 * Šw”N‚ÌƒQƒbƒ^[
+	 * å­¦å¹´ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return Šw”N
+	 * @return å­¦å¹´
 	 */
 	public int getGrade() {
 		return f_Grade;
 	}
 
 	/*
-	 * ‘OŠúŒãŠú‚ÌƒQƒbƒ^[
+	 * å‰æœŸå¾ŒæœŸã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ‘OŠú‚©ŒãŠú‚©
+	 * @return å‰æœŸã‹å¾ŒæœŸã‹
 	 */
 	public String getPreviousOrLatter() {
 		return f_PreviousOrLatter;
 	}
 
 	/*
-	 * ƒR[ƒXEƒNƒ‰ƒX‚ÌƒQƒbƒ^[
+	 * ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
+	 * @return ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
 	 */
 	public String getCourseOrClass(){
 		return f_CourseOrClass;
 	}
 
 //	/*
-//	 * ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚ÌƒQƒbƒ^[
+//	 * ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
+//	 * @return ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
 //	 */
 //	public String getCoursesOrClasses(int number) {
 //		return f_CoursesOrClasses.get(number);
 //	}
 
 //	/*
-//	 * ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚ÌƒTƒCƒY
+//	 * @return ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getCoursesOrClassesSize(){
 //		return f_CoursesOrClasses.size();
 //	}
 
 	/*
-	 * ‰È–Ú‚ÌƒQƒbƒ^[
+	 * ç§‘ç›®ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ‰È–Ú–¼
+	 * @return ç§‘ç›®å
 	 */
 	public String getSubject(){
 		return f_Subject;
 	}
 
 //	/*
-//	 * ‰È–Ú–¼‚ÌƒQƒbƒ^[
+//	 * ç§‘ç›®åã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return ‰È–Ú–¼
+//	 * @return ç§‘ç›®å
 //	 */
 //	public String getSubjects(int number) {
 //		return f_Subjects.get(number);
 //	}
 
 //	/*
-//	 * ‰È–Ú–¼‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * ç§‘ç›®åã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return ‰È–Ú–¼‚ÌƒTƒCƒY
+//	 * @return ç§‘ç›®åã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getSubjectsSize(){
 //		return f_Subjects.size();
 //	}
 
 //	/*
-//	 * æ¶‚ÌƒQƒbƒ^[
+//	 * å…ˆç”Ÿã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return æ¶
+//	 * @return å…ˆç”Ÿ
 //	 */
 //	public String getTeacher(int number){
 //		return f_Teacher.get(number);
 //	}
 
 	/*
-	 * æ¶‚ÌƒQƒbƒ^[
-	 * @return æ¶‚Ì–¼‘O
+	 * å…ˆç”Ÿã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * @return å…ˆç”Ÿã®åå‰
 	 */
 	public String getTeacher(){
 		return f_Teacher;
 	}
 //	/*
-//	 * æ¶‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * å…ˆç”Ÿã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return æ¶‚ÌƒTƒCƒY
+//	 * @return å…ˆç”Ÿã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getTeacherSize(){
 //		return f_Teacher.size();
 //	}
 
 //	/*
-//	 * TeacherƒNƒ‰ƒX‚Ìæ¶‚ÌƒQƒbƒ^[
+//	 * Teacherã‚¯ãƒ©ã‚¹ã®å…ˆç”Ÿã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return æ¶
+//	 * @return å…ˆç”Ÿ
 //	 */
 //	public Teacher getTeachers(int number) {
 //		return f_Teachers.get(number);
 //	}
 
 //	/*
-//	 * TeacherƒNƒ‰ƒX‚Ìæ¶‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * Teacherã‚¯ãƒ©ã‚¹ã®å…ˆç”Ÿã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return TeacherƒNƒ‰ƒX‚Ìæ¶‚ÌƒTƒCƒY
+//	 * @return Teacherã‚¯ãƒ©ã‚¹ã®å…ˆç”Ÿã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getTeachersSize(){
 //		return f_Teachers.size();
 //	}
 
 //	/*
-//	 * ‹³º‚ÌƒQƒbƒ^[
+//	 * æ•™å®¤ã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @return ‹³º
+//	 * @return æ•™å®¤
 //	 */
 //	public String getClassRooms(int number) {
 //		return f_ClassRooms.get(number);
 //	}
 
 //	/*
-//	 * ‹³º‚ÌƒTƒCƒY‚ÌƒQƒbƒ^[
+//	 * æ•™å®¤ã®ã‚µã‚¤ã‚ºã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return ‹³º‚ÌƒTƒCƒY
+//	 * @return æ•™å®¤ã®ã‚µã‚¤ã‚º
 //	 */
 //	public int getClassRoomsSize(){
 //		return f_ClassRooms.size();
 //	}
 
 //	/*
-//	 * ‹³º‚ÌƒQƒbƒ^[
+//	 * æ•™å®¤ã®ã‚²ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @return ‹³º
+//	 * @return æ•™å®¤
 //	 */
 //	public String getClassRoom(){
 //		return f_ClassRoom;
 //	}
 	// ----------------------------//
-	// ----------ƒZƒbƒ^[ŠÖ”------//
+	// ----------ã‚»ãƒƒã‚¿ãƒ¼é–¢æ•°------//
 	// ----------------------------//
 //	/*
-//	 * ƒRƒ}”‚ÌƒZƒbƒ^[
+//	 * ã‚³ãƒæ•°ã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param num ƒRƒ}”
+//	 * @param num ã‚³ãƒæ•°
 //	 */
 //	public void setNumbers(int number, int num) {
 //		f_Numbers.set(number, num);
 //	}
 
-	/*
-	 * —j“ú‚ÌƒZƒbƒ^[
-	 * @param day_of_week —j“ú
-	 */
-	public void setDayOfWeek(String day_of_week){
-		f_DayOfWeek=day_of_week;
-	}
+//	/*
+//	 * æ›œæ—¥ã®ã‚»ãƒƒã‚¿ãƒ¼
+//	 * @param day_of_week æ›œæ—¥
+//	 */
+//	public void setDayOfWeek(String day_of_week){
+//		f_DayOfWeek=day_of_week;
+//	}
+
+//	/*
+//	 * é™ç›®ã®ã‚»ãƒƒã‚¿ãƒ¼
+//	 * @param period é™ç›®
+//	 */
+//	public void setPeriod(int period){
+//		f_Period=period;
+//	}
 
 	/*
-	 * ŒÀ–Ú‚ÌƒZƒbƒ^[
-	 * @param period ŒÀ–Ú
-	 */
-	public void setPeriod(int period){
-		f_Period=period;
-	}
-
-	/*
-	 * ƒRƒ}”‚ÌƒZƒbƒ^[
+	 * ã‚³ãƒæ•°ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param number ƒRƒ}”
+	 * @param number ã‚³ãƒæ•°
 	 */
 	public void setNumber(int number){
 		f_Number=number;
 	}
 
 	/*
-	 * Šw”N‚ÌƒZƒbƒ^[
+	 * å­¦å¹´ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param grade Šw”N
+	 * @param grade å­¦å¹´
 	 */
 	public void setGrade(int grade) {
 		f_Grade = grade;
 	}
 
 	/*
-	 * ‘OŠú‚©ŒãŠú‚©‚ÌƒZƒbƒ^[
+	 * å‰æœŸã‹å¾ŒæœŸã‹ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param previous_or_latter ‘OŠú‚©ŒãŠú‚©
+	 * @param previous_or_latter å‰æœŸã‹å¾ŒæœŸã‹
 	 */
 	public void setPreviousOrLatter(String previous_or_latter) {
 		f_PreviousOrLatter = previous_or_latter;
 	}
 
 //	/*
-//	 * ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚ÌƒZƒbƒ^[
+//	 * ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param course_or_class ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
+//	 * @param course_or_class ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
 //	 */
 //	public void setCoursesOrClasses(int number, String course_or_class) {
 //		f_CoursesOrClasses.set(number, course_or_class);
 //	}
 
 	/*
-	 * ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚ÌƒZƒbƒ^[
+	 * ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param course_or_class ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
+	 * @param course_or_class ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
 	 */
 	public void setCourseOrClass(String course_or_class){
 		f_CourseOrClass=course_or_class;
 	}
 
 //	/*
-//	 * ‰È–Ú–¼‚ÌƒZƒbƒ^[
+//	 * ç§‘ç›®åã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param subject ‰È–Ú–¼
+//	 * @param subject ç§‘ç›®å
 //	 */
 //	public void setSubjects(int number, String subject) {
 //		f_Subjects.set(number, subject);
 //	}
 
 	/*
-	 * ‰È–Ú–¼‚ÌƒZƒbƒ^[
+	 * ç§‘ç›®åã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
 	 * @param subject
 	 */
@@ -340,11 +340,11 @@ public class ClassOfGrade {
 	}
 
 //	/*
-//	 * æ¶‚ÌƒZƒbƒ^[
+//	 * å…ˆç”Ÿã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param teacher æ¶
+//	 * @param teacher å…ˆç”Ÿ
 //	 *
 //	 */
 //	public void setTeacher(int number,String teacher){
@@ -352,97 +352,97 @@ public class ClassOfGrade {
 //	}
 
 	/*
-	 * æ¶‚ÌƒZƒbƒ^[
+	 * å…ˆç”Ÿã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param teacher æ¶
+	 * @param teacher å…ˆç”Ÿ
 	 */
 	public void setTeacher(String teacher){
 		f_Teacher=teacher;
 	}
 
 //	/*
-//	 * TeacherƒNƒ‰ƒX‚Ìæ¶‚ÌƒZƒbƒ^[
+//	 * Teacherã‚¯ãƒ©ã‚¹ã®å…ˆç”Ÿã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param teacher æ¶
+//	 * @param teacher å…ˆç”Ÿ
 //	 */
 //	public void setTeachers(int number, Teacher teacher) {
 //		f_Teachers.set(number, teacher);
 //	}
 
 //	/*
-//	 * ‹³º‚ÌƒZƒbƒ^[
+//	 * æ•™å®¤ã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param class_room ‹³º
+//	 * @param class_room æ•™å®¤
 //	 */
 //	public void setClassRoom(String class_room){
 //		f_ClassRoom=class_room;
 //	}
 
 //	/*
-//	 * ‹³º‚ÌƒZƒbƒ^[
+//	 * æ•™å®¤ã®ã‚»ãƒƒã‚¿ãƒ¼
 //	 *
-//	 * @param number ‰½”Ô–Ú
+//	 * @param number ä½•ç•ªç›®
 //	 *
-//	 * @param class_room ‹³º
+//	 * @param class_room æ•™å®¤
 //	 */
 //	public void setClassRooms(int number, String class_room) {
 //		f_ClassRooms.set(number, class_room);
 //	}
 
 	// ----------------------------//
-	// ----------addŠÖ”-----------//
+	// ----------addé–¢æ•°-----------//
 	// ----------------------------//
 //	/*
-//	 * ƒRƒ}”‚Ì’Ç‰Á
+//	 * ã‚³ãƒæ•°ã®è¿½åŠ 
 //	 *
-//	 * @param number ƒRƒ}”
+//	 * @param number ã‚³ãƒæ•°
 //	 */
 //	public void addNumbers(int number) {
 //		f_Numbers.add(number);
 //	}
 //
 //	/*
-//	 * ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX‚Ì’Ç‰Á
+//	 * ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹ã®è¿½åŠ 
 //	 *
-//	 * @param course_or_class ƒR[ƒX‚Ü‚½‚ÍƒNƒ‰ƒX
+//	 * @param course_or_class ã‚³ãƒ¼ã‚¹ã¾ãŸã¯ã‚¯ãƒ©ã‚¹
 //	 */
 //	public void addCoursesOrClasses(String course_or_class) {
 //		f_CoursesOrClasses.add(course_or_class);
 //	}
 //
 //	/*
-//	 * ‰È–Ú‚Ì’Ç‰Á
+//	 * ç§‘ç›®ã®è¿½åŠ 
 //	 *
-//	 * @param subject ‰È–Ú
+//	 * @param subject ç§‘ç›®
 //	 */
 //	public void addSubjects(String subject) {
 //		f_Subjects.add(subject);
 //	}
 //
 //	/*
-//	 * æ¶‚Ì’Ç‰Á
+//	 * å…ˆç”Ÿã®è¿½åŠ 
 //	 *
-//	 * @param teacher æ¶
+//	 * @param teacher å…ˆç”Ÿ
 //	 */
 //	public void addTeacher(String teacher){
 //		f_Teacher.add(teacher);
 //	}
 //
 //	/*
-//	 * TeacherƒNƒ‰ƒX‚Ìæ¶‚Ì’Ç‰Á
+//	 * Teacherã‚¯ãƒ©ã‚¹ã®å…ˆç”Ÿã®è¿½åŠ 
 //	 *
-//	 * @param teacher æ¶
+//	 * @param teacher å…ˆç”Ÿ
 //	 */
 //	public void addTeachers(Teacher teacher) {
 //		f_Teachers.add(teacher);
 //	}
 //
 //	/*
-//	 * ‹³º‚Ì’Ç‰Á
+//	 * æ•™å®¤ã®è¿½åŠ 
 //	 *
-//	 * @param class_room ‹³º
+//	 * @param class_room æ•™å®¤
 //	 */
 //	public void addClassRooms(String class_room) {
 //		f_ClassRooms.add(class_room);

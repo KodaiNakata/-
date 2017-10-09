@@ -3,22 +3,22 @@ package GeneticAlgo;
 import java.util.ArrayList;
 
 /*
- * ‰È–Ú‚ğ‚¾‚ê‚ª’S“–‚·‚é‚Ì‚©‚ğŒˆ‚ß‚é‚½‚ß‚ÌƒNƒ‰ƒX
+ * ç§‘ç›®ã‚’ã ã‚ŒãŒæ‹…å½“ã™ã‚‹ã®ã‹ã‚’æ±ºã‚ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹
  * @author Nakata
  */
 public class Decide_faculty implements iTimeTable {
 
-	private static StringBuffer TITLE = new StringBuffer("ˆâ“`“IƒAƒ‹ƒSƒŠƒYƒ€‚ğ—p‚¢‚½ŠÔŠ„ì¬");
-	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// ‘OŠú‚ÌŠÔŠ„
-	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// ŒãŠú‚ÌŠÔŠ„
-	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1=new ArrayList<ClassOfGrade>();// 1Ÿ‚ÌŠw”N‚²‚Æ‚Ìö‹Æ‚Ìƒf[ƒ^
-	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2=new ArrayList<ClassOfGrade>();// 2Ÿ‚ÌŠw”N‚²‚Æ‚Ìö‹Æ‚Ìƒf[ƒ^
-	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3=new ArrayList<ClassOfGrade>();// 3Ÿ‚ÌŠw”N‚²‚Æ‚Ìö‹Æ‚Ìƒf[ƒ^
-//	protected static final String RESULT_FILE_NAME = "room_3.csv";// 3Ÿ‚ÌŒ‹‰Ê‚Ìƒtƒ@ƒCƒ‹‚Ì–¼‘O
-	protected static int PROG_COUNT;// ƒvƒƒOƒ‰ƒ€‚ğÀs‚µ‚½‰ñ”
+	private static StringBuffer TITLE = new StringBuffer("éºä¼çš„ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã‚’ç”¨ã„ãŸæ™‚é–“å‰²ä½œæˆ");
+	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// å‰æœŸã®æ™‚é–“å‰²
+	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// å¾ŒæœŸã®æ™‚é–“å‰²
+	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1=new ArrayList<ClassOfGrade>();// 1æ¬¡ã®å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ãƒ‡ãƒ¼ã‚¿
+	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2=new ArrayList<ClassOfGrade>();// 2æ¬¡ã®å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ãƒ‡ãƒ¼ã‚¿
+	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3=new ArrayList<ClassOfGrade>();// 3æ¬¡ã®å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ãƒ‡ãƒ¼ã‚¿
+//	protected static final String RESULT_FILE_NAME = "room_3.csv";// 3æ¬¡ã®çµæœã®ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
+	protected static int PROG_COUNT;// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å®Ÿè¡Œã—ãŸå›æ•°
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	public Decide_faculty() {
 
@@ -31,94 +31,94 @@ public class Decide_faculty implements iTimeTable {
 	}
 
 //	/*
-//	 * ‘OŠú‚ÆŒãŠú‚ÌŠÔŠ„‚ÌŒ‹‰Ê‚Ì•\¦
+//	 * å‰æœŸã¨å¾ŒæœŸã®æ™‚é–“å‰²ã®çµæœã®è¡¨ç¤º
 //	 */
 //	private void result() {
 //
-//		// ‘OŠú‚ÌŠÔŠ„‚ÌŒ‹‰Ê
+//		// å‰æœŸã®æ™‚é–“å‰²ã®çµæœ
 //		for (int day = 0; day < MAX_DAY; day++) {
 //
-//			System.out.print(TimeTable.changeValueToDay(day) + "—j“ú");
+//			System.out.print(TimeTable.changeValueToDay(day) + "æ›œæ—¥");
 //			for (int period = 0; period < MAX_PERIOD; period++) {
 //
-//				System.out.println((period + 1) + "ŒÀ–Ú");
+//				System.out.println((period + 1) + "é™ç›®");
 //
 //				for (int number = 0; number < f_PreviousTimeTables[day][period]
 //						.getClassesOfGradesSize(); number++) {
 //
 //					System.out.print(f_PreviousTimeTables[day][period]
-//							.getGrade() + "”N,");// Šw”N
+//							.getGrade() + "å¹´,");// å­¦å¹´
 //					System.out.print(f_PreviousTimeTables[day][period]
 //							.getClassesOfGrades(number).getCourseOrClass()
-//							+ ",");// ƒR[ƒXEƒNƒ‰ƒX
+//							+ ",");// ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹
 //					System.out.print(f_PreviousTimeTables[day][period]
-//							.getClassesOfGrades(number).getSubject() + ",");// Šw”N
+//							.getClassesOfGrades(number).getSubject() + ",");// å­¦å¹´
 //					System.out.print(f_PreviousTimeTables[day][period]
-//							.getClassesOfGrades(number).getTeacher() + ",");// ’S“–Ò
+//							.getClassesOfGrades(number).getTeacher() + ",");// æ‹…å½“è€…
 //					System.out.println(f_PreviousTimeTables[day][period]
-//							.getClassesOfGrades(number).getClassRoom());// ‹³º
+//							.getClassesOfGrades(number).getClassRoom());// æ•™å®¤
 //
 //				}
 //			}
 //		}
 //
-//		// ŒãŠú‚ÌŠÔŠ„‚ÌŒ‹‰Ê
+//		// å¾ŒæœŸã®æ™‚é–“å‰²ã®çµæœ
 //		for (int day = 0; day < MAX_DAY; day++) {
 //
-//			System.out.print(TimeTable.changeValueToDay(day) + "—j“ú");
+//			System.out.print(TimeTable.changeValueToDay(day) + "æ›œæ—¥");
 //
 //			for (int period = 0; period < MAX_PERIOD; period++) {
 //
-//				System.out.println((period + 1) + "ŒÀ–Ú");
+//				System.out.println((period + 1) + "é™ç›®");
 //
 //				for (int number = 0; number < f_LatterTimeTables[day][period]
 //						.getClassesOfGradesSize(); number++) {
 //
 //					System.out.print(f_LatterTimeTables[day][period].getGrade()
-//							+ "”N,");// Šw”N
+//							+ "å¹´,");// å­¦å¹´
 //					System.out.print(f_LatterTimeTables[day][period]
 //							.getClassesOfGrades(number).getCourseOrClass()
-//							+ ",");// ƒR[ƒXEƒNƒ‰ƒX
+//							+ ",");// ã‚³ãƒ¼ã‚¹ãƒ»ã‚¯ãƒ©ã‚¹
 //					System.out.print(f_LatterTimeTables[day][period]
-//							.getClassesOfGrades(number).getSubject() + ",");// Šw”N
+//							.getClassesOfGrades(number).getSubject() + ",");// å­¦å¹´
 //					System.out.print(f_LatterTimeTables[day][period]
-//							.getClassesOfGrades(number).getTeacher() + ",");// ’S“–Ò
+//							.getClassesOfGrades(number).getTeacher() + ",");// æ‹…å½“è€…
 //					System.out.println(f_LatterTimeTables[day][period]
-//							.getClassesOfGrades(number).getClassRoom());// ‹³º
+//							.getClassesOfGrades(number).getClassRoom());// æ•™å®¤
 //				}
 //			}
 //		}
 //
-//		result3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ•\¦
+//		result3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’è¡¨ç¤º
 //	}
 
 //	/*
-//	 * 3Ÿ‚Ìƒtƒ@ƒCƒ‹(‚»‚ê‚¼‚ê‚Ì‰È–Ú‚Ì’S“–Ò)‚ÌŒ‹‰Ê‚ğ•\¦
+//	 * 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(ãã‚Œãã‚Œã®ç§‘ç›®ã®æ‹…å½“è€…)ã®çµæœã‚’è¡¨ç¤º
 //	 */
 //	private void result3(){
 //
 //		for(int number=0;number<f_ClassOfGradeData3.size();number++){
-//			System.out.print(f_ClassOfGradeData3.get(number).getNumber()+"ƒRƒ},");// ƒRƒ}”
-//			System.out.print(f_ClassOfGradeData3.get(number).getGrade()+"”N,");// Šw”N
-//			System.out.print(f_ClassOfGradeData3.get(number).getPreviousOrLatter()+",");// ‘OŠúŒãŠú
-//			System.out.print(f_ClassOfGradeData3.get(number).getSubject()+",");// ‰È–Ú–¼
-//			System.out.println(f_ClassOfGradeData3.get(number).getTeacher());// æ¶
+//			System.out.print(f_ClassOfGradeData3.get(number).getNumber()+"ã‚³ãƒ,");// ã‚³ãƒæ•°
+//			System.out.print(f_ClassOfGradeData3.get(number).getGrade()+"å¹´,");// å­¦å¹´
+//			System.out.print(f_ClassOfGradeData3.get(number).getPreviousOrLatter()+",");// å‰æœŸå¾ŒæœŸ
+//			System.out.print(f_ClassOfGradeData3.get(number).getSubject()+",");// ç§‘ç›®å
+//			System.out.println(f_ClassOfGradeData3.get(number).getTeacher());// å…ˆç”Ÿ
 //		}
 //	}
 
 	// ------------------------------------------//
-	// -------------ƒtƒ@ƒCƒ‹ŠÖŒW----------------//
+	// -------------ãƒ•ã‚¡ã‚¤ãƒ«é–¢ä¿‚----------------//
 	// ------------------------------------------//
 	/*
-	 * Œ‹‰Ê‚Ìƒtƒ@ƒCƒ‹‚ğ‘‚«‚Ş
+	 * çµæœã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚€
 	 */
 	private void writeResultFile() {
 //		PrintWriter output;
 //		output = FileIO.writeFile(RESULT_FILE_NAME, false);
 //
-//		System.out.println("ƒvƒƒOƒ‰ƒ€‚ğI—¹‚µ‚Ü‚µ‚½B" + RESULT_FILE_NAME + "‚É‘‚«‚İ‚Ü‚·B");
+//		System.out.println("ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚" + RESULT_FILE_NAME + "ã«æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
 //
-//		// ‘OŠú‚ÌŠÔŠ„ì¬‚ÌŒ‹‰Ê‚ğ•\¦
+//		// å‰æœŸã®æ™‚é–“å‰²ä½œæˆã®çµæœã‚’è¡¨ç¤º
 //		for (int day = 0; day < MAX_DAY; day++) {
 //
 //			for (int period = 0; period < MAX_PERIOD; period++) {
@@ -139,50 +139,50 @@ public class Decide_faculty implements iTimeTable {
 //			output.println();
 //		}
 //		output.close();
-//		System.out.println("‘‚«‚İ‚ğI—¹‚µ‚Ü‚µ‚½B");
+//		System.out.println("æ›¸ãè¾¼ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚");
 
-//		writeFile3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹(’S“–ÒŒˆ’è‚Ìƒtƒ@ƒCƒ‹)‚ğ‘‚«‚Ş
+//		writeFile3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«(æ‹…å½“è€…æ±ºå®šã®ãƒ•ã‚¡ã‚¤ãƒ«)ã‚’æ›¸ãè¾¼ã‚€
 	}
 
 //	/*
-//	 * ’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ‘‚«‚Ş
+//	 * æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚€
 //	 */
 //	private void writeFile3(){
 //		PrintWriter output;
 //		output = FileIO.writeFile(FACULTY3_NAME, false);
 //
-//		System.out.println("’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹" + FACULTY3_NAME + "‚É‘‚«‚İ‚Ü‚·B");
+//		System.out.println("æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«" + FACULTY3_NAME + "ã«æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
 //
 //		for(int number=0;number<f_TimeTableData3.size();number++){
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// —j“ú
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ŒÀ
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ƒRƒ}”
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// Šw”N
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‘OŠúŒãŠú
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‰È–Ú–¼
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ’S“–‹³ˆõ
-//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ‹³º
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// æ›œæ—¥
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// é™
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ã‚³ãƒæ•°
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// å­¦å¹´
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// å‰æœŸå¾ŒæœŸ
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// ç§‘ç›®å
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// æ‹…å½“æ•™å“¡
+//			output.print(f_TimeTableData3.get(number).getDayOfWeeks() + ",");// æ•™å®¤
 //			output.println();
 //		}
 //
 //		output.close();
-//		System.out.println("’S“–Ò‚ªŒˆ‚Ü‚Á‚½3Ÿ‚Ìƒtƒ@ƒCƒ‹" + FACULTY3_NAME + "‚Ì‘‚«‚İ‚ğI—¹‚µ‚Ü‚µ‚½B");
+//		System.out.println("æ‹…å½“è€…ãŒæ±ºã¾ã£ãŸ3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«" + FACULTY3_NAME + "ã®æ›¸ãè¾¼ã¿ã‚’çµ‚äº†ã—ã¾ã—ãŸã€‚");
 //	}
 
 //	/*
-//	 * ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //	 */
 //	private void readFile() {
 //
-//		readFile1();// 1Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//		readFile1();// 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //
-//		readFile2();// 2Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//		readFile2();// 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //
-//		readFile3();// 3Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//		readFile3();// 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //	}
 
 //	/*
-//	 * 1Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//	 * 1æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //	 */
 //	private void readFile1() {
 //
@@ -195,35 +195,35 @@ public class Decide_faculty implements iTimeTable {
 //		try {
 //			String line = new String();
 //
-//			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+//			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 //			for (int cols = 0; cols < ORDER1_COLS; cols++) {
 //
-//				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+//				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 //				if ((line = input.readLine()) != null) {
 //
-//					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+//					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 //					if (1 <= cols) {
 //						strData = line.split(",");
 //
-//						// —j“ú‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+//						// æ›œæ—¥ãŒç©ºç™½ã§ãªã„ã¨ã
 //						if (strData[0] != null) {
-//							classOfGradeData.setDayOfWeek(strData[0]);// —j“ú
+//							classOfGradeData.setDayOfWeek(strData[0]);// æ›œæ—¥
 //							classOfGradeData.setPeriod(Integer
-//									.parseInt(strData[1]));// ŒÀ
+//									.parseInt(strData[1]));// é™
 //							classOfGradeData.getClassOfGrade().setNumber(
-//									Integer.parseInt(strData[2]));// ƒRƒ}”
+//									Integer.parseInt(strData[2]));// ã‚³ãƒæ•°
 //							classOfGradeData
-//									.setGrade(Integer.parseInt(strData[3]));// Šw”N
+//									.setGrade(Integer.parseInt(strData[3]));// å­¦å¹´
 //							classOfGradeData.getClassOfGrade()
-//									.setPreviousOrLatter(strData[4]);// ‘OŠúŒãŠú
+//									.setPreviousOrLatter(strData[4]);// å‰æœŸå¾ŒæœŸ
 //							classOfGradeData.getClassOfGrade().setSubject(
-//									strData[5]);// ‰È–Ú–¼
+//									strData[5]);// ç§‘ç›®å
 //							classOfGradeData.getClassOfGrade().setTeacher(
-//									strData[6]);// ’S“–‹³ˆõ
+//									strData[6]);// æ‹…å½“æ•™å“¡
 //							classOfGradeData.getClassOfGrade().setClassRoom(
-//									strData[7]);// ‹³º
+//									strData[7]);// æ•™å®¤
 //
-//							f_ClassOfGradeData1.add(classOfGradeData);// 1Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+//							f_ClassOfGradeData1.add(classOfGradeData);// 1æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 //						}
 //					}
 //				}
@@ -235,7 +235,7 @@ public class Decide_faculty implements iTimeTable {
 //	}
 //
 //	/*
-//	 * 2Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//	 * 2æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //	 */
 //	private void readFile2() {
 //
@@ -248,32 +248,32 @@ public class Decide_faculty implements iTimeTable {
 //		try {
 //			String line = new String();
 //
-//			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+//			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 //			for (int cols = 0; cols < ORDER2_COLS; cols++) {
 //
-//				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+//				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 //				if ((line = input.readLine()) != null) {
 //
-//					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+//					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 //					if (1 <= cols) {
 //						strData = line.split(",");
 //
-////						System.out.print(cols+"s–Ú\t");
+////						System.out.print(cols+"è¡Œç›®\t");
 ////						System.out.print(strData[0]);
-////						System.out.println(strData[1] + "ŒÀ–Ú");
-//						timeTableData.setDayOfWeek(strData[0]);// —j“ú
-//						timeTableData.setPeriod(Integer.parseInt(strData[1]));// ŒÀ
+////						System.out.println(strData[1] + "é™ç›®");
+//						timeTableData.setDayOfWeek(strData[0]);// æ›œæ—¥
+//						timeTableData.setPeriod(Integer.parseInt(strData[1]));// é™
 //						timeTableData.getClassOfGrade().setNumber(
-//								Integer.parseInt(strData[2]));// ƒRƒ}”
-//						timeTableData.setGrade(Integer.parseInt(strData[3]));// Šw”N
+//								Integer.parseInt(strData[2]));// ã‚³ãƒæ•°
+//						timeTableData.setGrade(Integer.parseInt(strData[3]));// å­¦å¹´
 //						timeTableData.getClassOfGrade().setPreviousOrLatter(
-//								strData[4]);// ‘OŠúŒãŠú
-//						timeTableData.getClassOfGrade().setSubject(strData[5]);// ‰È–Ú–¼
-//						timeTableData.getClassOfGrade().setTeacher(strData[6]);// ’S“–‹³ˆõ
+//								strData[4]);// å‰æœŸå¾ŒæœŸ
+//						timeTableData.getClassOfGrade().setSubject(strData[5]);// ç§‘ç›®å
+//						timeTableData.getClassOfGrade().setTeacher(strData[6]);// æ‹…å½“æ•™å“¡
 //						timeTableData.getClassOfGrade()
-//								.setClassRoom(strData[7]);// ‹³º
+//								.setClassRoom(strData[7]);// æ•™å®¤
 //
-//						f_TimeTableData2.add(timeTableData);// 2Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+//						f_TimeTableData2.add(timeTableData);// 2æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 //
 //					}
 //				}
@@ -285,7 +285,7 @@ public class Decide_faculty implements iTimeTable {
 //	}
 //
 //	/*
-//	 * 3Ÿ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
+//	 * 3æ¬¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
 //	 */
 //	private void readFile3() {
 //
@@ -298,25 +298,25 @@ public class Decide_faculty implements iTimeTable {
 //		try {
 //			String line = new String();
 //
-//			// ˆê”Ôã‚©‚çˆê”Ô‰º‚Ìs‚Ü‚Å“Ç‚İ‚Ş
+//			// ä¸€ç•ªä¸Šã‹ã‚‰ä¸€ç•ªä¸‹ã®è¡Œã¾ã§èª­ã¿è¾¼ã‚€
 //			for (int cols = 0; cols < ORDER3_COLS; cols++) {
 //
-//				// “Ç‚İ‚ñ‚¾1s‚ª‹ó”’‚Å‚È‚¢‚Æ‚«
+//				// èª­ã¿è¾¼ã‚“ã 1è¡ŒãŒç©ºç™½ã§ãªã„ã¨ã
 //				if ((line = input.readLine()) != null) {
 //
-//					// ã‚©‚ç1sˆÈã‚Ì‚Æ‚«
+//					// ä¸Šã‹ã‚‰1è¡Œä»¥ä¸Šã®ã¨ã
 //					if (1 <= cols) {
 //						strData = line.split(",");
 //
 //						timeTableData.getClassOfGrade().setNumber(
-//								Integer.parseInt(strData[0]));// ƒRƒ}”
-//						timeTableData.setGrade(Integer.parseInt(strData[1]));// Šw”N
+//								Integer.parseInt(strData[0]));// ã‚³ãƒæ•°
+//						timeTableData.setGrade(Integer.parseInt(strData[1]));// å­¦å¹´
 //						timeTableData.getClassOfGrade().setPreviousOrLatter(
-//								strData[2]);// ‘OŠúŒãŠú
-//						timeTableData.getClassOfGrade().setSubject(strData[3]);// ‰È–Ú–¼
-//						timeTableData.getClassOfGrade().setTeacher(strData[4]);// ’S“–‹³ˆõ
+//								strData[2]);// å‰æœŸå¾ŒæœŸ
+//						timeTableData.getClassOfGrade().setSubject(strData[3]);// ç§‘ç›®å
+//						timeTableData.getClassOfGrade().setTeacher(strData[4]);// æ‹…å½“æ•™å“¡
 //
-//						f_TimeTableData3.add(timeTableData);// 3Ÿ‚ÌŠÔŠ„‚Ì“®“I”z—ñ‚É’Ç‰Á
+//						f_TimeTableData3.add(timeTableData);// 3æ¬¡ã®æ™‚é–“å‰²ã®å‹•çš„é…åˆ—ã«è¿½åŠ 
 //					}
 //				}
 //			}
@@ -327,101 +327,101 @@ public class Decide_faculty implements iTimeTable {
 //	}
 
 	/*
-	 * ƒƒjƒ…[
+	 * ãƒ¡ãƒ‹ãƒ¥ãƒ¼
 	 */
 	public int menu() {
-		int d = InOutPut.getMenu("which 1)à–¾ 2)ƒvƒƒOƒ‰ƒ€Às 3)I—¹", 1, 3);
+		int d = InOutPut.getMenu("which 1)èª¬æ˜ 2)ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œ 3)çµ‚äº†", 1, 3);
 		return d;
 	}
 
 	/*
-	 * à–¾‚ğ•\¦
+	 * èª¬æ˜ã‚’è¡¨ç¤º
 	 */
 	public void instruction() {
 		StringBuffer s = new StringBuffer(TITLE);
-		s.append("Fà–¾");
+		s.append("ï¼šèª¬æ˜");
 		InOutPut.decoration(s.toString(), '-');
 
-		System.out.println("ˆâ“`“IƒAƒ‹ƒSƒŠƒYƒ€‚ğ—p‚¢‚ÄŠÔŠ„‚ğì¬‚·‚é");
+		System.out.println("éºä¼çš„ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã‚’ç”¨ã„ã¦æ™‚é–“å‰²ã‚’ä½œæˆã™ã‚‹");
 	}
 
 //	/*
-//	 * ƒvƒƒOƒ‰ƒ€‚ğÀs‚·‚é
+//	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å®Ÿè¡Œã™ã‚‹
 //	 */
 //	private void executeProg() {
 //		int count = 0;
 //		PROG_COUNT++;
-//		startProg();// ƒvƒƒOƒ‰ƒ€ÀsŠJn
+//		startProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œé–‹å§‹
 //
 //		do {
-//			System.out.println("‰ñ”F" + (count + 1) + "‰ñ–Ú");
+//			System.out.println("å›æ•°ï¼š" + (count + 1) + "å›ç›®");
 //
-//			// ƒvƒƒOƒ‰ƒ€‚ğI‚¦‚½‚Æ‚«
+//			// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚ãˆãŸã¨ã
 //			if (isFinishedProg()) {
 //				break;
 //			}
 //			count++;
 //		} while (true);
-//		finishProg();// ƒvƒƒOƒ‰ƒ€ÀsI—¹
+//		finishProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œçµ‚äº†
 //	}
 
 	/*
-	 * ƒvƒƒOƒ‰ƒ€ÀsŠJn
+	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œé–‹å§‹
 	 */
 	protected void startProg() {
 		StringBuffer s = new StringBuffer(TITLE);
-		s.append("F‘æ");
+		s.append("ï¼šç¬¬");
 		s.append(PROG_COUNT);
-		s.append("‰ñƒvƒƒOƒ‰ƒ€ÀsŠJn!");
+		s.append("å›ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œé–‹å§‹!");
 
 		InOutPut.decoration(s.toString(), '-');
 	}
 
 //	/*
-//	 * ƒvƒƒOƒ‰ƒ€‚ğI—¹‚µ‚½‚©
+//	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†ã—ãŸã‹
 //	 */
 //	private boolean isFinishedProg() {
-//		readFile();// ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
-//		result();// Œ‹‰Ê‚Ì•\¦
+//		readFile();// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€
+//		result();// çµæœã®è¡¨ç¤º
 //		return true;
 //	}
 
 	/*
-	 * ƒvƒƒOƒ‰ƒ€ÀsI—¹
+	 * ãƒ—ãƒ­ã‚°ãƒ©ãƒ å®Ÿè¡Œçµ‚äº†
 	 */
 	public void finishProg() {
 		StringBuffer s = new StringBuffer(TITLE);
-		s.append("F‘æ");
+		s.append("ï¼šç¬¬");
 		s.append(PROG_COUNT);
-		s.append("‰ñÀsI—¹!");
+		s.append("å›å®Ÿè¡Œçµ‚äº†!");
 
 		InOutPut.decoration(s.toString(), '-');
 		System.out.println("");
 	}
 
 	/*
-	 * I—¹
+	 * çµ‚äº†
 	 */
 	public void finish() {
-		writeResultFile();
+//		writeResultFile();
 		System.out.println("See you later !");
 	}
 
 //	/*
-//	 * Às‚·‚éˆ—
+//	 * å®Ÿè¡Œã™ã‚‹å‡¦ç†
 //	 */
 //	public int exe() {
 //
 //		for (;;) {
 //			switch (menu()) {
 //			case 1:
-//				instruction();// à–¾‚ğ•\¦
+//				instruction();// èª¬æ˜ã‚’è¡¨ç¤º
 //				break;
 //			case 2:
-//				executeProg();// ƒvƒƒOƒ‰ƒ€‚ğÀs
+//				executeProg();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å®Ÿè¡Œ
 //				break;
 //			case 3:
-//				finish();// ƒvƒƒOƒ‰ƒ€‚ğI—¹
+//				finish();// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’çµ‚äº†
 //				return 0;
 //			}
 //		}

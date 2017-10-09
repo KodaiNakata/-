@@ -1,7 +1,7 @@
 package GeneticAlgo;
 
 /*
- * ƒƒCƒ“ƒNƒ‰ƒX
+ * ãƒ¡ã‚¤ãƒ³ã‚¯ãƒ©ã‚¹
  * @author Nakata
  */
 public class Main {
@@ -10,9 +10,6 @@ public class Main {
 
 		Decide_roomAndDayAndPeriod Dec_room = new Decide_roomAndDayAndPeriod  ();
 		Dec_room.exe();
-//		Decide_room Dec_room = new Decide_room  ();
-
-//		Dec_room.exec();
 	}
 
 }

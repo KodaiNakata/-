@@ -5,20 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /*
- *  “üo—ÍŠÖŒW‚ÌƒNƒ‰ƒX
+ *  å…¥å‡ºåŠ›é–¢ä¿‚ã®ã‚¯ãƒ©ã‚¹
  *  @author Nakata
  */
 public class InOutPut {
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	public InOutPut() {
 
 	}
 
 	/*
-	 * ‰½‚©ƒL[‚ğ‰Ÿ‚·
+	 * ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã™
 	 */
 	public static void anyKey() {
 		System.out.println("Hit any key...");
@@ -28,14 +28,14 @@ public class InOutPut {
 
 			br.readLine();
 		} catch (IOException e) {
-			System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+			System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 		}
 	}
 
 	/*
-	 * Å¬’l‚ÆÅ‘å’l‚Ì—Ìˆæ“à‚Å®”’l‚ğ“ü—Í‚·‚é
-	 * @param min:Å¬’l
-	 * @param max:Å‘å’l
+	 * æœ€å°å€¤ã¨æœ€å¤§å€¤ã®é ˜åŸŸå†…ã§æ•´æ•°å€¤ã‚’å…¥åŠ›ã™ã‚‹
+	 * @param min:æœ€å°å€¤
+	 * @param max:æœ€å¤§å€¤
 	 */
 	public static int getnCheck(int min, int max) {
 		int num = 0;
@@ -50,16 +50,16 @@ public class InOutPut {
 				num = Integer.parseInt(str);
 			}
 		} catch (IOException e) {
-			System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+			System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 		}
 		return num;
 	}
 
 	/*
-	 * ƒƒjƒ…[‚ğæ“¾
-	 * @param str:o—Í‚·‚é•¶š—ñ
-	 * @param min:Å¬’l
-	 * @param max:Å‘å’l
+	 * ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‚’å–å¾—
+	 * @param str:å‡ºåŠ›ã™ã‚‹æ–‡å­—åˆ—
+	 * @param min:æœ€å°å€¤
+	 * @param max:æœ€å¤§å€¤
 	 */
 	public static int getMenu(String str, int min, int max) {
 		System.out.println(str);
@@ -70,9 +70,9 @@ public class InOutPut {
 	}
 
 	/*
-	 * ƒfƒRƒŒ[ƒVƒ‡ƒ“
-	 * @param str:o—Í‚·‚é•¶š—ñ
-	 * @param chara:o—Í‚·‚é•¶š
+	 * ãƒ‡ã‚³ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³
+	 * @param str:å‡ºåŠ›ã™ã‚‹æ–‡å­—åˆ—
+	 * @param chara:å‡ºåŠ›ã™ã‚‹æ–‡å­—
 	 */
 	public static void decoration(String str, char chara) {
 		StringBuffer ds = new StringBuffer("");
