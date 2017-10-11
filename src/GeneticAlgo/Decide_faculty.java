@@ -9,8 +9,7 @@ import java.util.ArrayList;
 public class Decide_faculty implements iTimeTable {
 
 	private static StringBuffer TITLE = new StringBuffer("遺伝的アルゴリズムを用いた時間割作成");
-	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 前期の時間割
-	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 後期の時間割
+	
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1=new ArrayList<ClassOfGrade>();// 1次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2=new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3=new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ
@@ -22,12 +21,12 @@ public class Decide_faculty implements iTimeTable {
 	 */
 	public Decide_faculty() {
 
-		for (int day = 0; day < MAX_DAY; day++) {
-			for (int period = 0; period < MAX_PERIOD; period++) {
-				f_PreviousTimeTables[day][period] = new TimeTable();
-				f_LatterTimeTables[day][period] = new TimeTable();
-			}
-		}
+//		for (int day = 0; day < MAX_DAY; day++) {
+//			for (int period = 0; period < MAX_PERIOD; period++) {
+//				f_PreviousTimeTables[day][period] = new TimeTable();
+//				f_LatterTimeTables[day][period] = new TimeTable();
+//			}
+//		}
 	}
 
 //	/*
