@@ -57,6 +57,17 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 			System.out.println(f_TimeTableData3.get(number).getClassOfGrade()
 					.getCourseOrClass()
 					+ "クラス");// コース・クラス
+
+			// System.out.println(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("エレ情"));
+			// System.out.println(!"エレ情".equals(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass()));
+
+			// if(f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("エレ情")==true){
+			// System.out.println("true");
+			// }
+			//
+			// if(!f_TimeTableData3.get(number).getClassOfGrade().getCourseOrClass().equals("エレ情")){
+			// System.out.println("false");
+			// }
 		}
 	}
 
@@ -79,16 +90,16 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 			// 重複がある限り繰り返す
 			do {
-
 				makeFirstTimeTable3(number);// 最初の3次の時間割を決める
-			} while (checkDuplication());
+
+			} while (checkDuplication(number));
 
 		}
 	}
 
 	/*
 	 * 最初の3次の時間割を決める
-	 * 
+	 *
 	 * @param number 番目
 	 */
 	private void makeFirstTimeTable3(int number) {
@@ -111,29 +122,70 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 重複がないかのチェック
-	 * 
+	 *
+	 * @param number 番目(3次の時間割)
+	 *
 	 * @return true 重複あり
-	 * 
+	 *
 	 * @return false 重複なし
 	 */
-	private boolean checkDuplication() {
+	private boolean checkDuplication(int number) {
+		System.out.print(f_TimeTableData3.get(number).getDayOfWeek() + "曜日、");// 曜日
+		System.out.print(f_TimeTableData3.get(number).getPeriod() + "限目、");// 限目
+		System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
+				.getNumber()
+				+ "コマ、");// コマ数
+		System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
+				.getGrade()
+				+ "年、");// 学年
+		System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
+				.getPreviousOrLatter()
+				+ "、");// 前期・後期
+		System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
+				.getSubject()
+				+ "、");// 科目名
+		System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
+				.getTeacher()
+				+ "先生、");// 担当教員
+		System.out.print(f_TimeTableData3.get(number).getClassRoom() + "教室、");// 教室
+		System.out.println(f_TimeTableData3.get(number).getClassOfGrade()
+				.getCourseOrClass()
+				+ "クラス");// コース・クラス
 
-		for (int number = 0; number < f_TimeTableData3.size(); number++) {
-
-			// 1次の時間割と重複するとき
-			if (checkDuplication1(number)) {
-				return true;
+		// 1次の時間割と重複するとき
+		if (checkDuplication1(number)) {
+			if (DEBUG) {
+				System.out.println("1次と重複あり");
 			}
+			return true;
+		}
 
-			// 2次の時間割と重複するとき
-			if (checkDuplication2(number)) {
-				return true;
-			}
+		if (DEBUG) {
+			System.out.println("1次と重複なし");
+		}
 
-			// 3次の時間割と重複するとき
-			if (checkDuplication3(number)) {
-				return true;
+		// 2次の時間割と重複するとき
+		if (checkDuplication2(number)) {
+			if (DEBUG) {
+				System.out.println("2次と重複あり");
 			}
+			return true;
+		}
+
+		if (DEBUG) {
+			System.out.println("2次と重複なし");
+		}
+
+		// 3次の時間割と重複するとき
+		if (checkDuplication3(number)) {
+			if (DEBUG) {
+				System.out.println("3次と重複あり");
+			}
+			return true;
+		}
+
+		if (DEBUG) {
+			System.out.println("3次と重複なし");
 		}
 
 		return false;
@@ -141,11 +193,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 1次の時間割と重複がないかのチェック
-	 * 
+	 *
 	 * @param number 番目(3次の時間割)
-	 * 
+	 *
 	 * @return true 重複あり
-	 * 
+	 *
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication1(int number) {
@@ -164,215 +216,335 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 						.equals(f_TimeTableData3.get(number).getClassOfGrade()
 								.getPreviousOrLatter())) {
 
-					for (int addPeriod = 0; addPeriod < f_TimeTableData1
-							.get(number1).getClassOfGrade().getNumber(); addPeriod++) {
+					// 同じ学年のとき
+					if (f_TimeTableData1.get(number1).getClassOfGrade()
+							.getGrade() == f_TimeTableData3.get(number)
+							.getClassOfGrade().getGrade()) {
 
-						// 同じ限目のとき
-						if (f_TimeTableData1.get(number1).getPeriod()
-								+ addPeriod == f_TimeTableData3.get(number)
-								.getPeriod()) {
+						for (int addPeriod = 0; addPeriod < f_TimeTableData1
+								.get(number1).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ先生のとき
-							if (f_TimeTableData1
-									.get(number1)
-									.getClassOfGrade()
-									.getTeacher()
-									.equals(f_TimeTableData3.get(number)
-											.getClassOfGrade().getTeacher())) {
-								return true;
-							}
+							// 同じ限目のとき
+							if (f_TimeTableData1.get(number1).getPeriod()
+									+ addPeriod == f_TimeTableData3.get(number)
+									.getPeriod()) {
 
-							// 同じ教室のとき
-							else if (f_TimeTableData1
-									.get(number1)
-									.getClassRoom()
-									.equals(f_TimeTableData3.get(number)
-											.getClassRoom())) {
-								return true;
-							}
-
-							// 同じコース・クラスのとき
-							else if (f_TimeTableData1
-									.get(number1)
-									.getClassOfGrade()
-									.getCourseOrClass()
-									==(f_TimeTableData3.get(number)
-											.getClassOfGrade()
-											.getCourseOrClass())) {
-								return true;
-							}
-							
-							// 1次の時間割のクラスがabクラスのとき
-							else if ("ab".equals(f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass())) {
-
-								// 3次の時間割のクラスがbcまたはcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "bc"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c") {
+								// 同じ先生のとき
+								if (f_TimeTableData1
+										.get(number1)
+										.getClassOfGrade()
+										.getTeacher()
+										.equals(f_TimeTableData3.get(number)
+												.getClassOfGrade().getTeacher())) {
 									return true;
 								}
 
-							}
-
-							// 1次の時間割のクラスがbcクラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "bc") {
-
-								// 3次の時間割のクラスがaまたはabクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "ab") {
+								// 同じ教室のとき
+								else if (f_TimeTableData1
+										.get(number1)
+										.getClassRoom()
+										.equals(f_TimeTableData3.get(number)
+												.getClassRoom())) {
 									return true;
 								}
 
-							}
-
-							// 1次の時間割のクラスが奇数クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "奇数") {
-
-								// 3次の時間割のクラスが偶数クラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "偶数") {
-									return true;
-								}
-							}
-
-							// 1次の時間割のクラスが奇数クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "偶数") {
-
-								// 3次の時間割のクラスが偶数クラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "奇数") {
-									return true;
-								}
-							}
-
-							// 1次の時間割がaクラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "a") {
-
-								// 3次の時間割のクラスがbまたはcまたはbcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "b"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "bc") {
-									return true;
-								}
-
-							}
-
-							// 1次の時間割がbクラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "b") {
-
-								// 3次の時間割のクラスがaまたはcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c") {
-									return true;
-								}
-
-							}
-
-							// 1次の時間割がcクラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "c") {
-
-								// 3次の時間割のクラスがaまたはbまたはabクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "b"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "ab") {
-									return true;
-								}
-							}
-
-							// 1次の時間割がエレ情(奇数)クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "エレ情(奇数)") {
-
-								// 3次の時間割のクラスがエネ環またはエレ情(偶数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(偶数)") {
-									return true;
-								}
-							}
-
-							// 1次の時間割がエレ情(偶数)クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "エレ情(偶数)") {
-
-								// 3次の時間割のクラスがエネ環またはエレ情(奇数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(奇数)") {
-									return true;
-								}
-
-							}
-
-							// 1次の時間割がエレ情クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "エレ情") {
-
-								// 3次の時間割のクラスがエネ環クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環") {
-									return true;
-								}
-							}
-
-							// 1次の時間割がエネ環クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "エネ環") {
-
-								// 3次の時間割のクラスがエレ情またはエレ情(奇数)またはエレ情(偶数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() .equals("エレ情")==false
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(奇数)"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(偶数)") {
-									return true;
-								}
-							}
-
-							// 1次の時間割が共通クラスのとき
-							else if (f_TimeTableData1.get(number1)
-									.getClassOfGrade().getCourseOrClass() == "共通") {
-
-								// 3次の時間割の学年が同じとき
-								if (f_TimeTableData1.get(number1)
-										.getClassOfGrade().getGrade() == f_TimeTableData3
+								// 同じコース・クラスのとき
+								else if (f_TimeTableData1.get(number1)
+										.getClassOfGrade().getCourseOrClass() == (f_TimeTableData3
 										.get(number).getClassOfGrade()
-										.getGrade()) {
+										.getCourseOrClass())) {
 									return true;
 								}
 
+								// 3次の時間割のクラスがabクラスのとき
+								else if ("ab".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のbcクラスのとき
+									if ("bc".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("abと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割のクラスがbcクラスのとき
+								else if ("bc".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がabクラスのとき
+									else if ("ab".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("bcと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割のクラスが奇数クラスのとき
+								else if ("奇数".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のクラスが偶数クラスのとき
+									if ("偶数".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("奇数と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割のクラスが偶数クラスのとき
+								else if ("偶数".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のクラスが奇数クラスのとき
+									if ("奇数".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("偶数と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がaクラスのとき
+								else if ("a".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がbクラスのとき
+									if ("b".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がbcクラスのとき
+									else if ("bc".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("aと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がbクラスのとき
+								else if ("b".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("bと重複");
+									}
+
+									return true;
+
+								}
+
+								// 3次の時間割がcクラスのとき
+								else if ("c".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がbクラスのとき
+									else if ("b".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がabクラスのとき
+									else if ("ab".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("cと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエレ情(奇数)クラスのとき
+								else if ("エレ情(奇数)".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(偶数)クラスのとき
+									else if ("エレ情(偶数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情(奇数)と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエレ情(偶数)クラスのとき
+								else if ("エレ情(偶数)".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(奇数)クラスのとき
+									else if ("エレ情(奇数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情(偶数)と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエレ情クラスのとき
+								else if ("エレ情".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエネ環クラスのとき
+								else if ("エネ環".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエレ情クラスのとき
+									if ("エレ情".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(奇数)クラスのとき
+									else if ("エレ情(奇数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(偶数)クラスのとき
+									else if ("エレ情(偶数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+									if (DEBUG) {
+										System.out.println("エネ環と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割が共通クラスのとき
+								else if ("共通".equals(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									if (DEBUG) {
+										System.out.println("共通と重複");
+									}
+									return true;
+
+								}
 							}
 						}
 					}
@@ -385,11 +557,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 2次の時間割と重複がないかのチェック
-	 * 
+	 *
 	 * @param number 番目(3次の時間割)
-	 * 
+	 *
 	 * @return true 重複あり
-	 * 
+	 *
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication2(int number) {
@@ -421,6 +593,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 									.getGrade() == f_TimeTableData3.get(number)
 									.getClassOfGrade().getGrade()) {
 
+								if(DEBUG){
+									System.out.println("学年が重複");
+								}
+
 								return true;
 							}
 
@@ -431,6 +607,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 									.getTeacher()
 									.equals(f_TimeTableData3.get(number)
 											.getClassOfGrade().getTeacher())) {
+
+								if(DEBUG){
+									System.out.println("先生が重複");
+								}
+
 								return true;
 							}
 						}
@@ -443,9 +624,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 3次の時間割と重複がないかのチェック
-	 * 
+	 *
+	 * @param number 番目(3次の時間割)
+	 *
 	 * @return true 重複あり
-	 * 
+	 *
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication3(int number) {
@@ -464,215 +647,349 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 						.equals(f_TimeTableData3.get(number).getClassOfGrade()
 								.getPreviousOrLatter())) {
 
-					for (int addPeriod = 0; addPeriod < f_TimeTableData3
-							.get(number3).getClassOfGrade().getNumber(); addPeriod++) {
+					// 同じ学年のとき
+					if (f_TimeTableData3.get(number3).getClassOfGrade()
+							.getGrade() == f_TimeTableData3.get(number)
+							.getClassOfGrade().getGrade()) {
 
-						// 同じ限目のとき
-						if (f_TimeTableData3.get(number3).getPeriod()
-								+ addPeriod == f_TimeTableData3.get(number)
-								.getPeriod()) {
+						for (int addPeriod = 0; addPeriod < f_TimeTableData3
+								.get(number3).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ先生のとき
-							if (f_TimeTableData3
-									.get(number3)
-									.getClassOfGrade()
-									.getTeacher()
-									.equals(f_TimeTableData3.get(number)
-											.getClassOfGrade().getTeacher())) {
-								return true;
-							}
+							// 同じ限目のとき
+							if (f_TimeTableData3.get(number3).getPeriod()
+									+ addPeriod == f_TimeTableData3.get(number)
+									.getPeriod()) {
 
-							// 同じ教室のとき
-							else if (f_TimeTableData3
-									.get(number3)
-									.getClassRoom()
-									.equals(f_TimeTableData3.get(number)
-											.getClassRoom())) {
-								return true;
-							}
+								// 同じ先生のとき
+								if (f_TimeTableData3
+										.get(number3)
+										.getClassOfGrade()
+										.getTeacher()
+										.equals(f_TimeTableData3.get(number)
+												.getClassOfGrade().getTeacher())) {
 
-							// 同じコース・クラスのとき
-							else if (f_TimeTableData3
-									.get(number3)
-									.getClassOfGrade()
-									.getCourseOrClass()
-									.equals(f_TimeTableData3.get(number)
+									if (DEBUG) {
+										System.out.println("先生と重複");
+									}
+									return true;
+								}
+
+								// 同じ教室のとき
+								else if (f_TimeTableData3
+										.get(number3)
+										.getClassRoom()
+										.equals(f_TimeTableData3.get(number)
+												.getClassRoom())) {
+									if (DEBUG) {
+										System.out.println("教室と重複");
+									}
+									return true;
+								}
+
+								// 同じコース・クラスのとき
+								else if (f_TimeTableData3
+										.get(number3)
+										.getClassOfGrade()
+										.getCourseOrClass()
+										.equals(f_TimeTableData3.get(number)
+												.getClassOfGrade()
+												.getCourseOrClass()) == true) {
+
+									if (DEBUG) {
+										System.out.println("コース・クラスと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割のクラスがabクラスのとき
+								else if ("ab".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のbcクラスのとき
+									if ("bc".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("abと重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割のクラスがbcクラスのとき
+								else if ("bc".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割のaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
 											.getClassOfGrade()
 											.getCourseOrClass()) == true) {
-								return true;
-							}
+										return false;
+									}
 
-							// 3次の時間割のクラスがabクラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "ab") {
+									// 3次の時間割がabクラスのとき
+									else if ("ab".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-								// 3次の時間割のクラスがbcまたはcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "bc"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c") {
+									if (DEBUG) {
+										System.out.println("bcと重複");
+									}
 									return true;
 								}
 
-							}
+								// 3次の時間割のクラスが奇数クラスのとき
+								else if ("奇数".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
 
-							// 3次の時間割のクラスがbcクラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "bc") {
+									// 3次の時間割のクラスが偶数クラスのとき
+									if ("偶数".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
 
-								// 3次の時間割のクラスがaまたはabクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "ab") {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("奇数と重複");
+									}
 									return true;
 								}
 
-							}
+								// 3次の時間割のクラスが偶数クラスのとき
+								else if ("偶数".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
 
-							// 3次の時間割のクラスが奇数クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "奇数") {
+									// 3次の時間割のクラスが奇数クラスのとき
+									if ("奇数".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
 
-								// 3次の時間割のクラスが偶数クラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "偶数") {
-									return true;
-								}
-							}
+										return false;
+									}
 
-							// 3次の時間割のクラスが奇数クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "偶数") {
-
-								// 3次の時間割のクラスが偶数クラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "奇数") {
-									return true;
-								}
-							}
-
-							// 3次の時間割がaクラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "a") {
-
-								// 3次の時間割のクラスがbまたはcまたはbcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "b"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "bc") {
+									if (DEBUG) {
+										System.out.println("偶数と重複");
+									}
 									return true;
 								}
 
-							}
+								// 3次の時間割がaクラスのとき
+								else if ("a".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
 
-							// 3次の時間割がbクラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "b") {
+									// 3次の時間割がbクラスのとき
+									if ("b".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-								// 3次の時間割のクラスがaまたはcクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "c") {
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がbcクラスのとき
+									else if ("bc".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("aと重複");
+									}
 									return true;
 								}
 
-							}
+								// 3次の時間割がbクラスのとき
+								else if ("b".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
 
-							// 3次の時間割がcクラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "c") {
+									// 3次の時間割がaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-								// 3次の時間割のクラスがaまたはbまたはabクラスでないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "a"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "b"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "ab") {
+									// 3次の時間割がcクラスのとき
+									else if ("c".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("bと重複");
+									}
+
 									return true;
-								}
-							}
 
-							// 3次の時間割がエレ情(奇数)またはエレ情(偶数)クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "エレ情(奇数)") {
-
-								// 3次の時間割のクラスがエネ環またはエレ情(偶数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(偶数)") {
-									return true;
-								}
-							}
-
-							// 3次の時間割がエレ情(偶数)クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "エレ情(偶数)") {
-
-								// 3次の時間割のクラスがエネ環またはエレ情(奇数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(奇数)") {
-									return true;
 								}
 
-							}
+								// 3次の時間割がcクラスのとき
+								else if ("c".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
 
-							// 3次の時間割がエレ情クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "エレ情") {
+									// 3次の時間割がaクラスのとき
+									if ("a".equals(f_TimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-								// 3次の時間割のクラスがエネ環クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エネ環") {
-									return true;
-								}
-							}
+									// 3次の時間割がbクラスのとき
+									else if ("b".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-							// 3次の時間割がエネ環クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "エネ環") {
+									// 3次の時間割がabクラスのとき
+									else if ("ab".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
 
-								// 3次の時間割のクラスがエレ情またはエレ情(奇数)またはエレ情(偶数)クラスではないとき
-								if (f_TimeTableData3.get(number)
-										.getClassOfGrade().getCourseOrClass() != "エレ情"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(奇数)"
-										|| f_TimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass() != "エレ情(偶数)") {
-									return true;
-								}
-							}
-
-							// 3次の時間割が共通クラスのとき
-							else if (f_TimeTableData3.get(number3)
-									.getClassOfGrade().getCourseOrClass() == "共通") {
-
-								// 3次の時間割の学年が同じとき
-								if (f_TimeTableData3.get(number3)
-										.getClassOfGrade().getGrade() == f_TimeTableData3
-										.get(number).getClassOfGrade()
-										.getGrade()) {
+									if (DEBUG) {
+										System.out.println("cと重複");
+									}
 									return true;
 								}
 
+								// 3次の時間割がエレ情(奇数)クラスのとき
+								else if ("エレ情(奇数)".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(偶数)クラスのとき
+									else if ("エレ情(偶数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情(奇数)と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエレ情(偶数)クラスのとき
+								else if ("エレ情(偶数)".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(奇数)クラスのとき
+									else if ("エレ情(奇数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情(偶数)と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエレ情クラスのとき
+								else if ("エレ情".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエネ環クラスのとき
+									if ("エネ環".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									if (DEBUG) {
+										System.out.println("エレ情と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割がエネ環クラスのとき
+								else if ("エネ環".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									// 3次の時間割がエレ情クラスのとき
+									if ("エレ情".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(奇数)クラスのとき
+									else if ("エレ情(奇数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+
+									// 3次の時間割がエレ情(偶数)クラスのとき
+									else if ("エレ情(偶数)".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getCourseOrClass()) == true) {
+										return false;
+									}
+									if (DEBUG) {
+										System.out.println("エネ環と重複");
+									}
+									return true;
+								}
+
+								// 3次の時間割が共通クラスのとき
+								else if ("共通".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getCourseOrClass()) == true) {
+
+									if (DEBUG) {
+										System.out.println("共通と重複");
+									}
+									return true;
+
+								}
 							}
 						}
 					}
@@ -705,7 +1022,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * プログラムを終了したか
-	 * 
+	 *
 	 * @return true:終了
 	 */
 	private boolean isFinishedProg() {
@@ -729,7 +1046,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 実行する処理
-	 * 
+	 *
 	 * @return 0:終了
 	 */
 	public int exe() {
