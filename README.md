@@ -35,3 +35,7 @@ http://gomafuace.seesaa.net/article/301560900.html
 ## ※Eclipseのエクスプローラーでの注意
 
 - ソースコードを新規追加やデバッグするのはパッケージエクスプローラーで、EclipseのGitリポジトリーではデバッグや新規追加はできないが、ソースコードの中身は変更できる。
+
+## 6.遺伝的アルゴリズムに関するURL
+
+- http://www.sist.ac.jp/~kanakubo/research/evolutionary_computing/ga_operators.html
