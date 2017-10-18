@@ -43,6 +43,48 @@ public class ClassOfGrade {
 //		f_ClassRoom = null;
 	}
 
+	/*
+	 * 前期後期を数値に変える
+	 *
+	 * @param previous_latter 前期後期
+	 *
+	 * @return 前期後期を数値に変えたもの
+	 */
+	public static int changePreviousOrLatterToValue(String previous_latter) {
+
+		switch (previous_latter) {
+		case "前期":
+			return 0;
+
+		case "後期":
+			return 1;
+
+		default:
+			return -1;
+		}
+	}
+	
+	/*
+	 * 値を前期後期に変える
+	 *
+	 * @param value 値
+	 *
+	 * @return 値を前期後期に変えたもの
+	 */
+	public static String changeValueToPreviousOrLatter(int value) {
+
+		switch (value) {
+
+		case 0:
+			return "前期";
+
+		case 1:
+			return "後期";
+
+		}
+		return "不明";
+	}
+	
 	// ----------------------------//
 	// ----------ゲッター関数------//
 	// ----------------------------//
