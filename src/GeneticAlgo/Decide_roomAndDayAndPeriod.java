@@ -14,7 +14,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 前期の時間割
 	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 後期の時間割
-	private double f_EvaluationValue1;// 評価値
+	private double f_OldEvaluationValue;// 前の評価値
+	private double f_NewEvaluationValue;// 新しい評価値
 	private int f_RandomDayOfWeek1;// ランダムの曜日
 	private int f_RandomPeriod1;// ランダムの限目
 	private int f_RandomGrade1;// ランダムの学年
@@ -23,11 +24,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	private int f_RandomPeriod2;// ランダムの限目
 	private int f_RandomGrade2;// ランダムの学年
 	private int f_RandomPreviousOrLatter2;// 前期か後期か
-
 	private TimeTable f_TimeTableDataTmp1;// 時間割のデータの交換1
 	private TimeTable f_TimeTableDataTmp2;// 時間割のデータの交換2
 	private int f_TmpNumber1;// 交換用の番目1
 	private int f_TmpNumber2;// 交換用の番目2
+	private ArrayList<TimeTable> f_NewTimeTableData3 = new ArrayList<TimeTable>();// 新規の3次の時間割のデータ
 
 	protected ArrayList<TimeTable> f_TimeTableData1 = new ArrayList<TimeTable>();// 1次の時間割のデータ
 	protected ArrayList<TimeTable> f_TimeTableData2 = new ArrayList<TimeTable>();// 2次の時間割のデータ
@@ -62,7 +63,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ "、");// 科目名
 			System.out.print(f_TimeTableData1.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ "先生、");// 担当教員
 			System.out.print(f_TimeTableData1.get(number).getClassRoom()
 					+ "教室、");// 教室
@@ -88,7 +89,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ "、");// 科目名
 			System.out.print(f_TimeTableData2.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ "先生、");// 担当教員
 			System.out.print(f_TimeTableData2.get(number).getClassRoom()
 					+ "教室、");// 教室
@@ -114,7 +115,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ "、");// 科目名
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ "先生、");// 担当教員
 			System.out.print(f_TimeTableData3.get(number).getClassRoom()
 					+ "教室、");// 教室
@@ -148,7 +149,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ "、");// 科目名
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ "先生、");// 担当教員
 			System.out.print(f_TimeTableData3.get(number).getClassRoom()
 					+ "教室、");// 教室
@@ -156,6 +157,90 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getCourseOrClass()
 					+ "クラス");// コース・クラス
 		}
+	}
+
+	// ------------------------------------------------------//
+	// ---------------------評価値---------------------------//
+	// ------------------------------------------------------//
+	/*
+	 * 曜日の評価値
+	 *
+	 * @param day_of_week 曜日
+	 */
+	private double getDayEvaluationValue() {
+
+		double value = 1.0;
+
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+
+			// 土曜日のとき
+			if (Objects.equals("土", f_NewTimeTableData3.get(number)
+					.getDayOfWeek())) {
+				value *= 1.0;
+			}
+
+			// 月～金曜日のとき
+			else {
+				value *= 2.0;
+			}
+		}
+
+		if (DEBUG) {
+			System.out.println("曜日の評価値:" + value);
+		}
+
+		return value;
+	}
+
+	/*
+	 * 担当者の授業のコマ数の評価値
+	 */
+	private double getTeacherEvaluationValue() {
+
+		double value = 1.0;
+
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+
+		}
+
+		return value;
+	}
+
+	/*
+	 * 担当者の授業のコマ数の評価値
+	 *
+	 * @param teacher 担当者
+	 */
+	private double getTeacherEvaluationValue(String teacher) {
+
+		double value = 1.0;
+
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+
+			if (Objects.equals("月", f_NewTimeTableData3.get(number)
+					.getDayOfWeek())) {
+
+			}
+		}
+
+		return value;
+	}
+
+	/*
+	 * 全体の評価値
+	 *
+	 * @param day_of_week 曜日
+	 */
+	private double getEvaluationValue() {
+
+		return getDayEvaluationValue() * getTeacherEvaluationValue();
+	}
+
+	/*
+	 * 評価値の計算をする
+	 */
+	private void calcEvaluationValue(){
+		f_NewEvaluationValue=getEvaluationValue();
 	}
 
 	// ------------------------------------------------------//
@@ -186,6 +271,28 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 			cross();// 交叉する
 
 			mutation();// 突然変異をする
+
+			calcEvaluationValue();// 評価値の計算をする
+
+			// 新しい評価値が上のとき
+			if (f_OldEvaluationValue < f_NewEvaluationValue) {
+
+				for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+
+					f_TimeTableData3.set(number,
+							f_NewTimeTableData3.get(number));// 前の時間割のデータを更新する
+				}
+			}
+
+			// 新しい評価値以下のとき
+			else {
+
+				for (int number = 0; number < f_TimeTableData3.size(); number++) {
+
+					f_NewTimeTableData3.set(number,
+							f_TimeTableData3.get(number));// 前の時間割のデータに戻す
+				}
+			}
 		}
 	}
 
@@ -296,7 +403,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 				// 新規の時間割のデータとしてセットする
 				new_time_table = time_table_data.get(number);
-				new_time_table.setDayOfWeek(TimeTable.changeValueToDay(day_of_week));
+				new_time_table.setDayOfWeek(TimeTable
+						.changeValueToDay(day_of_week));
 				new_time_table.setPeriod(period);
 				new_time_table.getClassOfGrade().setGrade(grade);
 				tmp_number = number;
@@ -324,8 +432,129 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	 */
 	private boolean canCross() {
 
+		TimeTable tmpTimeTableData = new TimeTable();
+
+		// 試しに交叉
+		tmpTimeTableData = f_TimeTableDataTmp1;
+		f_TimeTableDataTmp1 = f_TimeTableDataTmp2;
+		f_TimeTableDataTmp2 = tmpTimeTableData;
+
+		// 1次の時間割のデータと重複するとき
+		if (checkDuplication1(f_TimeTableDataTmp1)) {
+
+			if (DEBUG) {
+				System.out
+						.println("1次の時間割のデータと重複するため交叉できない(f_TimeTableDataTmp1)");
+			}
+
+			return false;
+		}
+
+		// 2次の時間割のデータと重複するとき
+		if (checkDuplication2(f_TimeTableDataTmp1)) {
+
+			if (DEBUG) {
+				System.out
+						.println("2次の時間割のデータと重複するため交叉できない(f_TimeTableDataTmp1)");
+			}
+
+			return false;
+		}
+
+		// 1次の時間割のデータと重複するとき
+		if (checkDuplication1(f_TimeTableDataTmp2)) {
+
+			if (DEBUG) {
+				System.out
+						.println("1次の時間割のデータと重複するため交叉できない(f_TimeTableDataTmp2)");
+			}
+
+			return false;
+		}
+
+		// 2次の時間割のデータと重複するとき
+		if (checkDuplication2(f_TimeTableDataTmp2)) {
+
+			if (DEBUG) {
+				System.out
+						.println("2次の時間割のデータと重複するため交叉できない(f_TimeTableDataTmp2)");
+			}
+
+			return false;
+		}
+
+		if (DEBUG) {
+			System.out.println("交叉できる");
+		}
 
 		return true;
+	}
+
+	/*
+	 * 交叉する
+	 */
+	private void cross() {
+
+		// 交叉
+		f_NewTimeTableData3.get(f_TmpNumber1).setPeriod(
+				f_TimeTableDataTmp2.getPeriod());
+		f_NewTimeTableData3.get(f_TmpNumber1).setDayOfWeek(
+				f_TimeTableDataTmp2.getDayOfWeek());
+
+		f_NewTimeTableData3.get(f_TmpNumber2).setPeriod(
+				f_TimeTableDataTmp1.getPeriod());
+		f_NewTimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+				f_TimeTableDataTmp1.getDayOfWeek());
+
+	}
+
+	/*
+	 * 突然変異する
+	 */
+	private void mutation() {
+
+		int num = Calculation
+				.getRnd(1, ORDER1_COLS + ORDER2_COLS + ORDER3_COLS);// 3次の科目数/全科目数の確率
+
+		// 1から3次の科目数までのとき
+		if (num <= ORDER3_COLS) {
+
+			if (DEBUG) {
+				System.out.println("突然変異発生");
+			}
+
+			// 時間割のデータと重複しないようになるまで繰り返す
+			do {
+				f_TmpNumber1 = Calculation.getRnd(0,
+						f_NewTimeTableData3.size() - 1);// 要素番号をランダムに選択
+				f_TimeTableDataTmp1 = f_NewTimeTableData3.get(f_TmpNumber1);// 新規の3次の時間割のデータを選択
+				f_TimeTableDataTmp1.setDayOfWeek(TimeTable
+						.changeValueToDay(Calculation.getRnd(
+								TimeTable.changeDayToValue("月"),
+								TimeTable.changeDayToValue("土"))));// 曜日をランダムに選択
+				f_TimeTableDataTmp1.setPeriod(Calculation.getRnd(1, 5));// 限目をランダムに選択
+				f_TimeTableDataTmp1.setClassRoom(TimeTable
+						.changeValueToDay(Calculation.getRnd(
+								TimeTable.changeRoomToValue("31-202"),
+								TimeTable.changeRoomToValue("31-803"))));// 教室をランダムに選択
+
+			} while (checkDuplication(f_TimeTableDataTmp1));
+
+			f_NewTimeTableData3.get(f_TmpNumber1).setDayOfWeek(
+					f_TimeTableDataTmp1.getDayOfWeek());// 曜日
+			f_NewTimeTableData3.get(f_TmpNumber1).setPeriod(
+					f_TimeTableDataTmp1.getPeriod());// 限目
+			f_NewTimeTableData3.get(f_TmpNumber1).setClassRoom(
+					f_TimeTableDataTmp1.getClassRoom());// 教室
+		}
+
+		// 3次の科目数を超えた数のとき
+		else {
+
+			if (DEBUG) {
+				System.out.println("突然変異なし");
+			}
+		}
 	}
 
 	/*
@@ -347,7 +576,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 			System.out.print(time_table.getClassOfGrade().getPreviousOrLatter()
 					+ "、");// 前期・後期
 			System.out.print(time_table.getClassOfGrade().getSubject() + "、");// 科目名
-			System.out.print(time_table.getClassOfGrade().getTeacher() + "先生、");// 担当教員
+			System.out.print(time_table.getClassOfGrade().getTeachers().getName()+ "先生、");// 担当教員
 			System.out.print(time_table.getClassRoom() + "教室、");// 教室
 			System.out.println(time_table.getClassOfGrade().getCourseOrClass()
 					+ "クラス");// コース・クラス
@@ -432,8 +661,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects.equals(f_TimeTableData1
 										.get(number1).getClassOfGrade()
-										.getTeacher(), time_table
-										.getClassOfGrade().getTeacher())) {
+										.getTeachers().getName(), time_table
+										.getClassOfGrade().getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複");
@@ -482,8 +711,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects.equals(f_TimeTableData1
 										.get(number1).getClassOfGrade()
-										.getTeacher(), time_table
-										.getClassOfGrade().getTeacher())) {
+										.getTeachers().getName(), time_table
+										.getClassOfGrade().getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -566,8 +795,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects.equals(f_TimeTableData2
 										.get(number2).getClassOfGrade()
-										.getTeacher(), time_table
-										.getClassOfGrade().getTeacher())) {
+										.getTeachers().getName(), time_table
+										.getClassOfGrade().getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -604,6 +833,19 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	 */
 	private boolean checkDuplication3(TimeTable time_table) {
 
+		// 会議の曜日のとき
+		if (Objects.equals(CONFERENCE_DAY, time_table.getDayOfWeek())) {
+
+			// 会議の限目のとき
+			if (time_table.getPeriod() == CONFERENCE_PERIOD) {
+
+				if (DEBUG) {
+					System.out.println("会議の日程と重複");
+				}
+				return true;
+			}
+		}
+
 		for (int number3 = 0; number3 < f_TimeTableData3.size(); number3++) {
 
 			// 同じ曜日のとき
@@ -634,9 +876,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								if (f_TimeTableData3
 										.get(number3)
 										.getClassOfGrade()
-										.getTeacher()
+										.getTeachers().getName()
 										.equals(time_table.getClassOfGrade()
-												.getTeacher())) {
+												.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複");
@@ -685,9 +927,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								if (f_TimeTableData3
 										.get(number3)
 										.getClassOfGrade()
-										.getTeacher()
+										.getTeachers().getName()
 										.equals(time_table.getClassOfGrade()
-												.getTeacher())) {
+												.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -714,39 +956,6 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 		return false;
 	}
 
-
-	/*
-	 * 交叉する
-	 */
-	private void cross() {
-
-	}
-
-	/*
-	 * 突然変異する
-	 */
-	private void mutation() {
-
-		int num = Calculation
-				.getRnd(1, ORDER1_COLS + ORDER2_COLS + ORDER3_COLS);// 3次の科目数/全科目数の確率
-
-		// 1から3次の科目数までのとき
-		if (num <= ORDER3_COLS) {
-
-			if (DEBUG) {
-				System.out.println("突然変異発生");
-			}
-
-		}
-
-		// 3次の科目数を超えた数のとき
-		else {
-			if (DEBUG) {
-				System.out.println("突然変異なし");
-			}
-		}
-	}
-
 	/*
 	 * 学年ごとの授業を最初の時間割にセットする
 	 */
@@ -764,6 +973,11 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 
 			} while (checkDuplication(number));
 
+		}
+
+		// 新規の3次の時間割のデータとしてセット
+		for (int number = 0; number < f_TimeTableData3.size(); number++) {
+			f_NewTimeTableData3.add(f_TimeTableData3.get(number));
 		}
 	}
 
@@ -818,7 +1032,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ "、");// 科目名
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ "先生、");// 担当教員
 			System.out.print(f_TimeTableData3.get(number).getClassRoom()
 					+ "教室、");// 教室
@@ -906,10 +1120,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects
 										.equals(f_TimeTableData1.get(number1)
-												.getClassOfGrade().getTeacher(),
+												.getClassOfGrade().getTeachers().getName(),
 												f_TimeTableData3.get(number)
 														.getClassOfGrade()
-														.getTeacher())) {
+														.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複");
@@ -961,10 +1175,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects
 										.equals(f_TimeTableData1.get(number1)
-												.getClassOfGrade().getTeacher(),
+												.getClassOfGrade().getTeachers().getName(),
 												f_TimeTableData3.get(number)
 														.getClassOfGrade()
-														.getTeacher())) {
+														.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -1048,10 +1262,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects
 										.equals(f_TimeTableData2.get(number2)
-												.getClassOfGrade().getTeacher(),
+												.getClassOfGrade().getTeachers().getName(),
 												f_TimeTableData3.get(number)
 														.getClassOfGrade()
-														.getTeacher())) {
+														.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -1089,6 +1303,20 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	 */
 	private boolean checkDuplication3(int number) {
 
+		// 会議の曜日のとき
+		if (Objects.equals(CONFERENCE_DAY, f_TimeTableData3.get(number)
+				.getDayOfWeek())) {
+
+			// 会議の限目のとき
+			if (f_TimeTableData3.get(number).getPeriod() == CONFERENCE_PERIOD) {
+
+				if (DEBUG) {
+					System.out.println("会議の日程と重複");
+				}
+				return true;
+			}
+		}
+
 		for (int number3 = 0; number3 < f_TimeTableData3.size(); number3++) {
 
 			if (number <= number3) {
@@ -1121,10 +1349,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects
 										.equals(f_TimeTableData3.get(number3)
-												.getClassOfGrade().getTeacher(),
+												.getClassOfGrade().getTeachers().getName(),
 												f_TimeTableData3.get(number)
 														.getClassOfGrade()
-														.getTeacher())) {
+														.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("同じ先生");
@@ -1176,10 +1404,10 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 								// 同じ先生のとき
 								if (Objects
 										.equals(f_TimeTableData3.get(number3)
-												.getClassOfGrade().getTeacher(),
+												.getClassOfGrade().getTeachers().getName(),
 												f_TimeTableData3.get(number)
 														.getClassOfGrade()
-														.getTeacher())) {
+														.getTeachers().getName())) {
 
 									if (DEBUG) {
 										System.out.println("先生と重複(違う学年)");
@@ -1677,7 +1905,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 					.getSubject()
 					+ ",");// 科目名
 			output.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getTeacher()
+					.getTeachers().getName()
 					+ ",");// 担当教員
 			output.print(f_TimeTableData3.get(number).getClassRoom() + ",");// 教室
 			output.println(f_TimeTableData3.get(number).getClassOfGrade()
@@ -1733,8 +1961,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 									.setPreviousOrLatter(strData[4]);// 前期後期
 							timeTableData.getClassOfGrade().setSubject(
 									strData[5]);// 科目名
-							timeTableData.getClassOfGrade().setTeacher(
-									strData[6]);// 担当教員
+							timeTableData.getClassOfGrade().getTeachers()
+									.setName(strData[6]);// 担当教員
 							timeTableData.setClassRoom(strData[7]);// 教室
 							timeTableData.getClassOfGrade().setCourseOrClass(
 									strData[8]);// コース・クラス
@@ -1782,7 +2010,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 						timeTableData.getClassOfGrade().setPreviousOrLatter(
 								strData[4]);// 前期後期
 						timeTableData.getClassOfGrade().setSubject(strData[5]);// 科目名
-						timeTableData.getClassOfGrade().setTeacher(strData[6]);// 担当教員
+						timeTableData.getClassOfGrade().getTeachers().setName(strData[6]);// 担当教員
 						timeTableData.setClassRoom(strData[7]);// 教室
 
 						f_TimeTableData2.add(timeTableData);// 2次の時間割の動的配列に追加
@@ -1825,7 +2053,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 	// classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
 	// classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
 	// classOfGradeData.setSubject(strData[3]);// 科目名
-	// classOfGradeData.setTeacher(strData[4]);// 担当教員
+	// classOfGradeData.getTeachers.setName(strData[4]);// 担当教員
 	//
 	// f_ClassOfGradeData3.add(classOfGradeData);// 3次の時間割の動的配列に追加
 	// }
@@ -1877,7 +2105,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 									.parseInt(strData[1]));// 学年
 							classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
 							classOfGradeData.setSubject(strData[3]);// 科目名
-							classOfGradeData.setTeacher(strData[4]);// 担当教員
+							classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 
 							f_ClassOfGradeData1.add(classOfGradeData);// 1次の時間割の動的配列に追加
 						}
@@ -1918,7 +2146,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
 						classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
 						classOfGradeData.setSubject(strData[3]);// 科目名
-						classOfGradeData.setTeacher(strData[4]);// 担当教員
+						classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 
 						f_ClassOfGradeData2.add(classOfGradeData);// 2次の時間割の動的配列に追加
 
@@ -1959,7 +2187,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
 						classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
 						classOfGradeData.setSubject(strData[3]);// 科目名
-						classOfGradeData.setTeacher(strData[4]);// 担当教員
+						classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 						classOfGradeData.setCourseOrClass(strData[5]);// コース・クラス
 						f_ClassOfGradeData3.add(classOfGradeData);// 3次の学年ごとの授業の動的配列に追加
 					}
