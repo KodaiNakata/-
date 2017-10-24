@@ -16,6 +16,10 @@ public interface iTimeTable {
 
 	public final int CHECK_NUM = 1000;// チェックする回数
 
+	public final int TEACHER_COLS = 43;// 先生のファイルの行
+	public final int TEACHER_DATA = 1;// 先生のファイルのデータの数
+	public final String TEACHER_NAME = "EleTeacher.csv";// 先生のファイルの名前
+
 	public final int ORDER1_COLS = 17;// 1次のデータの行
 	public final int ORDER1_DATA = 9;// 1次のデータの数
 	public final String FACULTY1_NAME = "faculty_1.csv";// 1次のファイル(担当者が決まったファイル)の名前

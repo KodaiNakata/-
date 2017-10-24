@@ -1,5 +1,7 @@
 package GeneticAlgo;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /*
@@ -13,7 +15,7 @@ public class Decide_faculty implements iTimeTable {
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1=new ArrayList<ClassOfGrade>();// 1次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2=new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3=new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ
-//	protected static final String RESULT_FILE_NAME = "room_3.csv";// 3次の結果のファイルの名前
+	protected ArrayList<Teacher> f_TeacherData=new ArrayList<Teacher>();// 先生のデータ
 	protected static int PROG_COUNT;// プログラムを実行した回数
 
 	/*
@@ -108,6 +110,42 @@ public class Decide_faculty implements iTimeTable {
 	// ------------------------------------------//
 	// -------------ファイル関係----------------//
 	// ------------------------------------------//
+	/*
+	 * 先生のファイルを読み込む
+	 */
+	public void readTeacherFile(){
+		
+		String[] strData = new String[TEACHER_DATA];
+
+		BufferedReader input = FileIO.readFile(TEACHER_NAME);
+
+		try {
+			String line = new String();
+
+			// 一番上から一番下の行まで読み込む
+			for (int cols = 0; cols < TEACHER_COLS; cols++) {
+
+				// 読み込んだ1行が空白でないとき
+				if ((line = input.readLine()) != null) {
+
+					// 上から1行以上のとき
+					if (1 <= cols) {
+						strData = line.split(",");
+
+						// 曜日が空白でないとき
+						if (strData[0] != null) {
+							Teacher teacherData = new Teacher();
+							teacherData.setName(strData[0]);// 先生の名前
+							f_TeacherData.add(teacherData);// 先生のデータの動的配列に追加
+						}
+					}
+				}
+			}
+			input.close();
+		} catch (IOException error_report) {
+			System.out.println(error_report);
+		}
+	}
 	/*
 	 * 結果のファイルを書き込む
 	 */

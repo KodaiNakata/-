@@ -27,6 +27,43 @@ public class TimeTable {
 	}
 
 	/*
+	 * 時間割のクラスの全フィールドに設定する
+	 * 
+	 * @param day_of_week 曜日
+	 * 
+	 * @param period 限目
+	 * 
+	 * @param class_of_grade 学年ごとの授業
+	 * 
+	 * @param class_room 教室
+	 */
+	public void setTimeTable(String day_of_week,int period,ClassOfGrade class_of_grade,String class_room){
+		f_DayOfWeek=day_of_week;
+		f_Period=period;
+		f_ClassOfGrade=class_of_grade;
+		f_ClassRoom=class_room;
+	}
+	
+	public static void exchangeTimeTable(TimeTable time_table1,TimeTable time_table2){
+		TimeTable tmpTimeTable=new TimeTable();
+		
+		tmpTimeTable.setTimeTable(time_table1.getDayOfWeek(),
+				time_table1.getPeriod(),
+				time_table1.getClassOfGrade(),
+				time_table1.getClassRoom());
+		
+		time_table1.setTimeTable(time_table2.getDayOfWeek(),
+				time_table2.getPeriod(),
+				time_table2.getClassOfGrade(),
+				time_table2.getClassRoom());
+		
+		time_table2.setTimeTable(tmpTimeTable.getDayOfWeek(),
+				tmpTimeTable.getPeriod(),
+				tmpTimeTable.getClassOfGrade(),
+				tmpTimeTable.getClassRoom());
+	}
+	
+	/*
 	 * 曜日を数値に変える
 	 *
 	 * @param day_of_week 曜日
