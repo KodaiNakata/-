@@ -17,6 +17,8 @@ public class Teacher {
 	private String f_ThemeOfEleInfoCommunicationExperiment;// エレ情実験の何のテーマか
 	private String f_ThemeOfEnergyEnvironmentExperiment;// エネ環実験の何のテーマか
 	private int f_NumOfGraduateStudySeminar;// 卒研ゼミのコマ数
+	private int f_NumOfNewSubject;// 新規の科目のコマ数
+	private int f_NumOfAllSubject;// 全科目のコマ数
 	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
 	private double f_TimeTableEvaluationValue;// 時間割に対する評価値
 
@@ -35,6 +37,8 @@ public class Teacher {
 		f_ThemeOfEleInfoCommunicationExperiment = null;
 		f_ThemeOfEnergyEnvironmentExperiment = null;
 		f_NumOfGraduateStudySeminar = 0;
+		f_NumOfNewSubject=0;
+		f_NumOfAllSubject=0;
 		f_TimeTableEvaluationValue=0.0;
 	}
 
@@ -59,6 +63,24 @@ public class Teacher {
 		return f_NumOfBasicSeminar1;
 	}
 
+	/*
+	 * 新規の科目のコマ数のゲッター
+	 * 
+	 * @return 新規の科目のコマ数
+	 */
+	public int getNumOfNewSubject(){
+		return f_NumOfNewSubject;
+	}
+	
+	/*
+	 * 全科目のコマ数のゲッター
+	 * 
+	 * @return 全科目のコマ数
+	 */
+	public int getNumOfAllSubject(){
+		return f_NumOfAllSubject;
+	}
+	
 	/*
 	 * 時間割に対する評価値のゲッター
 	 *
@@ -88,6 +110,24 @@ public class Teacher {
 		f_NumOfBasicSeminar1 = num;
 	}
 
+	/*
+	 * 新規の科目のコマ数のセッター
+	 * 
+	 * @param num コマ数
+	 */
+	public void setNumOfNewSubject(int num){
+		f_NumOfNewSubject=num;
+	}
+	
+	/*
+	 * 全科目のコマ数のセッター
+	 * 
+	 * @param num コマ数
+	 */
+	public void setNumOfAllSubject(int num){
+		f_NumOfAllSubject=num;
+	}
+	
 	/*
 	 * 時間割に対する評価値のセッター
 	 *

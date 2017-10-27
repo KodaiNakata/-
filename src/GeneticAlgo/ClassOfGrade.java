@@ -12,7 +12,8 @@ public class ClassOfGrade {
 	private String f_Subject;// 科目
 	private String f_CourseOrClass;// コース・クラス
 	private Teacher f_Teachers;// 担当の先生(Teacherクラス)
-
+	private int f_NeedPC;// PCが必要か
+	
 	/*
 	 * コンストラクタ
 	 */
@@ -23,6 +24,7 @@ public class ClassOfGrade {
 		f_CourseOrClass = null;
 		f_Subject = null;
 		f_Teachers = new Teacher();
+		f_NeedPC=0;
 	}
 
 	/*
@@ -125,6 +127,15 @@ public class ClassOfGrade {
 		return f_Teachers;
 	}
 
+	/*
+	 * PCが必要かのゲッター
+	 * 
+	 * @return PC(1:必要,0:不要)
+	 */
+	public int getNeedPC(){
+		return f_NeedPC;
+	}
+	
 	// ----------------------------//
 	// ----------セッター関数------//
 	// ----------------------------//
@@ -183,6 +194,16 @@ public class ClassOfGrade {
 	public void setTeachers(Teacher teachers) {
 		f_Teachers = teachers;
 	}
+	
+	/*
+	 * PCが必要かのセッター
+	 * 
+	 * @param need PCが必要か(1:必要,0:不要)
+	 */
+	public void setNeedPC(int need){
+		f_NeedPC=need;
+	}
+	
 	// ----------------------------//
 	// ----------add関数-----------//
 	// ----------------------------//
