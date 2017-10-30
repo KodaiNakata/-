@@ -37,37 +37,39 @@ public class TimeTable {
 	 * 
 	 * @param class_room 教室
 	 */
-	public void setTimeTable(String day_of_week,int period,ClassOfGrade class_of_grade,String class_room){
-		f_DayOfWeek=day_of_week;
-		f_Period=period;
-		f_ClassOfGrade=class_of_grade;
-		f_ClassRoom=class_room;
+	public void setTimeTable(String day_of_week, int period,
+			ClassOfGrade class_of_grade) {
+		f_DayOfWeek = day_of_week;
+		f_Period = period;
+		f_ClassOfGrade = class_of_grade;
 	}
-	
-	public static void exchangeTimeTable(TimeTable time_table1,TimeTable time_table2){
-		TimeTable tmpTimeTable=new TimeTable();
-		
-		tmpTimeTable.setTimeTable(time_table1.getDayOfWeek(),
-				time_table1.getPeriod(),
-				time_table1.getClassOfGrade(),
-				time_table1.getClassRoom());
-		
-		time_table1.setTimeTable(time_table2.getDayOfWeek(),
-				time_table2.getPeriod(),
-				time_table2.getClassOfGrade(),
-				time_table2.getClassRoom());
-		
-		time_table2.setTimeTable(tmpTimeTable.getDayOfWeek(),
-				tmpTimeTable.getPeriod(),
-				tmpTimeTable.getClassOfGrade(),
-				tmpTimeTable.getClassRoom());
-	}
-	
+
+//	/*
+//	 * 時間割の交換
+//	 */
+//	public static void exchangeTimeTable(TimeTable[] time_table1,
+//			TimeTable[] time_table2) {
+//		
+//		TimeTable tmpTimeTable = new TimeTable();
+//
+//		tmpTimeTable.setTimeTable(time_table1[0].getDayOfWeek(),
+//				time_table1[0].getPeriod(), time_table1[0].getClassOfGrade(),
+//				time_table1[0].getClassRoom());
+//
+//		time_table1[0].setTimeTable(time_table2[0].getDayOfWeek(),
+//				time_table2[0].getPeriod(), time_table2[0].getClassOfGrade(),
+//				time_table2[0].getClassRoom());
+//
+//		time_table2[0].setTimeTable(tmpTimeTable.getDayOfWeek(),
+//				tmpTimeTable.getPeriod(), tmpTimeTable.getClassOfGrade(),
+//				tmpTimeTable.getClassRoom());
+//	}
+
 	/*
 	 * 曜日を数値に変える
-	 *
+	 * 
 	 * @param day_of_week 曜日
-	 *
+	 * 
 	 * @return 曜日を数値に変えたもの
 	 */
 	public static int changeDayToValue(String day_of_week) {
@@ -98,9 +100,9 @@ public class TimeTable {
 
 	/*
 	 * 値を曜日に変える
-	 *
+	 * 
 	 * @param value 値
-	 *
+	 * 
 	 * @return 値を曜日に変えたもの
 	 */
 	public static String changeValueToDay(int value) {
@@ -130,9 +132,9 @@ public class TimeTable {
 
 	/*
 	 * 教室を数値に変える
-	 *
+	 * 
 	 * @param class_room 教室
-	 *
+	 * 
 	 * @return 教室を数値に変えたもの
 	 */
 	public static int changeRoomToValue(String class_room) {
@@ -178,9 +180,9 @@ public class TimeTable {
 
 	/*
 	 * 数値を教室に変える
-	 *
+	 * 
 	 * @param value 数値
-	 *
+	 * 
 	 * @return 数値を教室に変えたもの
 	 */
 	public static String changeValueToRoom(int value) {
@@ -229,7 +231,7 @@ public class TimeTable {
 	// -------------------------------//
 	/*
 	 * 学年ごとの授業のサイズのゲッター
-	 *
+	 * 
 	 * @return 学年ごとの授業の動的配列のサイズ
 	 */
 	public int getClassesOfGradesSize() {
@@ -238,7 +240,7 @@ public class TimeTable {
 
 	/*
 	 * 曜日のゲッター
-	 *
+	 * 
 	 * @return 曜日
 	 */
 	public String getDayOfWeek() {
@@ -247,7 +249,7 @@ public class TimeTable {
 
 	/*
 	 * 限目のゲッター
-	 *
+	 * 
 	 * @return 限目
 	 */
 	public int getPeriod() {
@@ -263,7 +265,7 @@ public class TimeTable {
 
 	/*
 	 * 学年ごとの授業のゲッター
-	 *
+	 * 
 	 * @return 学年ごとの授業
 	 */
 	public ClassOfGrade getClassOfGrade() {
@@ -272,9 +274,9 @@ public class TimeTable {
 
 	/*
 	 * 学年ごとの授業のゲッター(動的配列)
-	 *
+	 * 
 	 * @param number 何番目
-	 *
+	 * 
 	 * @return 学年ごとの授業(動的配列)
 	 */
 	public ClassOfGrade getClassesOfGrades(int number) {
@@ -283,7 +285,7 @@ public class TimeTable {
 
 	/*
 	 * 教室のゲッター
-	 *
+	 * 
 	 * @return 教室
 	 */
 	public String getClassRoom() {
@@ -295,7 +297,7 @@ public class TimeTable {
 	// -------------------------------//
 	/*
 	 * 曜日のセッター
-	 *
+	 * 
 	 * @param dayOfWeek 曜日
 	 */
 	public void setDayOfWeek(String dayOfWeek) {
@@ -304,7 +306,7 @@ public class TimeTable {
 
 	/*
 	 * 限目のセッター
-	 *
+	 * 
 	 * @param period 限目
 	 */
 	public void setPeriod(int period) {
@@ -322,7 +324,7 @@ public class TimeTable {
 
 	/*
 	 * 学年ごとの授業のセッター
-	 *
+	 * 
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
@@ -331,9 +333,9 @@ public class TimeTable {
 
 	/*
 	 * 学年ごとの授業のセッター(動的配列)
-	 *
+	 * 
 	 * @param number 何番目
-	 *
+	 * 
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void setClassesOfGrades(int number, ClassOfGrade class_of_grade) {
@@ -342,7 +344,7 @@ public class TimeTable {
 
 	/*
 	 * 教室のセッター
-	 *
+	 * 
 	 * @param class_room 教室
 	 */
 	public void setClassRoom(String class_room) {
@@ -354,7 +356,7 @@ public class TimeTable {
 	// -------------------------------//
 	/*
 	 * 学年ごとの授業の動的配列の追加関数
-	 *
+	 * 
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void addClassOfGrade(ClassOfGrade class_of_grade) {

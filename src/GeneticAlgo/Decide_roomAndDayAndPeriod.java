@@ -561,7 +561,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty {
 //				f_TimeTableDataTmp2.getClassRoom());
 //		f_TimeTableDataTmp1 = f_TimeTableDataTmp2;
 		
-		TimeTable.exchangeTimeTable(f_TimeTableDataTmp1, f_TimeTableDataTmp2);
+//		TimeTable.exchangeTimeTable(f_TimeTableDataTmp1, f_TimeTableDataTmp2);
 //		f_TimeTableDataTmp2.setTimeTable(tmpTimeTableData.getDayOfWeek(),
 //				tmpTimeTableData.getPeriod(),
 //				tmpTimeTableData.getClassOfGrade(),
