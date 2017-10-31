@@ -34,4 +34,6 @@ public interface iTimeTable {
 	public final int ORDER3_DATA = 8;// 3次のデータの数
 	public final String FACULTY3_NAME = "faculty_3.csv";// 3次のファイル(担当者が決まったファイル)の名前
 	public final String FILE3_NAME = "room_3.csv";// 3次のファイル(教室と何曜日と何限目が決まったファイル)の名前
+
+	public final String FIRST_FILE3_NAME = "roomFirst_3.csv";// 最初の3次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 }
