@@ -20,7 +20,7 @@ public class Teacher {
 	private int f_NumOfNewSubject;// 新規の科目のコマ数
 	private int f_NumOfAllSubject;// 全科目のコマ数
 	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
-	private double f_TimeTableEvaluationValue;// 時間割に対する評価値
+	private double f_DayPeriodEvaluationValue;// 時間割に対する評価値
 
 	/*
 	 * コンストラクタ nullまたは0にする
@@ -39,7 +39,7 @@ public class Teacher {
 		f_NumOfGraduateStudySeminar = 0;
 		f_NumOfNewSubject=0;
 		f_NumOfAllSubject=0;
-		f_TimeTableEvaluationValue=0.0;
+		f_DayPeriodEvaluationValue=1.0;
 	}
 
 	// ---------------------------------//
@@ -86,8 +86,8 @@ public class Teacher {
 	 *
 	 * @return 時間割に対する評価値
 	 */
-	public double getTimeTableEvaluationValue(){
-		return f_TimeTableEvaluationValue;
+	public double getDayPeriodEvaluationValue(){
+		return f_DayPeriodEvaluationValue;
 	}
 	// ---------------------------------//
 	// -------------セッター------------//
@@ -133,7 +133,7 @@ public class Teacher {
 	 *
 	 * @param value 時間割に対する評価値
 	 */
-	public void setTimeTableEvaluationValue(double value){
-		f_TimeTableEvaluationValue=value;
+	public void setDayPeriodEvaluationValue(double value){
+		f_DayPeriodEvaluationValue=value;
 	}
 }

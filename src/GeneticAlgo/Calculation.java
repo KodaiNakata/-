@@ -36,9 +36,10 @@ public class Calculation {
 	 * 
 	 * @return 平方根
 	 */
-	public static double getSqrt(double value){
+	public static double getSqrt(double value) {
 		return Math.sqrt(value);
 	}
+
 	/*
 	 * minからmaxの間の整数値のいずれかを出力する一様乱数
 	 * 
@@ -63,7 +64,7 @@ public class Calculation {
 	 * @param max:最大値
 	 */
 	public static double getDRnd(double min, double max) {
-		return (random.nextDouble() * (max - min) + min);
+		return (Math.random() * (max - min + 1.0) + min);
 	}
 
 	/*
