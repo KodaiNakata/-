@@ -20,11 +20,9 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	private int f_RandomDayOfWeek1;// ランダムの曜日
 	private int f_RandomPeriod1;// ランダムの限目
 	private int f_RandomGrade1;// ランダムの学年
-	private int f_RandomPreviousOrLatter1;// 前期か後期か
+	private int f_RandomPreviousOrLatter;// 前期か後期か
 	private int f_RandomDayOfWeek2;// ランダムの曜日
 	private int f_RandomPeriod2;// ランダムの限目
-	private int f_RandomGrade2;// ランダムの学年
-	private int f_RandomPreviousOrLatter2;// 前期か後期か
 	private TimeTable f_TimeTableDataTmp1;// 時間割のデータの交換1
 	private TimeTable f_TimeTableDataTmp2;// 時間割のデータの交換2
 	private int f_TmpNumber1;// 交換用の番目1
@@ -192,10 +190,9 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	// ------------------------------------------------------//
 	// ---------------------評価値---------------------------//
 	// ------------------------------------------------------//
-
 	/*
 	 * 担当者の授業のコマ数の評価値
-	 *
+	 * 
 	 * @return 担当者の評価値
 	 */
 	private double getTeacherEvaluationValue() {
@@ -224,9 +221,9 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 担当者の授業のコマ数の評価値
-	 *
+	 * 
 	 * @param teacher 担当者
-	 *
+	 * 
 	 * @return 担当者の評価値
 	 */
 	private double getTeacherEvaluationValue(String teacher) {
@@ -255,7 +252,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 評価値の取得
-	 *
+	 * 
 	 * @return 評価値
 	 */
 	private double getEvaluationValue() {
@@ -333,9 +330,20 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	 */
 	private void calcEvaluationValue() {
 
-		f_NewEvaluationValue = getEvaluationValue();
+		// f_NewEvaluationValue = getEvaluationValue();
 
-		// f_NewEvaluationValue=Calculation.getDRnd(0.0, 100000.0);
+		// 時間割と重複するとき
+		if (checkDuplication()) {
+			f_NewEvaluationValue = 0.0;
+		}
+
+		else {
+
+			if (DEBUG) {
+				System.out.println("評価する");
+			}
+			f_NewEvaluationValue = f_OldEvaluationValue + 1.0;
+		}
 		// for(int teacherNum=0;teacherNum<f_TeacherData.size();teacherNum++){
 		// f_NewEvaluationValue=
 		// }
@@ -361,7 +369,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 		if (DEBUG) {
 			indicateData();
 			writeRoomAndDayAndPeriodFirstFile3();
-			System.out.println("遺伝的アルゴリズムを開始");
+			System.out.println("遺伝的アルゴリズムを開始する");
 			InOutPut.anyKey();
 		}
 
@@ -377,60 +385,116 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	 */
 	private void exeGeneticAlgo() {
 
-		Evaluation evaluation = new Evaluation();
-
-
 		for (int num = 0; num < CHECK_NUM; num++) {
 
-			boolean wasCrossedBoth=false;
-			boolean wasMutated=false;
+			Evaluation evaluation = new Evaluation();
+			boolean wasCrossedBoth = false;
+			boolean wasMutated = false;
 
 			System.out.println("遺伝的アルゴリズム" + (num + 1) + "回目");
 
 			evaluation.setGeneration(num + 1);// num世代目
 
-			// // 交叉できるようになるまで繰り返す
-			// do {
-			//
-			// } while (!canCross());
-
 			choice();// 前期後期どちらかの何曜日の何限目の何学年かを選択する
 
-			// // 新規の3次の時間割のデータとしてセット
-			// for (int number = 0; number < f_NewTimeTableData3.size();
-			// number++) {
-			// f_NewTimeTableData3.get(number).setDayOfWeek(f_TimeTableData3.get(number).getDayOfWeek());
-			// f_NewTimeTableData3.get(number).setPeriod(f_TimeTableData3.get(number).getPeriod());
-			// }
-
 			// 両方交叉するとき
-			if(cross()){
-				wasCrossedBoth=true;
+			if (cross()) {
+				wasCrossedBoth = true;
 			}
 
 			// 突然変異するとき
-			if(mutation()){
-				wasMutated=true;
+			if (mutation()) {
+				wasMutated = true;
 			}
-
-//			mutation();// 突然変異をする
 
 			calcEvaluationValue();// 評価値の計算をする
 
 			// 新しい評価値が上のとき
 			if (f_OldEvaluationValue < f_NewEvaluationValue) {
 
-				for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+				f_OldEvaluationValue = f_NewEvaluationValue;// 評価値を更新
 
-					// f_TimeTableData3.set(number,
-					// f_NewTimeTableData3.get(number));
+				// 両方交叉したとき
+				if (wasCrossedBoth) {
 
-					// 前の時間割のデータを更新する
-					f_TimeTableData3.get(number).setDayOfWeek(
-							f_NewTimeTableData3.get(number).getDayOfWeek());
+					TimeTable timeTable = new TimeTable();
 
-					f_TimeTableData3.get(number).setPeriod(
-							f_NewTimeTableData3.get(number).getPeriod());
+					timeTable.setDayOfWeek(f_NewTimeTableData3
+							.get(f_TmpNumber1).getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					timeTable.setPeriod(f_NewTimeTableData3.get(f_TmpNumber1)
+							.getPeriod());// 両方交叉した要素番号の限目を更新
+
+					f_TimeTableData3.get(f_TmpNumber1).setDayOfWeek(
+							f_NewTimeTableData3.get(f_TmpNumber2)
+									.getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					f_TimeTableData3.get(f_TmpNumber1).setPeriod(
+							f_NewTimeTableData3.get(f_TmpNumber2).getPeriod());// 両方交叉した要素番号の限目を更新
+
+					f_TimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+							timeTable.getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					f_TimeTableData3.get(f_TmpNumber2).setPeriod(
+							timeTable.getPeriod());// 両方交叉した要素番号の限目を更新
+
+					// f_TimeTableData3.get(f_TmpNumber1).setDayOfWeek(
+					// f_NewTimeTableData3.get(f_TmpNumber1)
+					// .getDayOfWeek());// 両方交叉した要素番号の曜日を戻す
+					//
+					// f_TimeTableData3.get(f_TmpNumber1).setPeriod(
+					// f_NewTimeTableData3.get(f_TmpNumber1).getPeriod());//
+					// 両方交叉した要素番号の限目を戻す
+					//
+					// f_TimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+					// f_NewTimeTableData3.get(f_TmpNumber2)
+					// .getDayOfWeek());// 両方交叉した要素番号の曜日を戻す
+					//
+					// f_TimeTableData3.get(f_TmpNumber2).setPeriod(
+					// f_NewTimeTableData3.get(f_TmpNumber2).getPeriod());//
+					// 両方交叉した要素番号の限目を戻す
+
+				}
+
+				// 片方だけ交叉したとき
+				else {
+
+					TimeTable timeTable = new TimeTable();
+
+					timeTable.setDayOfWeek(f_NewTimeTableData3
+							.get(f_TmpNumber2).getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					timeTable.setPeriod(f_NewTimeTableData3.get(f_TmpNumber2)
+							.getPeriod());// 両方交叉した要素番号の限目を更新
+
+					f_TimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+							timeTable.getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					f_TimeTableData3.get(f_TmpNumber2).setPeriod(
+							timeTable.getPeriod());// 両方交叉した要素番号の限目を更新
+
+					// f_TimeTableData3.get(f_TmpNumber2).setPeriod(
+					// f_NewTimeTableData3.get(f_TmpNumber2).getPeriod());//
+					// 片方だけ交叉した要素番号の限目を戻す
+				}
+
+				// 突然変異したとき
+				if (wasMutated) {
+
+					TimeTable timeTable = new TimeTable();
+
+					timeTable.setDayOfWeek(f_NewTimeTableData3
+							.get(f_MutationNumber).getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					timeTable.setPeriod(f_NewTimeTableData3.get(f_MutationNumber)
+							.getPeriod());// 両方交叉した要素番号の限目を更新
+
+					f_TimeTableData3.get(f_MutationNumber).setDayOfWeek(
+							timeTable.getDayOfWeek());// 両方交叉した要素番号の曜日を更新
+					f_TimeTableData3.get(f_MutationNumber).setPeriod(
+							timeTable.getPeriod());// 両方交叉した要素番号の限目を更新
+					
+//					f_TimeTableData3.get(f_MutationNumber).setDayOfWeek(
+//							f_NewTimeTableData3.get(f_MutationNumber)
+//									.getDayOfWeek());// 突然変異した要素番号の曜日を戻す
+//
+//					f_TimeTableData3.get(f_MutationNumber).setPeriod(
+//							f_NewTimeTableData3.get(f_MutationNumber)
+//									.getPeriod());// 突然変異した要素番号の限目を戻す
 				}
 
 				f_OldEvaluationValue = f_NewEvaluationValue;// 評価値を更新する
@@ -443,63 +507,46 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				evaluation.setEvaluationValue(f_NewEvaluationValue);
 
 				f_EvaluationData.add(evaluation);
-
-				if (DEBUG) {
-					InOutPut.anyKey();
-				}
 			}
 
 			// 新しい評価値以下のとき
 			else {
 
-//				for (int number = 0; number < f_TimeTableData3.size(); number++) {
-//
-//					if (DEBUG) {
-//						System.out.println("戻す前");
-//						System.out.println(f_TimeTableData3.get(number)
-//								.getDayOfWeek() + "曜日(既存の時間割)");
-//						System.out.println(f_TimeTableData3.get(number)
-//								.getPeriod() + "限目(既存の時間割)");
-//						System.out.println(f_NewTimeTableData3.get(number)
-//								.getDayOfWeek() + "曜日(新しい時間割)");
-//						System.out.println(f_NewTimeTableData3.get(number)
-//								.getPeriod() + "限目(新しい時間割)\n");
-//					}
-//
-//					// 前の時間割のデータに戻す
-//					f_NewTimeTableData3.get(number).setDayOfWeek(
-//							f_TimeTableData3.get(number).getDayOfWeek());
-//
-//					f_NewTimeTableData3.get(number).setPeriod(
-//							f_TimeTableData3.get(number).getPeriod());
-//
-//					if (DEBUG) {
-//						System.out.println("戻す後");
-//						System.out.println(f_TimeTableData3.get(number)
-//								.getDayOfWeek() + "曜日(既存の時間割)");
-//						System.out.println(f_TimeTableData3.get(number)
-//								.getPeriod() + "限目(既存の時間割)");
-//						System.out.println(f_NewTimeTableData3.get(number)
-//								.getDayOfWeek() + "曜日(新しい時間割)");
-//						System.out.println(f_NewTimeTableData3.get(number)
-//								.getPeriod() + "限目(新しい時間割)\n");
-//						// InOutPut.anyKey();
-//					}
-//				}
-//
-//				if (DEBUG) {
-//					System.out.println("評価値は更新されない。");
-//					System.out.println("評価値:" + f_OldEvaluationValue);
-//				}
-
 				// 両方交叉したとき
-				if(wasCrossedBoth){
+				if (wasCrossedBoth) {
+
+					f_NewTimeTableData3.get(f_TmpNumber1).setDayOfWeek(
+							f_TimeTableData3.get(f_TmpNumber1).getDayOfWeek());// 両方交叉した要素番号の曜日を戻す
+
+					f_NewTimeTableData3.get(f_TmpNumber1).setPeriod(
+							f_TimeTableData3.get(f_TmpNumber1).getPeriod());// 両方交叉した要素番号の限目を戻す
+
+					f_NewTimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+							f_TimeTableData3.get(f_TmpNumber2).getDayOfWeek());// 両方交叉した要素番号の曜日を戻す
+
+					f_NewTimeTableData3.get(f_TmpNumber2).setPeriod(
+							f_TimeTableData3.get(f_TmpNumber2).getPeriod());// 両方交叉した要素番号の限目を戻す
 
 				}
 
-				// 突然変異したとき
-				if(wasMutated){
+				// 片方だけ交叉したとき
+				else {
+					f_NewTimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+							f_TimeTableData3.get(f_TmpNumber2).getDayOfWeek());// 片方だけ交叉した要素番号の曜日を戻す
 
+					f_NewTimeTableData3.get(f_TmpNumber2).setPeriod(
+							f_TimeTableData3.get(f_TmpNumber2).getPeriod());// 片方だけ交叉した要素番号の限目を戻す
+				}
+
+				// 突然変異したとき
+				if (wasMutated) {
+
+					f_NewTimeTableData3.get(f_MutationNumber).setDayOfWeek(
+							f_TimeTableData3.get(f_MutationNumber)
+									.getDayOfWeek());// 突然変異した要素番号の曜日を戻す
+
+					f_NewTimeTableData3.get(f_MutationNumber).setPeriod(
+							f_TimeTableData3.get(f_MutationNumber).getPeriod());// 突然変異した要素番号の限目を戻す
 				}
 			}
 		}
@@ -525,7 +572,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 		f_RandomGrade1 = Calculation.getRnd(1, 4);
 
 		// 前期か後期かをランダムに選択
-		f_RandomPreviousOrLatter1 = Calculation.getRnd(
+		f_RandomPreviousOrLatter = Calculation.getRnd(
 				ClassOfGrade.changePreviousOrLatterToValue("前期"),
 				ClassOfGrade.changePreviousOrLatterToValue("後期"));
 
@@ -533,13 +580,17 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				.changeValueToDay(f_RandomDayOfWeek1));
 		f_TimeTableDataTmp1.setPeriod(f_RandomPeriod1);
 
+		// 時間割3のデータに存在する要素番号を取得
+		f_TmpNumber1 = getInTimeTable3Number(f_RandomDayOfWeek1,
+				f_RandomPeriod1, f_RandomGrade1, f_RandomPreviousOrLatter);
+
 		if (DEBUG) {
 			System.out.print(TimeTable.changeValueToDay(f_RandomDayOfWeek1)
 					+ "曜日、");
 			System.out.print(f_RandomPeriod1 + "限目、");
 			System.out.print(f_RandomGrade1 + "年、");
 			System.out.println(ClassOfGrade
-					.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter1)
+					.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter)
 					+ "が時間割3のデータに存在するか調べます\n");
 		}
 
@@ -549,11 +600,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				f_RandomPeriod1,
 				f_RandomGrade1,
 				ClassOfGrade
-						.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter1))) {
-
-			// 時間割3のデータに存在する要素番号を取得
-			f_TmpNumber1 = getInTimeTable3Number(f_RandomDayOfWeek1,
-					f_RandomPeriod1, f_RandomGrade1, f_RandomPreviousOrLatter1);
+						.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter))) {
 
 			if (DEBUG) {
 				System.out.println("時間割3のデータに存在する");
@@ -593,7 +640,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				System.out.print(f_RandomGrade1 + "年、");
 				System.out
 						.print(ClassOfGrade
-								.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter1)
+								.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter)
 								+ "は、");
 				System.out.println("時間割3のデータに存在しない\n");
 			}
@@ -614,7 +661,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 			// 要素番号を取得
 			f_TmpNumber2 = getInTimeTable3Number(f_RandomDayOfWeek2,
-					f_RandomPeriod2, f_RandomGrade1, f_RandomPreviousOrLatter1);
+					f_RandomPeriod2, f_RandomGrade1, f_RandomPreviousOrLatter);
 
 			if (DEBUG) {
 				System.out.print(TimeTable.changeValueToDay(f_RandomDayOfWeek2)
@@ -623,7 +670,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				System.out.print(f_RandomGrade1 + "年、");
 				System.out
 						.println(ClassOfGrade
-								.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter1)
+								.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter)
 								+ "が時間割3のデータに存在するか調べます");
 			}
 
@@ -632,7 +679,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				f_RandomPeriod2,
 				f_RandomGrade1,
 				ClassOfGrade
-						.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter1)));
+						.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter)));
 
 		f_TimeTableDataTmp2.setDayOfWeek(TimeTable
 				.changeValueToDay(f_RandomDayOfWeek2));
@@ -642,23 +689,23 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 既存の時間割のデータに存在するか
-	 *
+	 * 
 	 * @param time_table_data 既存の時間割のデータ
-	 *
+	 * 
 	 * @param day_of_week 曜日
-	 *
+	 * 
 	 * @param period 限目
-	 *
+	 * 
 	 * @param grade 学年
-	 *
+	 * 
 	 * @param previous_latter 前期後期
-	 *
+	 * 
 	 * @param time_table 新規の時間割のデータ
-	 *
+	 * 
 	 * @param tmp_number 交換用の番号(時間割のデータの要素番号)
-	 *
+	 * 
 	 * @return true 存在する
-	 *
+	 * 
 	 * @return false 存在しない
 	 */
 	private boolean existInTimeTable3(String day_of_week, int period,
@@ -671,15 +718,15 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 			System.out.print(previous_latter + "は");
 		}
 
-		for (int number = 0; number < f_TimeTableData3.size(); number++) {
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
 
 			// ランダムに選択した曜日、限目、学年、前期後期が時間割3のデータに存在するとき
-			if (Objects.equals(f_TimeTableData3.get(number).getDayOfWeek(),
+			if (Objects.equals(f_NewTimeTableData3.get(number).getDayOfWeek(),
 					day_of_week)
-					&& f_TimeTableData3.get(number).getPeriod() == period
-					&& f_TimeTableData3.get(number).getClassOfGrade()
+					&& f_NewTimeTableData3.get(number).getPeriod() == period
+					&& f_NewTimeTableData3.get(number).getClassOfGrade()
 							.getGrade() == grade
-					&& Objects.equals(f_TimeTableData3.get(number)
+					&& Objects.equals(f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getPreviousOrLatter(),
 							previous_latter)) {
 
@@ -699,34 +746,34 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 既存の時間割のデータの何番目に入っているか
-	 *
+	 * 
 	 * @param time_table_data 既存の時間割のデータ
-	 *
+	 * 
 	 * @param day_of_week 曜日
-	 *
+	 * 
 	 * @param period 限目
-	 *
+	 * 
 	 * @param grade 学年
-	 *
+	 * 
 	 * @param previous_latter 前期後期
-	 *
+	 * 
 	 * @param time_table 新規の時間割のデータ
-	 *
+	 * 
 	 * @return 既存の時間割のデータの要素番号
 	 */
 	private int getInTimeTable3Number(int day_of_week, int period, int grade,
 			int previous_latter) {
 
-		for (int number = 0; number < f_TimeTableData3.size(); number++) {
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
 
 			// ランダムに選択した曜日、限目、学年、前期後期が時間割3のデータに存在するとき
-			if (Objects.equals(f_TimeTableData3.get(number).getDayOfWeek(),
+			if (Objects.equals(f_NewTimeTableData3.get(number).getDayOfWeek(),
 					TimeTable.changeValueToDay(day_of_week))
-					&& f_TimeTableData3.get(number).getPeriod() == period
-					&& f_TimeTableData3.get(number).getClassOfGrade()
+					&& f_NewTimeTableData3.get(number).getPeriod() == period
+					&& f_NewTimeTableData3.get(number).getClassOfGrade()
 							.getGrade() == grade
 					&& Objects
-							.equals(f_TimeTableData3.get(number)
+							.equals(f_NewTimeTableData3.get(number)
 									.getClassOfGrade().getPreviousOrLatter(),
 									ClassOfGrade
 											.changeValueToPreviousOrLatter(previous_latter))) {
@@ -747,22 +794,19 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 交叉する
+	 * 
+	 * @return true 両方交叉
+	 * 
+	 * @return false 片方だけ交叉
 	 */
 	private boolean cross() {
 
-		// 時間割のデータが片方だけ存在のとき
-		if (f_TmpNumber1 < 0) {
-
-			f_NewTimeTableData3.get(f_TmpNumber2).setDayOfWeek(
-					f_TimeTableDataTmp2.getDayOfWeek());
-			f_NewTimeTableData3.get(f_TmpNumber2).setPeriod(
-					f_TimeTableDataTmp2.getPeriod());
-
-			return true;
-		}
-
 		// 時間割のデータが両方存在のとき
-		else {
+		if (0 <= f_TmpNumber1) {
+
+			if (DEBUG) {
+				System.out.println("両方交叉");
+			}
 
 			TimeTable tmpTimeTable = new TimeTable();
 
@@ -776,14 +820,35 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 			f_TimeTableDataTmp2.setDayOfWeek(tmpTimeTable.getDayOfWeek());
 			f_TimeTableDataTmp2.setPeriod(tmpTimeTable.getPeriod());
 
+			return true;
+		}
+
+		// 時間割のデータが片方だけ存在のとき
+		else {
+
+			if (DEBUG) {
+				System.out.println("片方交叉");
+			}
+
+			f_NewTimeTableData3.get(f_TmpNumber2).setDayOfWeek(
+					f_TimeTableDataTmp2.getDayOfWeek());
+			f_NewTimeTableData3.get(f_TmpNumber2).setPeriod(
+					f_TimeTableDataTmp2.getPeriod());
+
 			return false;
 		}
 	}
 
 	/*
 	 * 突然変異する
+	 * 
+	 * @return true 突然変異する
+	 * 
+	 * @return false 突然変異しない
 	 */
 	private boolean mutation() {
+
+		f_TimeTableDataTmp1 = new TimeTable();
 
 		int num = Calculation
 				.getRnd(1, ORDER1_COLS + ORDER2_COLS + ORDER3_COLS);// 3次の科目数/全科目数の確率
@@ -791,22 +856,51 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 		// 1から3次の科目数までのとき
 		if (num <= ORDER3_COLS) {
 
+			// 時間割3のデータに存在しない
+			// または、1つ目で選択したデータと被る
+			// 上記の条件のとき繰り返す
+			do {
+
+				// 曜日をランダムに選択
+				f_RandomDayOfWeek1 = Calculation.getRnd(
+						TimeTable.changeDayToValue("月"),
+						TimeTable.changeDayToValue("金"));
+
+				// 限目をランダムに選択
+				f_RandomPeriod1 = Calculation.getRnd(1, 5);
+
+				// 学年をランダムに選択
+				f_RandomGrade1 = Calculation.getRnd(1, 4);
+
+				// 前期か後期かをランダムに選択
+				f_RandomPreviousOrLatter = Calculation.getRnd(
+						ClassOfGrade.changePreviousOrLatterToValue("前期"),
+						ClassOfGrade.changePreviousOrLatterToValue("後期"));
+
+				f_TimeTableDataTmp1.setDayOfWeek(TimeTable
+						.changeValueToDay(f_RandomDayOfWeek1));
+				f_TimeTableDataTmp1.setPeriod(f_RandomPeriod1);
+
+				// 時間割3のデータに存在する要素番号を取得
+				f_MutationNumber = getInTimeTable3Number(f_RandomDayOfWeek1,
+						f_RandomPeriod1, f_RandomGrade1,
+						f_RandomPreviousOrLatter);
+
+			} while (!existInTimeTable3(
+					TimeTable.changeValueToDay(f_RandomDayOfWeek1),
+					f_RandomPeriod1,
+					f_RandomGrade1,
+					ClassOfGrade
+							.changeValueToPreviousOrLatter(f_RandomPreviousOrLatter)));
 			if (DEBUG) {
 				System.out.println("突然変異発生");
+				System.out.println(f_MutationNumber + "番");
 			}
 
-			f_MutationNumber = Calculation.getRnd(0,
-					f_NewTimeTableData3.size() - 1);// 要素番号をランダムに選択
-
-			int randomDay = Calculation.getRnd(TimeTable.changeDayToValue("月"),
-					TimeTable.changeDayToValue("金"));
-
 			f_NewTimeTableData3.get(f_MutationNumber).setDayOfWeek(
-					TimeTable.changeValueToDay(randomDay));// 指定した要素番号に曜日をランダムに設定
-
-			int randomPeriod = Calculation.getRnd(1, 5);
-
-			f_NewTimeTableData3.get(f_MutationNumber).setPeriod(randomPeriod);// 指定した要素番号に限目をランダムに設定
+					f_TimeTableDataTmp1.getDayOfWeek());
+			f_NewTimeTableData3.get(f_MutationNumber).setPeriod(
+					f_TimeTableDataTmp1.getPeriod());
 
 			return true;
 		}
@@ -824,11 +918,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication() {
@@ -877,11 +971,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 1次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication1() {
@@ -985,11 +1079,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 2次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication2() {
@@ -1069,11 +1163,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 3次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication3() {
@@ -1360,13 +1454,13 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 			f_NewTimeTableData3.add(f_TimeTableData3.get(number));
 		}
 
-		f_OldEvaluationValue = getEvaluationValue();// 親集団の評価値として取得
+		f_OldEvaluationValue = 5.0;// 親集団の評価値として取得
 
 	}
 
 	/*
 	 * 最初の3次の時間割を決める
-	 *
+	 * 
 	 * @param number 番目
 	 */
 	private void makeFirstTimeTable3(int number) {
@@ -1384,11 +1478,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkFirstDuplication(int number) {
@@ -1461,11 +1555,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 1次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkFirstDuplication1(int number) {
@@ -1563,11 +1657,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 2次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkFirstDuplication2(int number) {
@@ -1642,11 +1736,11 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 3次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkFirstDuplication3(int number) {
@@ -1748,13 +1842,13 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * コース・クラスと重複しているかのチェック
-	 *
+	 * 
 	 * @param course_or_class1
-	 *
+	 * 
 	 * @param course_or_class2
-	 *
+	 * 
 	 * @return true 重複している
-	 *
+	 * 
 	 * @return false 重複していない
 	 */
 	private boolean checkDuplicationCouseOrClass(String course_or_class1,
@@ -2032,7 +2126,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * プログラムを終了したか
-	 *
+	 * 
 	 * @return true:終了
 	 */
 	private boolean isFinishedProg() {
@@ -2059,7 +2153,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 	/*
 	 * 実行する処理
-	 *
+	 * 
 	 * @return 0:終了
 	 */
 	public int exe() {
