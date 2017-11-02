@@ -11,11 +11,13 @@ import java.util.ArrayList;
 public class Decide_faculty implements iTimeTable {
 
 	private static StringBuffer TITLE = new StringBuffer("遺伝的アルゴリズムを用いた時間割作成");
-	
+	private static final double DEFINE_NUM=0.6;// 評価式のある定数
+
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1=new ArrayList<ClassOfGrade>();// 1次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2=new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3=new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ
 	protected ArrayList<Teacher> f_TeacherData=new ArrayList<Teacher>();// 先生のデータ
+	protected double f_FacultyEvaluationValue;
 	protected static int PROG_COUNT;// プログラムを実行した回数
 
 	/*
@@ -29,6 +31,33 @@ public class Decide_faculty implements iTimeTable {
 //				f_LatterTimeTables[day][period] = new TimeTable();
 //			}
 //		}
+	}
+
+	/*
+	 * 担当者の授業のコマ数の評価値を計算
+	 */
+	public void calctTeacherEvaluationValue() {
+
+		double value = 0.0;
+
+		// (担当教員数)-((持っているコマ数)/DEFINE_NUM^(新規コマ数))
+		// ---------------------------------------------------
+		// √(持っているコマ数)
+		for (int teacherNum = 0; teacherNum < f_TeacherData.size(); teacherNum++) {
+
+			if (f_TeacherData.get(teacherNum).getNumOfAllSubject() == 0) {
+				continue;
+			}
+
+			value += (((double) f_TeacherData.size() - ((double) f_TeacherData
+					.get(teacherNum).getNumOfAllSubject() / Calculation
+					.getPowerRoot(DEFINE_NUM, f_TeacherData.get(teacherNum)
+							.getNumOfNewSubject()))) / Calculation
+					.getSqrt((double) f_TeacherData.get(teacherNum)
+							.getNumOfAllSubject()));
+		}
+
+		f_FacultyEvaluationValue=value;
 	}
 
 //	/*
@@ -114,7 +143,7 @@ public class Decide_faculty implements iTimeTable {
 	 * 先生のファイルを読み込む
 	 */
 	public void readTeacherFile(){
-		
+
 		String[] strData = new String[TEACHER_DATA];
 
 		BufferedReader input = FileIO.readFile(TEACHER_NAME);

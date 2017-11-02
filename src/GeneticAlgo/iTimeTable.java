@@ -9,7 +9,7 @@ public interface iTimeTable {
 	public final boolean DEBUG = true;// デバッグモード
 
 	public final int MAX_PERIOD = 5;// 5限目
-	public final int MAX_DAY = 6;// 月曜から土曜の6日間
+	public final int MAX_DAY = TimeTable.changeDayToValue("金");// 月曜から何曜日までか
 
 	public final String CONFERENCE_DAY = "木";// 会議の曜日
 	public final int CONFERENCE_PERIOD = 3;// 会議の限目
