@@ -189,6 +189,38 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	}
 
 	/*
+	 * 曜日限目の評価値
+	 *
+	 * @return 曜日限目の評価値
+	 */
+	private double getDayPeriodEvaluationValue() {
+
+		double value = f_FacultyEvaluationValue;
+
+		for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
+
+			for (int addPeriod = 0; addPeriod < f_NewTimeTableData3.get(number)
+					.getClassOfGrade().getNumber(); addPeriod++) {
+
+				// 1限目または5限目のとき
+				if (f_NewTimeTableData3.get(number).getPeriod() + addPeriod <= 1
+						|| 5<=f_NewTimeTableData3.get(number).getPeriod()
+								+ addPeriod) {
+
+					value -= 100.0;
+				}
+
+				// 2限目～4限目のとき
+				else {
+					value += 50.0;
+				}
+			}
+		}
+
+		return value;
+	}
+
+	/*
 	 * 担当者の授業のコマ数の評価値
 	 *
 	 * @param teacher 担当者
@@ -320,8 +352,8 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				System.out.println("評価する");
 			}
 
-
-			f_NewEvaluationValue = f_OldEvaluationValue + 1.0;
+			f_NewEvaluationValue = getDayPeriodEvaluationValue();
+			// f_NewEvaluationValue = f_OldEvaluationValue + 1.0;
 		}
 		// for(int teacherNum=0;teacherNum<f_TeacherData.size();teacherNum++){
 		// f_NewEvaluationValue=
@@ -376,7 +408,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 
 			evaluation.setGeneration(num + 1);// num世代目
 
-			choice();// 前期後期どちらかの何曜日の何限目の何学年かを選択する
+			choiceCross();// 前期後期どちらかの何曜日の何限目の何学年かを選択する
 
 			// 両方交叉するとき
 			if (cross()) {
@@ -509,7 +541,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	/*
 	 * 前期後期どちらかの何曜日の何限目の何学年かを選択
 	 */
-	private void choice() {
+	private void choiceCross() {
 
 		f_TimeTableDataTmp1 = new TimeTable();
 		f_TimeTableDataTmp2 = new TimeTable();
@@ -609,7 +641,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 					TimeTable.changeDayToValue("月"), MAX_DAY);
 
 			// 限目をランダムに選択
-			f_RandomPeriod2 = Calculation.getRnd(1, MAX_PERIOD);
+			f_RandomPeriod2 = getRandomPeriod();
 
 			// 要素番号を取得
 			f_TmpNumber2 = getInTimeTable3Number(f_RandomDayOfWeek2,
@@ -637,6 +669,29 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 				.changeValueToDay(f_RandomDayOfWeek2));
 		f_TimeTableDataTmp2.setPeriod(f_RandomPeriod2);
 
+	}
+
+	/*
+	 * ランダムの限目を取得
+	 */
+	private int getRandomPeriod() {
+
+		int randomPeriod = Calculation.getRnd(1, MAX_PERIOD * 4);
+
+		if(1<=randomPeriod&&randomPeriod<=8){
+
+			randomPeriod=1;
+		}
+
+		else if(9<=randomPeriod&&randomPeriod<=16){
+			randomPeriod=5;
+		}
+
+		else if(17<=randomPeriod){
+			randomPeriod=Calculation.getRnd(2, 4);
+		}
+
+		return randomPeriod;
 	}
 
 	/*
@@ -818,7 +873,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 						TimeTable.changeDayToValue("月"), MAX_DAY);
 
 				// 限目をランダムに選択
-				f_RandomPeriod1 = Calculation.getRnd(1, MAX_PERIOD);
+				f_RandomPeriod1 = getRandomPeriod();
 
 				// 学年をランダムに選択
 				f_RandomGrade1 = Calculation.getRnd(1, 4);
@@ -1386,8 +1441,19 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 			f_NewTimeTableData3.add(f_TimeTableData3.get(number));
 		}
 
-		f_OldEvaluationValue = 5.0;// 親集団の評価値として取得
+		f_OldEvaluationValue = getDayPeriodEvaluationValue();// 親集団の評価値として取得
 
+		if(DEBUG){
+			System.out.println("0代目の評価値:"+f_OldEvaluationValue);
+			InOutPut.anyKey();
+		}
+
+		Evaluation evaluation = new Evaluation();
+
+		evaluation.setGeneration(0);
+		evaluation.setEvaluationValue(f_OldEvaluationValue);
+
+		f_EvaluationData.add(evaluation);
 	}
 
 	/*
@@ -2274,7 +2340,7 @@ public class Decide_dayAndPeriod extends Decide_faculty {
 	/*
 	 * 評価値のファイルを書き込む
 	 */
-	private void writeEvaluationFile(){
+	private void writeEvaluationFile() {
 
 		PrintWriter output;
 		output = FileIO.writeFile(EVALUATION_FILE, false);
