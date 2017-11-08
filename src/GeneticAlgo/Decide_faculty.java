@@ -576,7 +576,7 @@ public class Decide_faculty implements iTimeTable {
 	 * 終了
 	 */
 	public void finish() {
-		writeFacultyFile3();// 担当者決定のファイルを書き込む
+//		writeFacultyFile3();// 担当者決定のファイルを書き込む
 		System.out.println("See you later !");
 	}
 
