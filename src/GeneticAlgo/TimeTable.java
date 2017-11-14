@@ -1,6 +1,5 @@
 package GeneticAlgo;
 
-import java.util.ArrayList;
 
 /*
  *  時間割のクラス
@@ -13,7 +12,6 @@ public class TimeTable {
 	// private int f_Grade;// 学年
 	private ClassOfGrade f_ClassOfGrade;// 学年ごとの授業
 	private String f_ClassRoom;// 教室
-	private ArrayList<ClassOfGrade> f_ClassesOfGrades = new ArrayList<ClassOfGrade>();
 
 	/*
 	 * コンストラクタ
@@ -230,15 +228,6 @@ public class TimeTable {
 	// ------------ゲッター-----------//
 	// -------------------------------//
 	/*
-	 * 学年ごとの授業のサイズのゲッター
-	 * 
-	 * @return 学年ごとの授業の動的配列のサイズ
-	 */
-	public int getClassesOfGradesSize() {
-		return f_ClassesOfGrades.size();
-	}
-
-	/*
 	 * 曜日のゲッター
 	 * 
 	 * @return 曜日
@@ -270,17 +259,6 @@ public class TimeTable {
 	 */
 	public ClassOfGrade getClassOfGrade() {
 		return f_ClassOfGrade;
-	}
-
-	/*
-	 * 学年ごとの授業のゲッター(動的配列)
-	 * 
-	 * @param number 何番目
-	 * 
-	 * @return 学年ごとの授業(動的配列)
-	 */
-	public ClassOfGrade getClassesOfGrades(int number) {
-		return f_ClassesOfGrades.get(number);
 	}
 
 	/*
@@ -332,34 +310,11 @@ public class TimeTable {
 	}
 
 	/*
-	 * 学年ごとの授業のセッター(動的配列)
-	 * 
-	 * @param number 何番目
-	 * 
-	 * @param class_of_grade 学年ごとの授業
-	 */
-	public void setClassesOfGrades(int number, ClassOfGrade class_of_grade) {
-		f_ClassesOfGrades.set(number, class_of_grade);
-	}
-
-	/*
 	 * 教室のセッター
 	 * 
 	 * @param class_room 教室
 	 */
 	public void setClassRoom(String class_room) {
 		f_ClassRoom = class_room;
-	}
-
-	// -------------------------------//
-	// ------------add関数-----------//
-	// -------------------------------//
-	/*
-	 * 学年ごとの授業の動的配列の追加関数
-	 * 
-	 * @param class_of_grade 学年ごとの授業
-	 */
-	public void addClassOfGrade(ClassOfGrade class_of_grade) {
-		f_ClassesOfGrades.add(class_of_grade);
 	}
 }
