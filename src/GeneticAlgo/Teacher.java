@@ -27,7 +27,7 @@ public class Teacher {
 	private int f_NumOfNewSubject;// 新規の科目のコマ数
 	private int f_NumOfAllSubject;// 全科目のコマ数
 	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
-	private double f_DayPeriodEvaluationValue;// 時間割に対する評価値
+	private double f_DayPeriodEvaluationValue;// 曜日限目決めに対する評価値
 
 	/*
 	 * コンストラクタ nullまたは0にする
@@ -50,7 +50,7 @@ public class Teacher {
 		f_Lab = null;
 		f_NumOfNewSubject = 0;
 		f_NumOfAllSubject = 0;
-		f_DayPeriodEvaluationValue = 1.0;
+		f_DayPeriodEvaluationValue = 25.0;
 	}
 
 	/*
