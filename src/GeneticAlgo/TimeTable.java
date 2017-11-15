@@ -17,11 +17,11 @@ public class TimeTable {
 	 * コンストラクタ
 	 */
 	public TimeTable() {
-		f_DayOfWeek = "不明";
-		f_Period = 0;
+		this.f_DayOfWeek = "不明";
+		this.f_Period = 0;
 		// f_Grade = 0;
-		f_ClassOfGrade = new ClassOfGrade();
-		f_ClassRoom = "不明";
+		this.f_ClassOfGrade = new ClassOfGrade();
+		this.f_ClassRoom = "不明";
 	}
 
 	/*
@@ -37,9 +37,9 @@ public class TimeTable {
 	 */
 	public void setTimeTable(String day_of_week, int period,
 			ClassOfGrade class_of_grade) {
-		f_DayOfWeek = day_of_week;
-		f_Period = period;
-		f_ClassOfGrade = class_of_grade;
+		this.f_DayOfWeek = day_of_week;
+		this.f_Period = period;
+		this.f_ClassOfGrade = class_of_grade;
 	}
 
 //	/*
@@ -72,7 +72,12 @@ public class TimeTable {
 	 */
 	public static int changeDayToValue(String day_of_week) {
 
+		if(day_of_week==null){
+			day_of_week="不明";
+		}
+		
 		switch (day_of_week) {
+		
 		case "月":
 			return 0;
 
@@ -233,7 +238,7 @@ public class TimeTable {
 	 * @return 曜日
 	 */
 	public String getDayOfWeek() {
-		return f_DayOfWeek;
+		return this.f_DayOfWeek;
 	}
 
 	/*
@@ -242,7 +247,7 @@ public class TimeTable {
 	 * @return 限目
 	 */
 	public int getPeriod() {
-		return f_Period;
+		return this.f_Period;
 	}
 
 	// /*
@@ -258,7 +263,7 @@ public class TimeTable {
 	 * @return 学年ごとの授業
 	 */
 	public ClassOfGrade getClassOfGrade() {
-		return f_ClassOfGrade;
+		return this.f_ClassOfGrade;
 	}
 
 	/*
@@ -267,7 +272,7 @@ public class TimeTable {
 	 * @return 教室
 	 */
 	public String getClassRoom() {
-		return f_ClassRoom;
+		return this.f_ClassRoom;
 	}
 
 	// -------------------------------//
@@ -279,7 +284,7 @@ public class TimeTable {
 	 * @param dayOfWeek 曜日
 	 */
 	public void setDayOfWeek(String dayOfWeek) {
-		f_DayOfWeek = dayOfWeek;
+		this.f_DayOfWeek = dayOfWeek;
 	}
 
 	/*
@@ -288,7 +293,7 @@ public class TimeTable {
 	 * @param period 限目
 	 */
 	public void setPeriod(int period) {
-		f_Period = period;
+		this.f_Period = period;
 	}
 
 	// /*
@@ -306,7 +311,7 @@ public class TimeTable {
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
-		f_ClassOfGrade = class_of_grade;
+		this.f_ClassOfGrade = class_of_grade;
 	}
 
 	/*
@@ -315,6 +320,6 @@ public class TimeTable {
 	 * @param class_room 教室
 	 */
 	public void setClassRoom(String class_room) {
-		f_ClassRoom = class_room;
+		this.f_ClassRoom = class_room;
 	}
 }

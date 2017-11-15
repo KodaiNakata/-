@@ -10,7 +10,7 @@ import java.util.Objects;
  * 教室と何曜日と何限目を決めるためのクラス
  * @author Nakata
  */
-public class Decide_roomAndDayAndPeriod extends Decide_faculty {
+public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPeriod{
 
 	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 前期の時間割
 	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 後期の時間割

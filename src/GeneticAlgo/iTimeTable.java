@@ -6,15 +6,12 @@ package GeneticAlgo;
  */
 public interface iTimeTable {
 
-	public final boolean DEBUG = true;// デバッグモード
-
-	public final int MAX_PERIOD = 5;// 5限目
-	public final int MAX_DAY = TimeTable.changeDayToValue("金");// 月曜から何曜日までか
+	public final boolean DEBUG = false;// デバッグモード
 
 	public final String CONFERENCE_DAY = "木";// 会議の曜日
 	public final int CONFERENCE_PERIOD = 3;// 会議の限目
 
-	public final int CHECK_NUM = 10000;// チェックする回数
+	public final int CHECK_NUM = 2000;// チェックする回数
 
 	public final int TEACHER_COLS = 43;// 先生のファイルの行
 	public final int TEACHER_DATA = 14;// 先生のファイルのデータの数
