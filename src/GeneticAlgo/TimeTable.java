@@ -17,11 +17,11 @@ public class TimeTable {
 	 * コンストラクタ
 	 */
 	public TimeTable() {
-		this.f_DayOfWeek = "不明";
-		this.f_Period = 0;
+		f_DayOfWeek = "不明";
+		f_Period = 0;
 		// f_Grade = 0;
-		this.f_ClassOfGrade = new ClassOfGrade();
-		this.f_ClassRoom = "不明";
+		f_ClassOfGrade = new ClassOfGrade();
+		f_ClassRoom = "不明";
 	}
 
 	/*
@@ -37,9 +37,9 @@ public class TimeTable {
 	 */
 	public void setTimeTable(String day_of_week, int period,
 			ClassOfGrade class_of_grade) {
-		this.f_DayOfWeek = day_of_week;
-		this.f_Period = period;
-		this.f_ClassOfGrade = class_of_grade;
+		f_DayOfWeek = day_of_week;
+		f_Period = period;
+		f_ClassOfGrade = class_of_grade;
 	}
 
 //	/*
@@ -238,7 +238,7 @@ public class TimeTable {
 	 * @return 曜日
 	 */
 	public String getDayOfWeek() {
-		return this.f_DayOfWeek;
+		return f_DayOfWeek;
 	}
 
 	/*
@@ -247,7 +247,7 @@ public class TimeTable {
 	 * @return 限目
 	 */
 	public int getPeriod() {
-		return this.f_Period;
+		return f_Period;
 	}
 
 	// /*
@@ -263,7 +263,7 @@ public class TimeTable {
 	 * @return 学年ごとの授業
 	 */
 	public ClassOfGrade getClassOfGrade() {
-		return this.f_ClassOfGrade;
+		return f_ClassOfGrade;
 	}
 
 	/*
@@ -272,7 +272,7 @@ public class TimeTable {
 	 * @return 教室
 	 */
 	public String getClassRoom() {
-		return this.f_ClassRoom;
+		return f_ClassRoom;
 	}
 
 	// -------------------------------//
@@ -284,7 +284,7 @@ public class TimeTable {
 	 * @param dayOfWeek 曜日
 	 */
 	public void setDayOfWeek(String dayOfWeek) {
-		this.f_DayOfWeek = dayOfWeek;
+		f_DayOfWeek = dayOfWeek;
 	}
 
 	/*
@@ -293,7 +293,7 @@ public class TimeTable {
 	 * @param period 限目
 	 */
 	public void setPeriod(int period) {
-		this.f_Period = period;
+		f_Period = period;
 	}
 
 	// /*
@@ -311,7 +311,7 @@ public class TimeTable {
 	 * @param class_of_grade 学年ごとの授業
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
-		this.f_ClassOfGrade = class_of_grade;
+		f_ClassOfGrade = class_of_grade;
 	}
 
 	/*
@@ -320,6 +320,6 @@ public class TimeTable {
 	 * @param class_room 教室
 	 */
 	public void setClassRoom(String class_room) {
-		this.f_ClassRoom = class_room;
+		f_ClassRoom = class_room;
 	}
 }

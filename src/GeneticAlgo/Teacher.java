@@ -59,10 +59,10 @@ public class Teacher implements iDayPeriod {
 	 */
 	public void resetDayNumber() {
 
-		for (int data = 0; data < 2; data++) {
+		for (int semester = 0; semester <= MAX_SEMESTER; semester++) {
 
 			for (int day = 0; day <= MAX_DAY; day++) {
-				f_DayNumber[data][day] = 0;
+				f_DayNumber[semester][day] = 0;
 			}
 		}
 	}
@@ -249,12 +249,14 @@ public class Teacher implements iDayPeriod {
 	/*
 	 * 曜日のコマ数のゲッター
 	 * 
+	 * @param semester 学期
+	 * 
 	 * @param day 曜日
 	 * 
 	 * @return 指定した曜日のコマ数
 	 */
-	public int getDayNumber(int data, int day) {
-		return f_DayNumber[data][day];
+	public int getDayNumber(int semester, int day) {
+		return f_DayNumber[semester][day];
 	}
 
 	/*
@@ -425,12 +427,14 @@ public class Teacher implements iDayPeriod {
 	/*
 	 * それぞれの曜日のコマ数のセッター
 	 * 
+	 * @param semester 学期
+	 * 
 	 * @param day 曜日
 	 * 
 	 * @param num コマ数
 	 */
-	public void setDayNumber(int data, int day, int num) {
-		f_DayNumber[data][day] = num;
+	public void setDayNumber(int semester, int day, int num) {
+		f_DayNumber[semester][day] = num;
 	}
 
 	/*

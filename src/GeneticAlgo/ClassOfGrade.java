@@ -8,7 +8,7 @@ public class ClassOfGrade {
 
 	private int f_Number;// コマ数
 	private int f_Grade;// 学年
-	private String f_PreviousOrLatter;// 前期後期
+	private String f_Semester;// 前期後期
 	private String f_Subject;// 科目
 	private String f_CourseOrClass;// コース・クラス
 	private Teacher f_Teachers;// 担当の先生(Teacherクラス)
@@ -19,7 +19,7 @@ public class ClassOfGrade {
 	 */
 	public ClassOfGrade() {
 		f_Grade = 0;
-		f_PreviousOrLatter = null;
+		f_Semester = null;
 		f_Number = 0;
 		f_CourseOrClass = null;
 		f_Subject = null;
@@ -34,9 +34,9 @@ public class ClassOfGrade {
 	 *
 	 * @return 前期後期を数値に変えたもの
 	 */
-	public static int changePreviousOrLatterToValue(String previous_latter) {
+	public static int changeSemesterToValue(String semester) {
 
-		switch (previous_latter) {
+		switch (semester) {
 		case "前期":
 			return 0;
 
@@ -55,7 +55,7 @@ public class ClassOfGrade {
 	 *
 	 * @return 値を前期後期に変えたもの
 	 */
-	public static String changeValueToPreviousOrLatter(int value) {
+	public static String changeValueToSemester(int value) {
 
 		switch (value) {
 
@@ -96,8 +96,8 @@ public class ClassOfGrade {
 	 *
 	 * @return 前期か後期か
 	 */
-	public String getPreviousOrLatter() {
-		return f_PreviousOrLatter;
+	public String getSemester() {
+		return f_Semester;
 	}
 
 	/*
@@ -163,8 +163,8 @@ public class ClassOfGrade {
 	 *
 	 * @param previous_or_latter 前期か後期か
 	 */
-	public void setPreviousOrLatter(String previous_or_latter) {
-		f_PreviousOrLatter = previous_or_latter;
+	public void setSemester(String semester) {
+		f_Semester = semester;
 	}
 
 	/*

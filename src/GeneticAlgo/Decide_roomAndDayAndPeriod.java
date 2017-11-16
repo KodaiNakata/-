@@ -57,7 +57,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ "年、");// 学年
 			System.out.print(f_TimeTableData1.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ "、");// 前期・後期
 			System.out.print(f_TimeTableData1.get(number).getClassOfGrade()
 					.getSubject()
@@ -83,7 +83,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ "年、");// 学年
 			System.out.print(f_TimeTableData2.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ "、");// 前期・後期
 			System.out.print(f_TimeTableData2.get(number).getClassOfGrade()
 					.getSubject()
@@ -109,7 +109,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ "年、");// 学年
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ "、");// 前期・後期
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
 					.getSubject()
@@ -143,7 +143,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ "年、");// 学年
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ "、");// 前期・後期
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
 					.getSubject()
@@ -363,8 +363,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 		// 前期か後期かをランダムに選択
 		f_RandomPreviousOrLatter1 = Calculation.getRnd(
-				ClassOfGrade.changePreviousOrLatterToValue("前期"),
-				ClassOfGrade.changePreviousOrLatterToValue("後期"));
+				ClassOfGrade.changeSemesterToValue("前期"),
+				ClassOfGrade.changeSemesterToValue("後期"));
 
 		// 時間割3のデータに存在するとき
 		if (existInTimeTable(f_TimeTableData3, f_RandomDayOfWeek1,
@@ -381,7 +381,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 				System.out.print(f_TimeTableDataTmp1.getClassOfGrade()
 						.getGrade() + "年、");
 				System.out.print(f_TimeTableDataTmp1.getClassOfGrade()
-						.getPreviousOrLatter() + "、");
+						.getSemester() + "、");
 				System.out.print(f_TimeTableDataTmp1.getClassOfGrade()
 						.getSubject() + "、");
 				System.out.print(f_TimeTableDataTmp1.getClassOfGrade()
@@ -419,8 +419,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 			// 前期か後期かをランダムに選択
 			f_RandomPreviousOrLatter2 = Calculation.getRnd(
-					ClassOfGrade.changePreviousOrLatterToValue("前期"),
-					ClassOfGrade.changePreviousOrLatterToValue("後期"));
+					ClassOfGrade.changeSemesterToValue("前期"),
+					ClassOfGrade.changeSemesterToValue("後期"));
 
 		} while (!existInTimeTable(f_TimeTableData3, f_RandomDayOfWeek2,
 				f_RandomPeriod2, f_RandomGrade2, f_RandomPreviousOrLatter2,
@@ -463,9 +463,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					&& time_table_data.get(number).getClassOfGrade().getGrade() == grade
 					&& Objects
 							.equals(time_table_data.get(number)
-									.getClassOfGrade().getPreviousOrLatter(),
+									.getClassOfGrade().getSemester(),
 									ClassOfGrade
-											.changeValueToPreviousOrLatter(previous_latter))) {
+											.changeValueToSemester(previous_latter))) {
 
 				// 新規の時間割のデータとしてセットする
 				new_time_table = time_table_data.get(number);
@@ -497,7 +497,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					System.out.print(new_time_table.getClassOfGrade()
 							.getGrade() + "年、");// 学年
 					System.out.print(new_time_table.getClassOfGrade()
-							.getPreviousOrLatter() + "、");// 前期・後期
+							.getSemester() + "、");// 前期・後期
 					System.out.print(new_time_table.getClassOfGrade()
 							.getSubject() + "、");// 科目名
 					System.out.print(new_time_table.getClassOfGrade()
@@ -544,7 +544,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 			System.out.print(tmpTimeTableData.getClassOfGrade().getGrade()
 					+ "年、");// 学年
 			System.out.print(tmpTimeTableData.getClassOfGrade()
-					.getPreviousOrLatter() + "、");// 前期・後期
+					.getSemester() + "、");// 前期・後期
 			System.out.print(tmpTimeTableData.getClassOfGrade().getSubject()
 					+ "、");// 科目名
 			System.out.print(tmpTimeTableData.getClassOfGrade().getTeachers()
@@ -702,7 +702,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 			System.out.print(time_table.getPeriod() + "限目、");// 限目
 			System.out.print(time_table.getClassOfGrade().getNumber() + "コマ、");// コマ数
 			System.out.print(time_table.getClassOfGrade().getGrade() + "年、");// 学年
-			System.out.print(time_table.getClassOfGrade().getPreviousOrLatter()
+			System.out.print(time_table.getClassOfGrade().getSemester()
 					+ "、");// 前期・後期
 			System.out.print(time_table.getClassOfGrade().getSubject() + "、");// 科目名
 			System.out.print(time_table.getClassOfGrade().getTeachers()
@@ -774,8 +774,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 				// 同じ前期・後期のとき
 				if (Objects.equals(f_TimeTableData1.get(number1)
-						.getClassOfGrade().getPreviousOrLatter(), time_table
-						.getClassOfGrade().getPreviousOrLatter())) {
+						.getClassOfGrade().getSemester(), time_table
+						.getClassOfGrade().getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData1.get(number1).getClassOfGrade()
@@ -891,8 +891,8 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 				// 同じ前期・後期のとき
 				if (Objects.equals(f_TimeTableData2.get(number2)
-						.getClassOfGrade().getPreviousOrLatter(), time_table
-						.getClassOfGrade().getPreviousOrLatter())) {
+						.getClassOfGrade().getSemester(), time_table
+						.getClassOfGrade().getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData2.get(number2).getClassOfGrade()
@@ -990,9 +990,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 				if (f_TimeTableData3
 						.get(number3)
 						.getClassOfGrade()
-						.getPreviousOrLatter()
+						.getSemester()
 						.equals(time_table.getClassOfGrade()
-								.getPreviousOrLatter())) {
+								.getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData3.get(number3).getClassOfGrade()
@@ -1162,7 +1162,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ "年、");// 学年
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ "、");// 前期・後期
 			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
 					.getSubject()
@@ -1236,9 +1236,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 				// 同じ前期・後期のとき
 				if (Objects.equals(f_TimeTableData1.get(number1)
-						.getClassOfGrade().getPreviousOrLatter(),
+						.getClassOfGrade().getSemester(),
 						f_TimeTableData3.get(number).getClassOfGrade()
-								.getPreviousOrLatter())) {
+								.getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData1.get(number1).getClassOfGrade()
@@ -1361,9 +1361,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 				// 同じ前期・後期のとき
 				if (Objects.equals(f_TimeTableData2.get(number2)
-						.getClassOfGrade().getPreviousOrLatter(),
+						.getClassOfGrade().getSemester(),
 						f_TimeTableData3.get(number).getClassOfGrade()
-								.getPreviousOrLatter())) {
+								.getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData2.get(number2).getClassOfGrade()
@@ -1469,9 +1469,9 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 
 				// 同じ前期・後期のとき
 				if (Objects.equals(f_TimeTableData3.get(number3)
-						.getClassOfGrade().getPreviousOrLatter(),
+						.getClassOfGrade().getSemester(),
 						f_TimeTableData3.get(number).getClassOfGrade()
-								.getPreviousOrLatter())) {
+								.getSemester())) {
 
 					// 同じ学年のとき
 					if (f_TimeTableData3.get(number3).getClassOfGrade()
@@ -2040,7 +2040,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 					.getGrade()
 					+ ",");// 学年
 			output.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getPreviousOrLatter()
+					.getSemester()
 					+ ",");// 前期後期
 			output.print(f_TimeTableData3.get(number).getClassOfGrade()
 					.getSubject()
@@ -2099,7 +2099,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 							timeTableData.getClassOfGrade().setGrade(
 									Integer.parseInt(strData[3]));// 学年
 							timeTableData.getClassOfGrade()
-									.setPreviousOrLatter(strData[4]);// 前期後期
+									.setSemester(strData[4]);// 前期後期
 							timeTableData.getClassOfGrade().setSubject(
 									strData[5]);// 科目名
 							timeTableData.getClassOfGrade().getTeachers()
@@ -2148,7 +2148,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 								Integer.parseInt(strData[2]));// コマ数
 						timeTableData.getClassOfGrade().setGrade(
 								Integer.parseInt(strData[3]));// 学年
-						timeTableData.getClassOfGrade().setPreviousOrLatter(
+						timeTableData.getClassOfGrade().setSemester(
 								strData[4]);// 前期後期
 						timeTableData.getClassOfGrade().setSubject(strData[5]);// 科目名
 						timeTableData.getClassOfGrade().getTeachers()
@@ -2245,7 +2245,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 									.parseInt(strData[0]));// コマ数
 							classOfGradeData.setGrade(Integer
 									.parseInt(strData[1]));// 学年
-							classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
+							classOfGradeData.setSemester(strData[2]);// 前期後期
 							classOfGradeData.setSubject(strData[3]);// 科目名
 							classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 
@@ -2286,7 +2286,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 						classOfGradeData
 								.setNumber(Integer.parseInt(strData[0]));// コマ数
 						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
-						classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
+						classOfGradeData.setSemester(strData[2]);// 前期後期
 						classOfGradeData.setSubject(strData[3]);// 科目名
 						classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 
@@ -2327,7 +2327,7 @@ public class Decide_roomAndDayAndPeriod extends Decide_faculty implements iDayPe
 						classOfGradeData
 								.setNumber(Integer.parseInt(strData[0]));// コマ数
 						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
-						classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
+						classOfGradeData.setSemester(strData[2]);// 前期後期
 						classOfGradeData.setSubject(strData[3]);// 科目名
 						classOfGradeData.getTeachers().setName(strData[4]);// 担当教員
 						classOfGradeData.setCourseOrClass(strData[5]);// コース・クラス
