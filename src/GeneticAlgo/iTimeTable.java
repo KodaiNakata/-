@@ -6,15 +6,14 @@ package GeneticAlgo;
  */
 public interface iTimeTable {
 
-	public final boolean DEBUG = true;// デバッグモード
+	public final boolean DEBUG = false;// デバッグモード
 
-	public final int MAX_PERIOD = 5;// 5限目
-	public final int MAX_DAY = TimeTable.changeDayToValue("金");// 月曜から何曜日までか
-
+	public final int MAX_GRADE=4;// 最高学年
 	public final String CONFERENCE_DAY = "木";// 会議の曜日
 	public final int CONFERENCE_PERIOD = 3;// 会議の限目
 
 	public final int CHECK_NUM = 10000;// チェックする回数
+	public final int MUTATION_PROBABLITY = 1;// 突然変異率
 
 	public final int TEACHER_COLS = 43;// 先生のファイルの行
 	public final int TEACHER_DATA = 14;// 先生のファイルのデータの数
@@ -32,7 +31,7 @@ public interface iTimeTable {
 
 	public final int ORDER3_COLS = 112;// 3次のデータの行
 	public final int ORDER3_DATA = 8;// 3次のデータの数
-	public final String SUBJECT3_NAME="subject_3.csv";// 3次の教科のファイルの名前
+	public final String SUBJECT3_NAME = "subject_3.csv";// 3次の教科のファイルの名前
 	public final String FACULTY3_NAME = "faculty_3.csv";// 3次のファイル(担当者が決まったファイル)の名前
 	public final String FILE3_NAME = "room_3.csv";// 3次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 

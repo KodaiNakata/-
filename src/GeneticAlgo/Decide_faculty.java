@@ -326,7 +326,7 @@ public class Decide_faculty implements iTimeTable {
 		for (int number = 0; number < f_ClassOfGradeData3.size(); number++) {
 			output.print(f_ClassOfGradeData3.get(number).getNumber() + ",");// コマ数
 			output.print(f_ClassOfGradeData3.get(number).getGrade() + ",");// 学年
-			output.print(f_ClassOfGradeData3.get(number).getPreviousOrLatter()
+			output.print(f_ClassOfGradeData3.get(number).getSemester()
 					+ ",");// 前期後期
 			output.print(f_ClassOfGradeData3.get(number).getSubject() + ",");// 科目名
 			output.print(f_ClassOfGradeData3.get(number).getTeachers()
@@ -481,7 +481,7 @@ public class Decide_faculty implements iTimeTable {
 						classOfGradeData
 								.setNumber(Integer.parseInt(strData[0]));// コマ数
 						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
-						classOfGradeData.setPreviousOrLatter(strData[2]);// 前期後期
+						classOfGradeData.setSemester(strData[2]);// 前期後期
 						classOfGradeData.setSubject(strData[3]);// 科目名
 						classOfGradeData.setCourseOrClass(strData[4]);// コース・クラス
 						classOfGradeData

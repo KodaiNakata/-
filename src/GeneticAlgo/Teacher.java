@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *  先生のクラス
  *  @author Nakata
  */
-public class Teacher {
+public class Teacher implements iDayPeriod {
 
 	private String f_Name;// 氏名
 	private int f_NumOfBasicSeminar1;// 基礎ゼミ1を持っているか
@@ -26,8 +26,8 @@ public class Teacher {
 
 	private int f_NumOfNewSubject;// 新規の科目のコマ数
 	private int f_NumOfAllSubject;// 全科目のコマ数
-	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
-	private double f_DayPeriodEvaluationValue;// 曜日限目決めに対する評価値
+//	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
+	private int[][] f_DayNumber = new int[2][MAX_DAY + 1];// 曜日のコマ数
 
 	/*
 	 * コンストラクタ nullまたは0にする
@@ -50,56 +50,70 @@ public class Teacher {
 		f_Lab = null;
 		f_NumOfNewSubject = 0;
 		f_NumOfAllSubject = 0;
-		f_DayPeriodEvaluationValue = 25.0;
+
+		resetDayNumber();
 	}
 
 	/*
-	 * 値を名前に変える
-	 *
-	 * @return 担当教員の名前
+	 * 曜日のコマ数をリセット
 	 */
-	public static final String changeValueToName(int value) {
+	public void resetDayNumber() {
 
-		switch (value) {
+		for (int semester = 0; semester <= MAX_SEMESTER; semester++) {
 
-		case 0:
-			return "神戸 尚志";
-
-		case 1:
-			return "渥美 寿雄";
-
-		case 2:
-			return "中野 人志";
-
-		case 3:
-			return "橋新 裕一";
-
-		case 4:
-			return "吉田 実";
-
-		case 5:
-			return "前田 佳伸";
-
-		case 6:
-			return "神戸 尚志";
-
-		case 7:
-			return "神戸 尚志";
-
-		case 8:
-			return "神戸 尚志";
-
-		default:
-			return "不明";
+			for (int day = 0; day <= MAX_DAY; day++) {
+				f_DayNumber[semester][day] = 0;
+			}
 		}
 	}
+
+	// /*
+	// * 値を名前に変える
+	// *
+	// * @return 担当教員の名前
+	// */
+	// public static final String changeValueToName(int value) {
+	//
+	// switch (value) {
+	//
+	// case 0:
+	// return "神戸 尚志";
+	//
+	// case 1:
+	// return "渥美 寿雄";
+	//
+	// case 2:
+	// return "中野 人志";
+	//
+	// case 3:
+	// return "橋新 裕一";
+	//
+	// case 4:
+	// return "吉田 実";
+	//
+	// case 5:
+	// return "前田 佳伸";
+	//
+	// case 6:
+	// return "神戸 尚志";
+	//
+	// case 7:
+	// return "神戸 尚志";
+	//
+	// case 8:
+	// return "神戸 尚志";
+	//
+	// default:
+	// return "不明";
+	// }
+	// }
 
 	// ---------------------------------//
 	// -------------ゲッター------------//
 	// ---------------------------------//
 	/*
 	 * 氏名のゲッター
-	 *
+	 * 
 	 * @return 氏名
 	 */
 	public String getName() {
@@ -108,7 +122,7 @@ public class Teacher {
 
 	/*
 	 * 基礎ゼミ1のコマ数のゲッター
-	 *
+	 * 
 	 * @return 基礎ゼミ1のコマ数
 	 */
 	public int getNumOfBasicSeminar1() {
@@ -117,7 +131,7 @@ public class Teacher {
 
 	/*
 	 * 基礎ゼミ2のコマ数のゲッター
-	 *
+	 * 
 	 * @return 基礎ゼミ2のコマ数
 	 */
 	public int getNumOfBasicSeminar2() {
@@ -126,7 +140,7 @@ public class Teacher {
 
 	/*
 	 * 奇数の電気電子工学実習のコマ数のゲッター
-	 *
+	 * 
 	 * @return 電気電子工学実習のコマ数
 	 */
 	public int getNumOfOddEETraining() {
@@ -135,7 +149,7 @@ public class Teacher {
 
 	/*
 	 * 偶数の電気電子工学実習のコマ数のゲッター
-	 *
+	 * 
 	 * @return 電気電子工学実習のコマ数
 	 */
 	public int getNumOfEvenEETraining() {
@@ -144,7 +158,7 @@ public class Teacher {
 
 	/*
 	 * 奇数の電気電子工学実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return 電気電子工学実験のコマ数
 	 */
 	public int getNumOfOddEEExperiment() {
@@ -153,7 +167,7 @@ public class Teacher {
 
 	/*
 	 * 偶数の電気電子工学実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return 電気電子工学実験のコマ数
 	 */
 	public int getNumOfEvenEEExperiment() {
@@ -162,7 +176,7 @@ public class Teacher {
 
 	/*
 	 * 奇数のエンジニアリングデザイン実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return エンジニアリングデザイン実験のコマ数
 	 */
 	public int getNumOfOddEngineeringDesignExperiment() {
@@ -171,7 +185,7 @@ public class Teacher {
 
 	/*
 	 * 偶数のエンジニアリングデザイン実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return エンジニアリングデザイン実験のコマ数
 	 */
 	public int getNumOfEvenEngineeringDesignExperiment() {
@@ -180,7 +194,7 @@ public class Teacher {
 
 	/*
 	 * エレ情実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return エレ情実験のコマ数
 	 */
 	public int getNumOfEleInfoCommunicationExperiment() {
@@ -189,7 +203,7 @@ public class Teacher {
 
 	/*
 	 * エネ環実験のコマ数のゲッター
-	 *
+	 * 
 	 * @return エネ環実験のコマ数
 	 */
 	public int getNumOfEnergyEnvironmentExperiment() {
@@ -198,7 +212,7 @@ public class Teacher {
 
 	/*
 	 * 卒研ゼミのコマ数のゲッター
-	 *
+	 * 
 	 * @return 卒研ゼミのコマ数
 	 */
 	public int getNumOfGraduateStudySeminar() {
@@ -207,7 +221,7 @@ public class Teacher {
 
 	/*
 	 * 卒研のコマ数のゲッター
-	 *
+	 * 
 	 * @return 卒研のコマ数
 	 */
 	public int getNumOfGraduateStudy() {
@@ -216,7 +230,7 @@ public class Teacher {
 
 	/*
 	 * 新規の科目のコマ数のゲッター
-	 *
+	 * 
 	 * @return 新規の科目のコマ数
 	 */
 	public int getNumOfNewSubject() {
@@ -225,7 +239,7 @@ public class Teacher {
 
 	/*
 	 * 全科目のコマ数のゲッター
-	 *
+	 * 
 	 * @return 全科目のコマ数
 	 */
 	public int getNumOfAllSubject() {
@@ -233,17 +247,21 @@ public class Teacher {
 	}
 
 	/*
-	 * 時間割に対する評価値のゲッター
-	 *
-	 * @return 時間割に対する評価値
+	 * 曜日のコマ数のゲッター
+	 * 
+	 * @param semester 学期
+	 * 
+	 * @param day 曜日
+	 * 
+	 * @return 指定した曜日のコマ数
 	 */
-	public double getDayPeriodEvaluationValue() {
-		return f_DayPeriodEvaluationValue;
+	public int getDayNumber(int semester, int day) {
+		return f_DayNumber[semester][day];
 	}
 
 	/*
 	 * 研究室の階のゲッター
-	 *
+	 * 
 	 * @return 研究室の階
 	 */
 	public String getLab() {
@@ -252,19 +270,19 @@ public class Teacher {
 
 	/*
 	 * 担当科目の動的配列のゲッター
-	 *
+	 * 
 	 * @param number 要素番号
-	 *
+	 * 
 	 * @return 担当科目
 	 */
-	public String getChargeOfSubject(int number){
+	public String getChargeOfSubject(int number) {
 		return f_ChargeOfSubjects.get(number);
 	}
 
 	/*
 	 * 担当科目の動的配列のサイズのゲッター
 	 */
-	public int getSizeChargeOfSubject(){
+	public int getSizeChargeOfSubject() {
 		return f_ChargeOfSubjects.size();
 	}
 
@@ -273,7 +291,7 @@ public class Teacher {
 	// ---------------------------------//
 	/*
 	 * 氏名のセッター
-	 *
+	 * 
 	 * @param name 氏名
 	 */
 	public void setName(String name) {
@@ -282,7 +300,7 @@ public class Teacher {
 
 	/*
 	 * 基礎ゼミ1のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfBasicSeminar1(int num) {
@@ -291,7 +309,7 @@ public class Teacher {
 
 	/*
 	 * 基礎ゼミ2のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfBasicSeminar2(int num) {
@@ -300,7 +318,7 @@ public class Teacher {
 
 	/*
 	 * 奇数の電気電子工学実習のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfOddEETraining(int num) {
@@ -309,7 +327,7 @@ public class Teacher {
 
 	/*
 	 * 偶数の電気電子工学実習のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfEvenEETraining(int num) {
@@ -318,7 +336,7 @@ public class Teacher {
 
 	/*
 	 * 奇数の電気電子工学実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfOddEEExperiment(int num) {
@@ -327,7 +345,7 @@ public class Teacher {
 
 	/*
 	 * 偶数の電気電子工学実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfEvenEEExperiment(int num) {
@@ -336,7 +354,7 @@ public class Teacher {
 
 	/*
 	 * 奇数のエンジニアリングデザイン実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfOddEngineeringDesignExperiment(int num) {
@@ -345,7 +363,7 @@ public class Teacher {
 
 	/*
 	 * 偶数のエンジニアリングデザイン実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfEvenEngineeringDesignExperiment(int num) {
@@ -354,7 +372,7 @@ public class Teacher {
 
 	/*
 	 * エレ情実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfEleInfoCommunicationExperiment(int num) {
@@ -363,7 +381,7 @@ public class Teacher {
 
 	/*
 	 * エネ環実験のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfEnergyEnvironmentExperiment(int num) {
@@ -372,7 +390,7 @@ public class Teacher {
 
 	/*
 	 * 卒研ゼミのコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfGraduateStudySeminar(int num) {
@@ -381,7 +399,7 @@ public class Teacher {
 
 	/*
 	 * 卒研のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setHasGraduateStudy(int num) {
@@ -390,7 +408,7 @@ public class Teacher {
 
 	/*
 	 * 新規の科目のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfNewSubject(int num) {
@@ -399,7 +417,7 @@ public class Teacher {
 
 	/*
 	 * 全科目のコマ数のセッター
-	 *
+	 * 
 	 * @param num コマ数
 	 */
 	public void setNumOfAllSubject(int num) {
@@ -407,17 +425,21 @@ public class Teacher {
 	}
 
 	/*
-	 * 時間割に対する評価値のセッター
-	 *
-	 * @param value 時間割に対する評価値
+	 * それぞれの曜日のコマ数のセッター
+	 * 
+	 * @param semester 学期
+	 * 
+	 * @param day 曜日
+	 * 
+	 * @param num コマ数
 	 */
-	public void setDayPeriodEvaluationValue(double value) {
-		f_DayPeriodEvaluationValue = value;
+	public void setDayNumber(int semester, int day, int num) {
+		f_DayNumber[semester][day] = num;
 	}
 
 	/*
 	 * 研究室の階のセッター
-	 *
+	 * 
 	 * @param floor 部屋
 	 */
 	public void setLab(String floor) {
@@ -426,12 +448,12 @@ public class Teacher {
 
 	/*
 	 * 担当科目の動的配列のセッター
-	 *
+	 * 
 	 * @param number 要素番号
-	 *
+	 * 
 	 * @param subject 科目
 	 */
-	public void setChargeOfSubject(int number,String subject){
+	public void setChargeOfSubject(int number, String subject) {
 		f_ChargeOfSubjects.set(number, subject);
 	}
 
@@ -440,10 +462,10 @@ public class Teacher {
 	// ---------------------------------//
 	/*
 	 * 担当科目の動的配列の追加
-	 *
+	 * 
 	 * @param subject 科目
 	 */
-	public void addChargeOfSubject(String subject){
+	public void addChargeOfSubject(String subject) {
 		f_ChargeOfSubjects.add(subject);
 	}
 

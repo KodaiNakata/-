@@ -72,7 +72,12 @@ public class TimeTable {
 	 */
 	public static int changeDayToValue(String day_of_week) {
 
+		if(day_of_week==null){
+			day_of_week="不明";
+		}
+		
 		switch (day_of_week) {
+		
 		case "月":
 			return 0;
 
