@@ -468,5 +468,4 @@ public class Teacher implements iDayPeriod {
 	public void addChargeOfSubject(String subject) {
 		f_ChargeOfSubjects.add(subject);
 	}
-
 }

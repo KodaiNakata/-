@@ -1,99 +1,97 @@
 package GeneticAlgo;
 
-
 /*
- *  æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹
+ *  ŠÔŠ„‚ÌƒNƒ‰ƒX
  *  @author Nakata
  */
 public class TimeTable {
 
-	private String f_DayOfWeek;// æ›œæ—¥
-	private int f_Period;// é™ç›®
-	// private int f_Grade;// å­¦å¹´
-	private ClassOfGrade f_ClassOfGrade;// å­¦å¹´ã”ã¨ã®æˆæ¥­
-	private String f_ClassRoom;// æ•™å®¤
+	private String f_DayOfWeek;// —j“ú
+	private int f_Period;// ŒÀ–Ú
+	// private int f_Grade;// Šw”N
+	private ClassOfGrade f_ClassOfGrade;// Šw”N‚²‚Æ‚Ìö‹Æ
+	private String f_ClassRoom;// ‹³º
 
 	/*
-	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	 */
 	public TimeTable() {
-		f_DayOfWeek = "ä¸æ˜";
+		f_DayOfWeek = "•s–¾";
 		f_Period = 0;
 		// f_Grade = 0;
 		f_ClassOfGrade = new ClassOfGrade();
-		f_ClassRoom = "ä¸æ˜";
+		f_ClassRoom = "•s–¾";
 	}
 
 	/*
-	 * æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ã®å…¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«è¨­å®šã™ã‚‹
+	 * ŠÔŠ„‚ÌƒNƒ‰ƒX‚Ì‘SƒtƒB[ƒ‹ƒh‚Éİ’è‚·‚é
 	 * 
-	 * @param day_of_week æ›œæ—¥
+	 * @param day_of_week —j“ú
 	 * 
-	 * @param period é™ç›®
+	 * @param period ŒÀ–Ú
 	 * 
-	 * @param class_of_grade å­¦å¹´ã”ã¨ã®æˆæ¥­
+	 * @param class_of_grade Šw”N‚²‚Æ‚Ìö‹Æ
 	 * 
-	 * @param class_room æ•™å®¤
+	 * @param class_room ‹³º
 	 */
-	public void setTimeTable(String day_of_week, int period,
-			ClassOfGrade class_of_grade) {
+	public void setTimeTable(String day_of_week, int period, ClassOfGrade class_of_grade) {
 		f_DayOfWeek = day_of_week;
 		f_Period = period;
 		f_ClassOfGrade = class_of_grade;
 	}
 
-//	/*
-//	 * æ™‚é–“å‰²ã®äº¤æ›
-//	 */
-//	public static void exchangeTimeTable(TimeTable[] time_table1,
-//			TimeTable[] time_table2) {
-//		
-//		TimeTable tmpTimeTable = new TimeTable();
-//
-//		tmpTimeTable.setTimeTable(time_table1[0].getDayOfWeek(),
-//				time_table1[0].getPeriod(), time_table1[0].getClassOfGrade(),
-//				time_table1[0].getClassRoom());
-//
-//		time_table1[0].setTimeTable(time_table2[0].getDayOfWeek(),
-//				time_table2[0].getPeriod(), time_table2[0].getClassOfGrade(),
-//				time_table2[0].getClassRoom());
-//
-//		time_table2[0].setTimeTable(tmpTimeTable.getDayOfWeek(),
-//				tmpTimeTable.getPeriod(), tmpTimeTable.getClassOfGrade(),
-//				tmpTimeTable.getClassRoom());
-//	}
+	// /*
+	// * ŠÔŠ„‚ÌŒğŠ·
+	// */
+	// public static void exchangeTimeTable(TimeTable[] time_table1,
+	// TimeTable[] time_table2) {
+	//
+	// TimeTable tmpTimeTable = new TimeTable();
+	//
+	// tmpTimeTable.setTimeTable(time_table1[0].getDayOfWeek(),
+	// time_table1[0].getPeriod(), time_table1[0].getClassOfGrade(),
+	// time_table1[0].getClassRoom());
+	//
+	// time_table1[0].setTimeTable(time_table2[0].getDayOfWeek(),
+	// time_table2[0].getPeriod(), time_table2[0].getClassOfGrade(),
+	// time_table2[0].getClassRoom());
+	//
+	// time_table2[0].setTimeTable(tmpTimeTable.getDayOfWeek(),
+	// tmpTimeTable.getPeriod(), tmpTimeTable.getClassOfGrade(),
+	// tmpTimeTable.getClassRoom());
+	// }
 
 	/*
-	 * æ›œæ—¥ã‚’æ•°å€¤ã«å¤‰ãˆã‚‹
+	 * —j“ú‚ğ”’l‚É•Ï‚¦‚é
 	 * 
-	 * @param day_of_week æ›œæ—¥
+	 * @param day_of_week —j“ú
 	 * 
-	 * @return æ›œæ—¥ã‚’æ•°å€¤ã«å¤‰ãˆãŸã‚‚ã®
+	 * @return —j“ú‚ğ”’l‚É•Ï‚¦‚½‚à‚Ì
 	 */
 	public static int changeDayToValue(String day_of_week) {
 
-		if(day_of_week==null){
-			day_of_week="ä¸æ˜";
+		if (day_of_week == null) {
+			day_of_week = "•s–¾";
 		}
-		
+
 		switch (day_of_week) {
-		
-		case "æœˆ":
+
+		case "Œ":
 			return 0;
 
-		case "ç«":
+		case "‰Î":
 			return 1;
 
-		case "æ°´":
+		case "…":
 			return 2;
 
-		case "æœ¨":
+		case "–Ø":
 			return 3;
 
-		case "é‡‘":
+		case "‹à":
 			return 4;
 
-		case "åœŸ":
+		case "“y":
 			return 5;
 
 		default:
@@ -102,43 +100,43 @@ public class TimeTable {
 	}
 
 	/*
-	 * å€¤ã‚’æ›œæ—¥ã«å¤‰ãˆã‚‹
+	 * ’l‚ğ—j“ú‚É•Ï‚¦‚é
 	 * 
-	 * @param value å€¤
+	 * @param value ’l
 	 * 
-	 * @return å€¤ã‚’æ›œæ—¥ã«å¤‰ãˆãŸã‚‚ã®
+	 * @return ’l‚ğ—j“ú‚É•Ï‚¦‚½‚à‚Ì
 	 */
 	public static String changeValueToDay(int value) {
 
 		switch (value) {
 
 		case 0:
-			return "æœˆ";
+			return "Œ";
 
 		case 1:
-			return "ç«";
+			return "‰Î";
 
 		case 2:
-			return "æ°´";
+			return "…";
 
 		case 3:
-			return "æœ¨";
+			return "–Ø";
 
 		case 4:
-			return "é‡‘";
+			return "‹à";
 
 		case 5:
-			return "åœŸ";
+			return "“y";
 		}
-		return "ä¸æ˜";
+		return "•s–¾";
 	}
 
 	/*
-	 * æ•™å®¤ã‚’æ•°å€¤ã«å¤‰ãˆã‚‹
+	 * ‹³º‚ğ”’l‚É•Ï‚¦‚é
 	 * 
-	 * @param class_room æ•™å®¤
+	 * @param class_room ‹³º
 	 * 
-	 * @return æ•™å®¤ã‚’æ•°å€¤ã«å¤‰ãˆãŸã‚‚ã®
+	 * @return ‹³º‚ğ”’l‚É•Ï‚¦‚½‚à‚Ì
 	 */
 	public static int changeRoomToValue(String class_room) {
 
@@ -182,11 +180,11 @@ public class TimeTable {
 	}
 
 	/*
-	 * æ•°å€¤ã‚’æ•™å®¤ã«å¤‰ãˆã‚‹
+	 * ”’l‚ğ‹³º‚É•Ï‚¦‚é
 	 * 
-	 * @param value æ•°å€¤
+	 * @param value ”’l
 	 * 
-	 * @return æ•°å€¤ã‚’æ•™å®¤ã«å¤‰ãˆãŸã‚‚ã®
+	 * @return ”’l‚ğ‹³º‚É•Ï‚¦‚½‚à‚Ì
 	 */
 	public static String changeValueToRoom(int value) {
 
@@ -226,98 +224,105 @@ public class TimeTable {
 		case 16:
 			return "31-803";
 		}
-		return "ä¸æ˜";
+		return "•s–¾";
 	}
 
 	// -------------------------------//
-	// ------------ã‚²ãƒƒã‚¿ãƒ¼-----------//
+	// ------------ƒQƒbƒ^[-----------//
 	// -------------------------------//
 	/*
-	 * æ›œæ—¥ã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * —j“ú‚ÌƒQƒbƒ^[
 	 * 
-	 * @return æ›œæ—¥
+	 * @return —j“ú
 	 */
 	public String getDayOfWeek() {
 		return f_DayOfWeek;
 	}
 
 	/*
-	 * é™ç›®ã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * ŒÀ–Ú‚ÌƒQƒbƒ^[
 	 * 
-	 * @return é™ç›®
+	 * @return ŒÀ–Ú
 	 */
 	public int getPeriod() {
 		return f_Period;
 	}
 
 	// /*
-	// * å­¦å¹´ã®ã‚²ãƒƒã‚¿ãƒ¼
+	// * Šw”N‚ÌƒQƒbƒ^[
 	// */
 	// public int getGrade() {
 	// return f_Grade;
 	// }
 
 	/*
-	 * å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * Šw”N‚²‚Æ‚Ìö‹Æ‚ÌƒQƒbƒ^[
 	 * 
-	 * @return å­¦å¹´ã”ã¨ã®æˆæ¥­
+	 * @return Šw”N‚²‚Æ‚Ìö‹Æ
 	 */
 	public ClassOfGrade getClassOfGrade() {
 		return f_ClassOfGrade;
 	}
 
 	/*
-	 * æ•™å®¤ã®ã‚²ãƒƒã‚¿ãƒ¼
+	 * ‹³º‚ÌƒQƒbƒ^[
 	 * 
-	 * @return æ•™å®¤
+	 * @return ‹³º
 	 */
 	public String getClassRoom() {
 		return f_ClassRoom;
 	}
 
 	// -------------------------------//
-	// ------------ã‚»ãƒƒã‚¿ãƒ¼-----------//
+	// ------------ƒZƒbƒ^[-----------//
 	// -------------------------------//
 	/*
-	 * æ›œæ—¥ã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * —j“ú‚ÌƒZƒbƒ^[
 	 * 
-	 * @param dayOfWeek æ›œæ—¥
+	 * @param dayOfWeek —j“ú
 	 */
 	public void setDayOfWeek(String dayOfWeek) {
-		f_DayOfWeek = dayOfWeek;
+
+		if ("•s–¾".equals(f_DayOfWeek)) {
+			f_DayOfWeek = dayOfWeek;
+		}
+
+		else {
+			f_DayOfWeek = f_DayOfWeek.replaceAll(f_DayOfWeek, dayOfWeek);
+		}
 	}
 
 	/*
-	 * é™ç›®ã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * ŒÀ–Ú‚ÌƒZƒbƒ^[
 	 * 
-	 * @param period é™ç›®
+	 * @param period ŒÀ–Ú
 	 */
 	public void setPeriod(int period) {
 		f_Period = period;
 	}
 
 	// /*
-	// * å­¦å¹´ã®ã‚»ãƒƒã‚¿ãƒ¼
+	// * Šw”N‚ÌƒZƒbƒ^[
 	// *
-	// * @param grade å­¦å¹´
+	// * @param grade Šw”N
 	// */
 	// public void setGrade(int grade) {
 	// f_Grade = grade;
 	// }
 
 	/*
-	 * å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * Šw”N‚²‚Æ‚Ìö‹Æ‚ÌƒZƒbƒ^[
 	 * 
-	 * @param class_of_grade å­¦å¹´ã”ã¨ã®æˆæ¥­
+	 * @param class_of_grade Šw”N‚²‚Æ‚Ìö‹Æ
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
 		f_ClassOfGrade = class_of_grade;
 	}
 
 	/*
-	 * æ•™å®¤ã®ã‚»ãƒƒã‚¿ãƒ¼
+	 * ‹³º‚ÌƒZƒbƒ^[
 	 * 
-	 * @param class_room æ•™å®¤
+	 * @param class_room ‹³º
 	 */
 	public void setClassRoom(String class_room) {
 		f_ClassRoom = class_room;
