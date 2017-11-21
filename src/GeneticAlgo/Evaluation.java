@@ -9,7 +9,7 @@ public class Evaluation {
 
 	private int f_Generation;// 世代
 	private double f_EvaluationValue;// 評価値
-
+	
 	/*
 	 * コンストラクタ
 	 */
@@ -55,4 +55,5 @@ public class Evaluation {
 	public void setEvaluationValue(double value) {
 		f_EvaluationValue = value;
 	}
+	
 }
