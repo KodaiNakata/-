@@ -15,10 +15,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	private static final String EVALUATION_FILE = "DayPeriodEvaluationData.csv";// 日程の評価値のデータのファイル
 	private static final int CANDIDATE_NUM = 3;// 候補の数
 
-	// private ArrayList<TimeTable>[]f_CandidateTimeTables3=new
-	// ArrayList[CANDIDATE_NUM];
-	// private TimeTable[][] f_CandidateTimeTableData3 = new
-	// TimeTable[CANDIDATE_NUM][ORDER3_COLS];
 	private TimeTable[][] f_PreviousTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 前期の時間割
 	private TimeTable[][] f_LatterTimeTables = new TimeTable[MAX_DAY][MAX_PERIOD];// 後期の時間割
 	private TimeTable f_TimeTableDataTmp1;// 時間割のデータの交換1
@@ -268,9 +264,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				// 時間割と重複するとき
 				if (checkDuplication(candidate, number)) {
 
-					if (DEBUG) {
-						System.out.println("既存の時間割と重複");
-					}
 					return false;
 				}
 
@@ -360,9 +353,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 											.get(number).getClassOfGrade()
 											.getCourseOrClass())) {
 
-								return -10.0;
+								return -50.0;
 							}
 
+							// コース・クラスと重複しないとき
 							else {
 								return 100.0;
 							}
@@ -384,6 +378,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 
 		double value = f_FacultyEvaluationValue;
 
+		System.out.println("評価値:" + f_FacultyEvaluationValue);
+		InOutPut.anyKey();
 		for (int candidate = 0; candidate < f_CandidateTimeTableData3.length; candidate++) {
 
 			for (int number = 0; number < f_CandidateTimeTableData3[candidate]
@@ -399,12 +395,12 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									number).getPeriod()
 									+ addPeriod) {
 
-						value -= 20.0;
+						value -= 10.0;
 					}
 
 					// 2限目～4限目のとき
 					else {
-						value += 40.0;
+						value += 20.0;
 					}
 				}
 			}
@@ -588,10 +584,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		// 評価できるとき
 		if (canEvaluate) {
 
-			if (DEBUG) {
-				System.out.println("評価する");
-			}
-
 			// calcDayPeriodEvaluationValue();// 評価値の計算をする
 
 			f_NewEvaluationValue = getSumEvaluationValue();// 評価値の合計を取得
@@ -634,6 +626,21 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 
 	}
 
+	/*
+	 * 評価値の表示
+	 */
+	private void indicateEvaluationValue() {
+
+		for (int number = 0; number < f_EvaluationValues.size(); number++) {
+
+			System.out.println("候補" + (number + 1) + "の評価値:"
+					+ f_EvaluationValues.get(number));
+		}
+
+		System.out.println("評価値の合計:"
+				+ getSumEvaluationValue(f_EvaluationValues.size() - 1));
+	}
+
 	// ------------------------------------------------------//
 	// ---------------------遺伝的アルゴリズム---------------//
 	// ------------------------------------------------------//
@@ -647,19 +654,24 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		setClassOfGrade3ToFirstTimeTable3();// 3次の学年ごとの授業を最初の時間割にセットする
 
 		if (DEBUG) {
-			writeRoomAndDayAndPeriodFirstFile3();
+			writeRoomAndDayAndPeriodFirstFile3();// 初期集団においての3次の科目のデータを書き込む
+			indicateTeacherDayNum();// 担当教員のコマ数を表示
+			indicateTimeTableData3();// 3次の科目のデータの表示
+			indicateEvaluationValue();// 評価値の表示
+			InOutPut.anyKey();
 		}
 
-		indicateTeacherDayNum();
-		indicateTimeTableData3();
-		InOutPut.anyKey();
+		exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
 
-		 exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
+		System.out.println("遺伝的アルゴリズム終了");
 
-		indicateTeacherDayNum();// 担当教員のコマ数を表示
+		if (DEBUG) {
+			indicateTeacherDayNum();// 担当教員のコマ数を表示
+			indicateTimeTableData3();// 3次の科目のデータの表示
+			indicateEvaluationValue();// 評価値の表示
 
-//		System.out
-//				.println("評価値が更新された回数：" + (f_EvaluationData.size() - 1) + "回");
+			InOutPut.anyKey();
+		}
 	}
 
 	/*
@@ -667,12 +679,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	 */
 	private void exeGeneticAlgo() {
 
-		int updateNum=0;
-		
-		for (int num = 0; num < CHECK_NUM; num++) {
-			Evaluation evaluation = new Evaluation();
+		int updateNum = 0;
 
-			// TimeTable tmpTimeTable = new TimeTable();
+		for (int num = 0; num < CHECK_NUM; num++) {
+
+			Evaluation evaluation = new Evaluation();
 
 			boolean wasMutated = false;
 
@@ -694,31 +705,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 			// 新しい評価値が上のとき
 			if (isBiggerDayPeriodEvaluationValue()) {
 
-				// // 候補の時間割を更新
-				// for (int candidate = 0; candidate <
-				// f_CandidateNewTimeTableData3.length; candidate++) {
-				//
-				// for (int number = 0; number <
-				// f_CandidateNewTimeTableData3[candidate]
-				// .size(); number++) {
-				//
-				// String tmpDayOfWeek = f_CandidateNewTimeTableData3[candidate]
-				// .get(number).getDayOfWeek();
-				// int tmpPeriod = f_CandidateNewTimeTableData3[candidate]
-				// .get(number).getPeriod();
-				//
-				// // 曜日を更新
-				// f_CandidateTimeTableData3[candidate].get(number)
-				// .setDayOfWeek(tmpDayOfWeek);
-				//
-				// // 限目を更新
-				// f_CandidateTimeTableData3[candidate].get(number)
-				// .setPeriod(tmpPeriod);
-				//
-				// }
-				// }
-
-				resetCandidateTimeTableData3(false);
+				resetCandidateTimeTableData3(false);// 時間割を更新する
 
 				if (DEBUG) {
 					System.out.println("評価値が更新された。");
@@ -726,24 +713,15 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				}
 
 				updateNum++;
-//				evaluation.setEvaluationValue(f_OldEvaluationValue);
-//
-//				f_EvaluationData.add(evaluation);
 			}
 
 			// 新しい評価値以下のとき
 			else {
 
+				// 突然変異したとき
 				if (wasMutated == true) {
 
 					for (int mutationNum = f_MutationDayOfWeeks.size() - 1; mutationNum >= 0; mutationNum--) {
-						// int mutationCandidateNumber =
-						// f_MutationCandidateNumbers.get(mutationNum);
-						// int mutationNumber =
-						// f_MutationNumbers.get(mutationNum);
-						// String dayOfWeek =
-						// f_MutationDayOfWeeks.get(mutationNum);
-						// int period = f_MutationPeriods.get(mutationNum);
 
 						f_CandidateNewTimeTableData3[f_MutationCandidateNumbers
 								.get(mutationNum)].get(
@@ -757,44 +735,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 					}
 				}
 
-				// // 元の候補に戻す
-				// for (int candidate = 0; candidate <
-				// f_CandidateTimeTableData3.length; candidate++) {
-				//
-				// for (int number = 0; number <
-				// f_CandidateTimeTableData3[candidate]
-				// .size(); number++) {
-				//
-				// String tmpDayOfWeek = f_CandidateTimeTableData3[candidate]
-				// .get(number).getDayOfWeek();
-				//
-				// int tmpPeriod = f_CandidateTimeTableData3[candidate]
-				// .get(number).getPeriod();
-				//
-				// if (tmpDayOfWeek == null) {
-				// System.out.println(tmpDayOfWeek + "曜日");
-				// InOutPut.anyKey();
-				// }
-				//
-				// // 曜日を戻す
-				// f_CandidateNewTimeTableData3[candidate].get(number)
-				// .setDayOfWeek(tmpDayOfWeek);
-				//
-				// // 限目を戻す
-				// f_CandidateNewTimeTableData3[candidate].get(number)
-				// .setPeriod(tmpPeriod);
-				// }
-				// }
-				resetCandidateTimeTableData3(true);
+				resetCandidateTimeTableData3(true);// 時間割をリセットする
 			}
-			
-			evaluation.setEvaluationValue(f_OldEvaluationValue);
+
+			for (int number = 0; number < f_EvaluationValues.size(); number++) {
+				evaluation.addEvaluationValues(f_EvaluationValues.get(number));
+			}
+
+			evaluation.setSumEvaluationValue(f_OldEvaluationValue);
 
 			f_EvaluationData.add(evaluation);
 		}
-		
-		System.out
-		.println("評価値が更新された回数：" + updateNum + "回");
+
+		System.out.println("評価値が更新された回数：" + updateNum + "回");
 		InOutPut.anyKey();
 	}
 
@@ -816,68 +769,20 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				for (int number = 0; number < f_CandidateTimeTableData3[candidate]
 						.size(); number++) {
 
-					// oldDayOfWeek = f_CandidateTimeTableData3[candidate].get(
-					// number).getDayOfWeek();
-
 					tmpTimeTable
 							.setDayOfWeek(f_CandidateTimeTableData3[candidate]
 									.get(number).getDayOfWeek());
 
 					tmpTimeTable.setPeriod(f_CandidateTimeTableData3[candidate]
 							.get(number).getPeriod());
-					// oldPeriod = f_CandidateTimeTableData3[candidate]
-					// .get(number).getPeriod();
-
-					// newDayOfWeek =
-					// f_CandidateNewTimeTableData3[candidate].get(
-					// number).getDayOfWeek();
-					//
-					// newPeriod = f_CandidateNewTimeTableData3[candidate].get(
-					// number).getPeriod();
 
 					// 曜日を戻す
 					f_CandidateNewTimeTableData3[candidate].get(number)
 							.setDayOfWeek(tmpTimeTable.getDayOfWeek());
 
-					// // 曜日を戻す
-					// f_CandidateNewTimeTableData3[candidate].get(number)
-					// .setDayOfWeek(oldDayOfWeek);
-					// if (Objects.equals(oldDayOfWeek, newDayOfWeek) == false)
-					// {
-					//
-					// System.out.print("ちがう曜日");
-					// InOutPut.anyKey();
-					//
-					// }
-
 					// 限目を戻す
 					f_CandidateNewTimeTableData3[candidate].get(number)
 							.setPeriod(tmpTimeTable.getPeriod());
-					// // 限目を戻す
-					// f_CandidateNewTimeTableData3[candidate].get(number)
-					// .setPeriod(oldPeriod);
-					// if (oldPeriod != newPeriod) {
-					//
-					// System.out.print("ちがう限目");
-					// InOutPut.anyKey();
-					//
-					// }
-
-					// // 時間割と重複するとき
-					// if (checkDuplication(candidate, number)) {
-					//
-					// indicateTimeTableData3();
-					//
-					// System.out.println("候補" + (candidate + 1) + "の"
-					// + number + "番の時間割と重複");
-					// System.out.println("既存の時間割"
-					// + tmpTimeTable.getDayOfWeek() + "曜日"
-					// + tmpTimeTable.getPeriod() + "限目");
-					// // System.out.println("新規の時間割" + newDayOfWeek + "曜日"
-					// // + newPeriod + "限目");
-					//
-					// InOutPut.anyKey();
-					// }
 				}
 			}
 		}
@@ -886,29 +791,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		else {
 
 			// 時間割を更新する
-			for (int candidate = 0; candidate < f_CandidateTimeTableData3.length; candidate++) {
+			for (int candidate = 0; candidate < f_CandidateNewTimeTableData3.length; candidate++) {
 
-				for (int number = 0; number < f_CandidateTimeTableData3[candidate]
+				for (int number = 0; number < f_CandidateNewTimeTableData3[candidate]
 						.size(); number++) {
-
-					// oldDayOfWeek = oldDayOfWeek.replaceAll(oldDayOfWeek,
-					// f_CandidateTimeTableData3[candidate].get(number)
-					// .getDayOfWeek());
-					//
-					// oldPeriod = f_CandidateTimeTableData3[candidate]
-					// .get(number).getPeriod();
-
-					// newDayOfWeek = newDayOfWeek.replaceAll(newDayOfWeek,
-					// f_CandidateNewTimeTableData3[candidate].get(number)
-					// .getDayOfWeek());
-					//
-					// newPeriod = f_CandidateNewTimeTableData3[candidate].get(
-					// number).getPeriod();
-
-					// if (newDayOfWeek == null) {
-					// System.out.println(newDayOfWeek + "曜日");
-					// InOutPut.anyKey();
-					// }
 
 					tmpTimeTable
 							.setDayOfWeek(f_CandidateNewTimeTableData3[candidate]
@@ -925,25 +811,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 					// 限目を更新
 					f_CandidateTimeTableData3[candidate].get(number).setPeriod(
 							tmpTimeTable.getPeriod());
-
-					// if (Objects.equals(oldDayOfWeek, newDayOfWeek) == false)
-					// {
-					// System.out.print("ちがう曜日");
-					// InOutPut.anyKey();
-					// // 曜日を更新
-					// f_CandidateTimeTableData3[candidate].get(number)
-					// .setDayOfWeek(newDayOfWeek);
-					// }
-					//
-					// if (oldPeriod != newPeriod) {
-					//
-					// System.out.print("ちがう限目");
-					// InOutPut.anyKey();
-					//
-					// // 限目を更新
-					// f_CandidateTimeTableData3[candidate].get(number)
-					// .setPeriod(newPeriod);
-					// }
 				}
 			}
 		}
@@ -1028,17 +895,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		int tmpPeriod = f_CandidateNewTimeTableData3[f_CandidateRandomNumber1]
 				.get(f_RandomCrossNumber1).getPeriod();
 
-		if (DEBUG) {
-			System.out.println("交換前");
-			System.out
-					.println(f_CandidateNewTimeTableData3[f_CandidateRandomNumber2]
-							.get(f_RandomCrossNumber1).getDayOfWeek()
-							+ "曜日と"
-							+ f_CandidateNewTimeTableData3[f_CandidateRandomNumber1]
-									.get(f_RandomCrossNumber1).getDayOfWeek()
-							+ "曜日");
-		}
-
 		f_CandidateNewTimeTableData3[f_CandidateRandomNumber1].get(
 				f_RandomCrossNumber1).setDayOfWeek(
 				f_CandidateNewTimeTableData3[f_CandidateRandomNumber2].get(
@@ -1055,18 +911,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		f_CandidateNewTimeTableData3[f_CandidateRandomNumber2].get(
 				f_RandomCrossNumber1).setPeriod(tmpPeriod);
 
-		if (DEBUG) {
-			System.out.println("交換後");
-			System.out
-					.println(f_CandidateNewTimeTableData3[f_CandidateRandomNumber2]
-							.get(f_RandomCrossNumber1).getPeriod()
-							+ "限目と"
-							+ f_CandidateNewTimeTableData3[f_CandidateRandomNumber1]
-									.get(f_RandomCrossNumber1).getPeriod()
-							+ "限目");
-
-		}
-
 		// 候補1の中に候補2の曜日と限目が同じものがないかを探す
 		elementNumber1 = getInTimeTable3Number(
 				f_CandidateRandomNumber1,
@@ -1076,7 +920,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 						.get(f_RandomCrossNumber1).getClassOfGrade().getGrade(),
 				f_CandidateNewTimeTableData3[f_CandidateRandomNumber2]
 						.get(f_RandomCrossNumber1).getClassOfGrade()
-						.getSemester(), false);
+						.getSemester(),
+				f_CandidateNewTimeTableData3[f_CandidateRandomNumber2]
+						.get(f_RandomCrossNumber1).getClassOfGrade()
+						.getCourseOrClass(), false, false, false, true);
 
 		// 候補2の中に候補1の曜日と限目が同じものがないかを探す
 		elementNumber2 = getInTimeTable3Number(
@@ -1087,7 +934,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 						.get(f_RandomCrossNumber1).getClassOfGrade().getGrade(),
 				f_CandidateNewTimeTableData3[f_CandidateRandomNumber1]
 						.get(f_RandomCrossNumber1).getClassOfGrade()
-						.getSemester(), false);
+						.getSemester(),
+				f_CandidateNewTimeTableData3[f_CandidateRandomNumber2]
+						.get(f_RandomCrossNumber1).getClassOfGrade()
+						.getCourseOrClass(), false, false, false, true);
 
 		// 両方見つかった場合(計4つの要素番号)
 		if (0 <= elementNumber2 && 0 <= elementNumber1) {
@@ -1216,6 +1066,30 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	}
 
 	/*
+	 * 時間割に1に存在するか
+	 */
+	private boolean existInTimeTable1Number(String day_of_week, int period,
+			int grade, String semester, String course_class) {
+
+		for (int number = 0; number < f_TimeTableData1.size(); number++) {
+
+			if (day_of_week.equals(f_TimeTableData1.get(number).getDayOfWeek())
+					&& f_TimeTableData1.get(number).getPeriod() == period
+					&& f_TimeTableData1.get(number).getClassOfGrade()
+							.getGrade() == grade
+					&& semester.equals(f_TimeTableData1.get(number)
+							.getClassOfGrade().getSemester())
+					&& course_class.equals(f_TimeTableData1.get(number)
+							.getClassOfGrade().getCourseOrClass())) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/*
 	 * 既存の時間割のデータの何番目に入っているか
 	 * 
 	 * @param candidate_number 候補の番号
@@ -1228,81 +1102,100 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	 * 
 	 * @param semester 学期
 	 * 
-	 * @param isAllSame すべての要素が同じものだけ探すか
+	 * @param lookForAll すべての要素が同じものを探すか
+	 * 
+	 * @param lookForSameDayPeriodSemester 曜日、限目、学期が同じものを探すか
+	 * 
+	 * @param lookForSameDayPeriod 曜日、限目が同じものを探すか
 	 * 
 	 * @return 既存の時間割のデータの要素番号
 	 */
 	private int getInTimeTable3Number(int candidate_number, String day_of_week,
-			int period, int grade, String semester, boolean isAllSame) {
+			int period, int grade, String semester, String course_class,
+			boolean lookForAll, boolean lookForSameDayPeriodGradeSemester,
+			boolean lookForSameDayPeriodSemester, boolean lookForSameDayPeriod) {
 
-		// すべての要素が同じものを探す
-		for (int number = 0; number < f_CandidateNewTimeTableData3[candidate_number]
-				.size(); number++) {
+		// 全ての要素が同じもの探すとき
+		if (lookForAll == true) {
 
-			// ランダムに選択した曜日、限目、学年、前期後期が時間割3のデータに存在するとき
-			if (Objects.equals(f_CandidateNewTimeTableData3[candidate_number]
-					.get(number).getDayOfWeek(), day_of_week)
-					&& f_CandidateNewTimeTableData3[candidate_number].get(
-							number).getPeriod() == period
-					&& f_CandidateNewTimeTableData3[candidate_number]
-							.get(number).getClassOfGrade().getGrade() == grade
-					&& Objects.equals(
-							f_CandidateNewTimeTableData3[candidate_number]
-									.get(number).getClassOfGrade()
-									.getSemester(), semester)) {
-
-				if (DEBUG) {
-					System.out.println("すべての要素が同じものを発見");
-				}
-				return number;
-			}
-		}
-
-		// すべての要素が同じものを探さないとき
-		if (isAllSame == false) {
-
-			// 学年だけ違うものを探す
+			// すべての要素が同じものを探す
 			for (int number = 0; number < f_CandidateNewTimeTableData3[candidate_number]
 					.size(); number++) {
 
-				// ランダムに選択した曜日、限目、前期後期が時間割3のデータに存在するとき
-				if (Objects.equals(
-						f_CandidateNewTimeTableData3[candidate_number].get(
-								number).getDayOfWeek(), day_of_week)
-						&& f_CandidateNewTimeTableData3[candidate_number].get(
-								number).getPeriod() == period
-						&& Objects.equals(
-								f_CandidateNewTimeTableData3[candidate_number]
-										.get(number).getClassOfGrade()
-										.getSemester(), semester)) {
+				// 全ての要素が同じもの探すとき
+				if (lookForAll == true) {
 
-					if (DEBUG) {
-						System.out.println("学年だけ違うものを発見");
+					// 指定した曜日、限目、学年、前期後期、コース・クラスが時間割3のデータに存在するとき
+					if (Objects.equals(
+							f_CandidateNewTimeTableData3[candidate_number].get(
+									number).getDayOfWeek(), day_of_week)
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getPeriod() == period
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getClassOfGrade().getGrade() == grade
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number).getClassOfGrade()
+											.getSemester(), semester)
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number), course_class)) {
+
+						return number;
 					}
-					return number;
+				}
+
+				// 曜日、限目、学期が同じものを探すとき
+				if (lookForSameDayPeriodGradeSemester == true) {
+
+					// 指定した曜日、限目、学年、前期後期が時間割3のデータに存在するとき
+					if (Objects.equals(
+							f_CandidateNewTimeTableData3[candidate_number].get(
+									number).getDayOfWeek(), day_of_week)
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getPeriod() == period
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getClassOfGrade().getGrade() == grade
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number).getClassOfGrade()
+											.getSemester(), semester)) {
+
+						return number;
+					}
+				}
+
+				// 曜日、限目、学期が同じものを探すとき
+				if (lookForSameDayPeriodSemester == true) {
+
+					// 指定した曜日、限目、前期後期が時間割3のデータに存在するとき
+					if (Objects.equals(
+							f_CandidateNewTimeTableData3[candidate_number].get(
+									number).getDayOfWeek(), day_of_week)
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getPeriod() == period
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number).getClassOfGrade()
+											.getSemester(), semester)) {
+
+						return number;
+					}
+				}
+
+				// 曜日、限目が同じものを探すとき
+				if (lookForSameDayPeriod == true) {
+
+					// 指定した曜日、限目が時間割3のデータに存在するとき
+					if (Objects.equals(
+							f_CandidateNewTimeTableData3[candidate_number].get(
+									number).getDayOfWeek(), day_of_week)
+							&& f_CandidateNewTimeTableData3[candidate_number]
+									.get(number).getPeriod() == period) {
+						return number;
+					}
 				}
 			}
-
-			// 学年と学期が違うものを探す
-			for (int number = 0; number < f_CandidateNewTimeTableData3[candidate_number]
-					.size(); number++) {
-
-				// ランダムに選択した曜日、限目が時間割3のデータに存在するとき
-				if (Objects.equals(
-						f_CandidateNewTimeTableData3[candidate_number].get(
-								number).getDayOfWeek(), day_of_week)
-						&& f_CandidateNewTimeTableData3[candidate_number].get(
-								number).getPeriod() == period) {
-					if (DEBUG) {
-						System.out.println("学年と前期後期が違うものを発見");
-					}
-					return number;
-				}
-			}
-		}
-
-		if (DEBUG) {
-			System.out.println("既存の時間割のデータに存在しません。");
 		}
 
 		return -1;
@@ -1319,10 +1212,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 
 		// 時間割のデータが両方存在のとき
 		if (0 <= f_CandidateRandomNumber1) {
-
-			if (DEBUG) {
-				System.out.println("両方交叉");
-			}
 
 			TimeTable tmpTimeTable = new TimeTable();
 
@@ -1342,10 +1231,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		// 時間割のデータが片方だけ存在のとき
 		else {
 
-			if (DEBUG) {
-				System.out.println("片方交叉");
-			}
-
 			f_NewTimeTableData3.get(f_CandidateRandomNumber2).setDayOfWeek(
 					f_TimeTableDataTmp2.getDayOfWeek());
 			f_NewTimeTableData3.get(f_CandidateRandomNumber2).setPeriod(
@@ -1364,7 +1249,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	 */
 	private boolean mutation() {
 
-		boolean wasMutated = false;
+		boolean wasMutatedOnce = false;
 		int mutationNum = 0;
 		TimeTable tmpTimeTable = new TimeTable();
 		f_MutationCandidateNumbers.clear();
@@ -1382,8 +1267,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 
 				tmpTimeTable.getClassOfGrade().setSemester(
 						ClassOfGrade.changeValueToSemester(semester));
-				// String strSemester = ClassOfGrade
-				// .changeValueToSemester(semester);
 
 				// 月曜～金曜において
 				for (int day = TimeTable.changeDayToValue("月"); day <= MAX_DAY; day++) {
@@ -1407,48 +1290,34 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									tmpTimeTable.getPeriod(), tmpTimeTable
 											.getClassOfGrade().getGrade(),
 									tmpTimeTable.getClassOfGrade()
-											.getSemester(), true);
+											.getSemester(), tmpTimeTable
+											.getClassOfGrade()
+											.getCourseOrClass(), true, true,
+									true, true);
 
 							// 既存の時間割に存在するとき
 							if (0 <= mutationNumber) {
 
+								int addProbablity = 0;
+
+								// 1限目または5限目のとき
+								if (period == 1 || period == 5) {
+									// addProbablity = 1;// 突然変異率を上げる
+								}
+
+								// 2～4限目のとき
+								else {
+									continue;
+								}
+
 								int num = Calculation.getRnd(1, 100);
 
 								// (MUTATION_PROBABILITY)/(100)のとき
-								if (1 <= num && num <= MUTATION_PROBABLITY) {
-
-									String courseOrClass = f_CandidateNewTimeTableData3[candidate]
-											.get(mutationNumber)
-											.getClassOfGrade()
-											.getCourseOrClass();
-
-									// // コース・クラスをもとにより良い要素番号を取得
-									// int bestNumber = getBestNumberTimeTable3(
-									// candidate, grade, strSemester,
-									// courseOrClass);
-
-									// コース・クラスをもとにより良い要素番号を取得
-									int bestNumber = getBestNumberTimeTable3(
-											candidate, grade, tmpTimeTable
-													.getClassOfGrade()
-													.getSemester(),
-											courseOrClass);
-
-									// // 突然変異させる候補の番号をランダムで選ぶ
-									// f_MutationCandidateNumbers
-									// .add(Calculation
-									// .getRnd(0,
-									// f_CandidateNewTimeTableData3.length -
-									// 1));
+								if (1 <= num
+										&& num <= MUTATION_PROBABLITY
+												+ addProbablity) {
 
 									f_MutationCandidateNumbers.add(candidate);
-
-									// // 突然変異させる要素番号をランダムで選ぶ
-									// f_MutationNumbers
-									// .add(Calculation
-									// .getRnd(0,
-									// f_CandidateNewTimeTableData3[f_CandidateMutationNumber]
-									// .size() - 1));
 
 									f_MutationNumbers.add(mutationNumber);
 
@@ -1462,57 +1331,80 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 													.get(mutationNumber)
 													.getPeriod());
 
-									if (0 <= bestNumber) {
-										tmpTimeTable
-												.setDayOfWeek(f_CandidateNewTimeTableData3[candidate]
-														.get(bestNumber)
-														.getDayOfWeek());
-										tmpTimeTable
-												.setPeriod(f_CandidateNewTimeTableData3[candidate]
-														.get(bestNumber)
-														.getPeriod());
+									boolean couldDiscover = false;
+									String courseOrClass = f_CandidateNewTimeTableData3[candidate]
+											.get(mutationNumber)
+											.getClassOfGrade()
+											.getCourseOrClass();
+
+									TimeTable bestTimeTable = new TimeTable();
+
+									int randomNum = Calculation.getRnd(0, 3);
+									String bestCourse = getBestCourse(
+											courseOrClass, randomNum);
+
+									// 1次の時間割の中にベストな曜日と限目があるかを探索
+									bestTimeTable = getInTimeTable1Number(
+											candidate, tmpTimeTable
+													.getClassOfGrade()
+													.getGrade(), tmpTimeTable
+													.getClassOfGrade()
+													.getSemester(),
+											courseOrClass, bestCourse);
+
+									// 1次の時間割にベストな曜日と限目があるとき
+									if (bestTimeTable.getPeriod() != 0) {
+
+										tmpTimeTable.setDayOfWeek(bestTimeTable
+												.getDayOfWeek());
+										tmpTimeTable.setPeriod(bestTimeTable
+												.getPeriod());
+
+										couldDiscover = true;
 									}
 
-									else {
+									// 発見できなかったとき
+									if (couldDiscover == false) {
+										
+										// コース・クラスをもとにより良い要素番号を取得
+										int bestNumber = getInTimeTable3BestNumber(
+												candidate, grade, tmpTimeTable
+														.getClassOfGrade()
+														.getSemester(),
+												courseOrClass, bestCourse);
 
+										// 良い要素番号を見つけたとき
+										if (0 <= bestNumber) {
+											tmpTimeTable
+													.setDayOfWeek(f_CandidateNewTimeTableData3[candidate]
+															.get(bestNumber)
+															.getDayOfWeek());
+											tmpTimeTable
+													.setPeriod(f_CandidateNewTimeTableData3[candidate]
+															.get(bestNumber)
+															.getPeriod());
+
+											couldDiscover = true;
+										}
+									}
+
+									// 発見できなかったとき
+									if (couldDiscover == false) {
+
+										// 曜日をランダムで取得
 										int randomDayOfWeek = Calculation
 												.getRnd(TimeTable
 														.changeDayToValue("月"),
 														MAX_DAY);
+
+										// 限目をランダムで取得
 										tmpTimeTable
 												.setPeriod(getRandomPeriod());
 										tmpTimeTable
 												.setDayOfWeek(TimeTable
 														.changeValueToDay(randomDayOfWeek));
+
 									}
-
-									// f_MutationDayOfWeeks
-									// .add(f_CandidateNewTimeTableData3[f_MutationCandidateNumbers
-									// .get(f_MutationCandidateNumbers
-									// .size() - 1)]
-									// .get(f_MutationNumbers
-									// .get(f_MutationNumbers
-									// .size() - 1))
-									// .getDayOfWeek());
-									// f_MutationPeriods
-									// .add(f_CandidateNewTimeTableData3[f_MutationCandidateNumbers
-									// .get(f_MutationCandidateNumbers
-									// .size() - 1)]
-									// .get(f_MutationNumbers
-									// .get(f_MutationNumbers
-									// .size() - 1))
-									// .getPeriod());
-
-									// // 曜日を交換
-									// f_CandidateNewTimeTableData3[candidate]
-									// .get(mutationNumber)
-									// .setDayOfWeek(
-									// tmpTimeTable.getDayOfWeek());
-									//
-									// // 限目を交換
-									// f_CandidateNewTimeTableData3[candidate]
-									// .get(mutationNumber)
-									// .setPeriod(tmpTimeTable.getPeriod());
 
 									// 曜日を交換
 									f_CandidateNewTimeTableData3[f_MutationCandidateNumbers
@@ -1533,9 +1425,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 															.size() - 1))
 											.setPeriod(tmpTimeTable.getPeriod());
 
-									mutationNum++;
-									if (wasMutated == false) {
-										wasMutated = true;
+									mutationNum++;// 突然変異の回数を増やす
+
+									// 1回も突然変異が発生していないとき
+									if (wasMutatedOnce == false) {
+										wasMutatedOnce = true;
 									}
 								}
 							}
@@ -1545,7 +1439,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 			}
 		}
 
-		if (wasMutated == true) {
+		// 1回以上突然変異が発生したとき
+		if (wasMutatedOnce == true) {
 			System.out.println(mutationNum + "回発生");
 			return true;
 		}
@@ -1554,308 +1449,289 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		return false;
 	}
 
-	// TimeTable timeTable = new TimeTable();
+	// /*
+	// * ある候補のコースをもとにどこの部分がよりよいかの要素番号を取得
+	// *
+	// * @param candidate 候補の番号
+	// *
+	// * @param grade 学年
+	// *
+	// * @param semester 学期
+	// *
+	// * @param course コース・クラス
+	// *
+	// * @return
+	// */
+	// private int getBestNumberTimeTable3(int candidate, int grade,
+	// String semester, String course) {
 	//
-	// timeTable.setDayOfWeek(TimeTable.changeValueToDay(randomDayOfWeek));
-	// timeTable.setPeriod(randomPeriod);
+	// int elementNumber = -1;
+	// String bestCourse = null;
+	//
+	// if (course == null) {
+	// System.out.println("コースが" + course);
+	// InOutPut.anyKey();
+	// }
+	//
+	// double randomNum = Calculation.getDRnd(1.0, 9.0);
+	//
+	// switch (course) {
+	//
+	// case "奇数":
+	//
+	// bestCourse = "偶数";
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "偶数":
+	//
+	// bestCourse = "奇数";
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "ab":
+	//
+	// if (1.0 <= randomNum && randomNum < 4.5) {
+	// bestCourse = "bc";
+	// }
+	//
+	// else {
+	// bestCourse = "c";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	//
+	// return elementNumber;
+	//
+	// case "bc":
+	//
+	// if (1.0 <= randomNum && randomNum < 4.5) {
+	// bestCourse = "ab";
+	// }
+	//
+	// else {
+	// bestCourse = "a";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "a":
+	//
+	// if (1.0 <= randomNum && randomNum < 3.0) {
+	// bestCourse = "b";
+	// }
+	//
+	// else if (3.0 <= randomNum && randomNum < 6.0) {
+	// bestCourse = "c";
+	// }
+	//
+	// else if (6.0 <= randomNum && randomNum <= 9.0) {
+	// bestCourse = "bc";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "b":
+	//
+	// if (1.0 <= randomNum && randomNum < 4.5) {
+	// bestCourse = "a";
+	// }
+	//
+	// else {
+	// bestCourse = "c";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "c":
+	//
+	// if (1.0 <= randomNum && randomNum < 3.0) {
+	// bestCourse = "ab";
+	// }
+	//
+	// else if (3.0 <= randomNum && randomNum < 6.0) {
+	// bestCourse = "a";
+	// }
+	//
+	// else if (6.0 <= randomNum && randomNum <= 9.0) {
+	// bestCourse = "b";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "エレ情(奇数)":
+	//
+	// if (1.0 <= randomNum && randomNum < 4.5) {
+	// bestCourse = "エレ情(偶数)";
+	// }
+	//
+	// else {
+	// bestCourse = "エネ環";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "エレ情(偶数)":
+	//
+	// if (1.0 <= randomNum && randomNum < 4.5) {
+	// bestCourse = "エレ情(奇数)";
+	// }
+	//
+	// else {
+	// bestCourse = "エネ環";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "エレ情":
+	//
+	// bestCourse = "エネ環";
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// case "エネ環":
+	//
+	// if (1.0 <= randomNum && randomNum < 3.0) {
+	// bestCourse = "エレ情(奇数)";
+	// }
+	//
+	// else if (3.0 <= randomNum && randomNum < 6.0) {
+	// bestCourse = "エレ情(偶数)";
+	// }
+	//
+	// else if (6.0 <= randomNum && randomNum <= 9.0) {
+	// bestCourse = "エレ情";
+	// }
+	//
+	// elementNumber = getInTimeTable3Number(candidate, grade, semester,
+	// bestCourse);
+	// return elementNumber;
+	//
+	// default:
+	// return elementNumber;
+	//
+	// }
+	// }
 
-	// // 曜日を保管
-	// f_TmpMutationDayOfWeek =
-	// f_CandidateNewTimeTableData3[randomCandidateNumber]
-	// .get(mutationNumber).getDayOfWeek();
+	// /*
+	// *
+	// */
+	// private int getBestNumberTimeTable3(int candidate, int grade,
+	// String semester, String course){
 	//
-	// // 限目を保管
-	// f_TmpMutationPeriod =
-	// f_CandidateNewTimeTableData3[randomCandidateNumber]
-	// .get(mutationNumber).getPeriod();
-	// int num = Calculation
-	// .getRnd(1, ORDER1_COLS + ORDER2_COLS + ORDER3_COLS);// 3次の科目数/全科目数の確率
+	// TimeTable bestTimeTable=new TimeTable();
 	//
-	// // 1から3次の科目数までのとき
-	// if (ORDER3_COLS <= num
-	// && num <= ORDER1_COLS + ORDER2_COLS + ORDER3_COLS) {
-
+	// int randomNum=Calculation.getRnd(0, 3);
+	// String bestCourse=getBestCourse(course,randomNum);
 	//
-	// int randomDayOfWeek = Calculation.getRnd(
-	// TimeTable.changeDayToValue("月"),
-	// MAX_DAY);
-	// int randomPeriod = Calculation.getRnd(1,
-	// MAX_PERIOD);
-	// String tmpDayOfWeek = TimeTable
-	// .changeValueToDay(randomDayOfWeek);
+	// int elementNumber=-1;
 	//
-	// // TimeTable timeTable = new TimeTable();
-	// // timeTable.setDayOfWeek(tmpDayOfWeek);
-	// // timeTable.setPeriod(randomPeriod);
+	// bestTimeTable=getInTimeTable1Number(candidate,grade,semester,bestCourse);
 	//
-	// // 曜日を交換
-	// f_CandidateNewTimeTableData3[candidate]
-	// .get(mutationNumber).setDayOfWeek(
-	// tmpDayOfWeek);
+	// if(bestTimeTable.getPeriod()!=0){
 	//
-	// // 限目を交換
-	// f_CandidateNewTimeTableData3[candidate]
-	// .get(mutationNumber).setPeriod(
-	// randomPeriod);
+	// elementNumber=getInTimeTable3Number(candidate,grade,semester,course);
 	//
-	// break;
-	// // String courseOrClass =
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // .get(mutationNumber)
-	// // .getClassOfGrade()
-	// // .getCourseOrClass();
-	// //
-
-	// //
-	// // // よい要素番号があるとき
-	// // if (0 <= bestNumber) {
-	// // // String bestDayOfWeek =
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(bestNumber).getDayOfWeek();
-	// // // int bestPeriod =
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(bestNumber).getPeriod();
-	// // //
-	// // // // 曜日を交換
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(mutationNumber)
-	// // // .setDayOfWeek(bestDayOfWeek);
-	// // //
-	// // // // 限目を交換
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(mutationNumber).setPeriod(
-	// // // bestPeriod);
-	// // //
-	// // // int randomDayOfWeek = Calculation
-	// // // .getRnd(TimeTable
-	// // // .changeDayToValue("月"),
-	// // // MAX_DAY);
-	// // // int randomPeriod =
-	// // // Calculation.getRnd(
-	// // // 1, MAX_PERIOD);
-	// // // String tmpDayOfWeek = TimeTable
-	// // // .changeValueToDay(randomDayOfWeek);
-	// // //
-	// // // // 曜日を交換
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(mutationNumber)
-	// // // .setDayOfWeek(tmpDayOfWeek);
-	// // //
-	// // // // 限目を交換
-	// // //
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // // .get(mutationNumber).setPeriod(
-	// // // randomPeriod);
-	// // }
-	// //
-	// // // よい要素番号がないとき
-	// // else {
-	// //
-	// // int randomDayOfWeek = Calculation
-	// // .getRnd(TimeTable
-	// // .changeDayToValue("月"),
-	// // MAX_DAY);
-	// // int randomPeriod = Calculation.getRnd(
-	// // 1, MAX_PERIOD);
-	// // String tmpDayOfWeek = TimeTable
-	// // .changeValueToDay(randomDayOfWeek);
-	// //
-	// // // 曜日を交換
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // .get(mutationNumber)
-	// // .setDayOfWeek(tmpDayOfWeek);
-	// //
-	// // // 限目を交換
-	// // f_CandidateNewTimeTableData3[candidate]
-	// // .get(mutationNumber).setPeriod(
-	// // randomPeriod);
-	// // }
+	// if(elementNumber<0){
+	// return elementNumber;
 	// }
 	// }
+	//
+	// else{
+	//
+	// elementNumber=getInTimeTable3Number(candidate,grade,semester,bestCourse);
 	// }
-	// }
-	// }
-	// }
-	// }
+	//
+	// return elementNumber;
 	// }
 
 	/*
-	 * ある候補のコースをもとにどこの部分がよりよいかの要素番号を取得
+	 * 推奨コースの要素番号を1次の時間割から取得
+	 * 
+	 * @param grade 学年
+	 * 
+	 * @param semester 学期
+	 * 
+	 * @param course_class コース・クラス
+	 * 
+	 * @param best_course 推奨のコース・クラス
+	 * 
+	 * @return 既存の時間割のデータの要素番号
 	 */
-	private int getBestNumberTimeTable3(int candidate, int grade,
-			String semester, String course) {
+	private TimeTable getInTimeTable1Number(int candidate_number, int grade,
+			String semester, String course_class, String best_course) {
 
-		int elementNumber = -1;
-		String bestCourse = null;
+		TimeTable bestTimeTable = new TimeTable();
 
-		if (course == null) {
-			System.out.println("コースが" + course);
-			InOutPut.anyKey();
+		for (int number = 0; number < f_TimeTableData1.size(); number++) {
+
+			for (int addPeriod = 0; addPeriod < f_TimeTableData1.get(number)
+					.getClassOfGrade().getNumber(); addPeriod++) {
+
+				// 2限目～4限目のとき
+				if (2 <= f_TimeTableData1.get(number).getPeriod() + addPeriod
+						&& f_TimeTableData1.get(number).getPeriod() + addPeriod <= 4) {
+
+					// 同じ学年、同じ学期、同じコース・クラスがあるとき
+					if (f_TimeTableData1.get(number).getClassOfGrade()
+							.getGrade() == grade
+							&& semester.equals(f_TimeTableData1.get(number)
+									.getClassOfGrade().getSemester())
+							&& best_course.equals(f_TimeTableData1.get(number)
+									.getClassOfGrade().getCourseOrClass())) {
+
+						// 曜日と限目をセット
+						bestTimeTable.setDayOfWeek(f_TimeTableData1.get(number)
+								.getDayOfWeek());
+						bestTimeTable.setPeriod(f_TimeTableData1.get(number)
+								.getPeriod() + addPeriod);
+
+						// 同じ曜日と限目のところに3次の時間割のデータに同じコース・クラスがあるか確認する
+						int elementNumber = getInTimeTable3Number(
+								candidate_number, bestTimeTable.getDayOfWeek(),
+								bestTimeTable.getPeriod(), grade, semester,
+								course_class, true, false, false, false);
+
+						if (existInTimeTable1Number(
+								bestTimeTable.getDayOfWeek(),
+								bestTimeTable.getPeriod(), grade, semester,
+								course_class) == false && elementNumber < 0) {
+							return bestTimeTable;
+						}
+
+						// // 同じコース・クラスがないとき
+						// else {
+						// return bestTimeTable;
+						// }
+					}
+				}
+			}
 		}
 
-		double randomNum = Calculation.getDRnd(1.0, 9.0);
+		bestTimeTable.setDayOfWeek("不明");
+		bestTimeTable.setPeriod(0);
 
-		switch (course) {
-
-		case "奇数":
-
-			bestCourse = "偶数";
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "偶数":
-
-			bestCourse = "奇数";
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "ab":
-
-			if (1.0 <= randomNum && randomNum < 4.5) {
-				bestCourse = "bc";
-			}
-
-			else {
-				bestCourse = "c";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-
-			return elementNumber;
-
-		case "bc":
-
-			if (1.0 <= randomNum && randomNum < 4.5) {
-				bestCourse = "ab";
-			}
-
-			else {
-				bestCourse = "a";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "a":
-
-			if (1.0 <= randomNum && randomNum < 3.0) {
-				bestCourse = "b";
-			}
-
-			else if (3.0 <= randomNum && randomNum < 6.0) {
-				bestCourse = "c";
-			}
-
-			else if (6.0 <= randomNum && randomNum <= 9.0) {
-				bestCourse = "bc";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "b":
-
-			if (1.0 <= randomNum && randomNum < 4.5) {
-				bestCourse = "a";
-			}
-
-			else {
-				bestCourse = "c";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "c":
-
-			if (1.0 <= randomNum && randomNum < 3.0) {
-				bestCourse = "ab";
-			}
-
-			else if (3.0 <= randomNum && randomNum < 6.0) {
-				bestCourse = "a";
-			}
-
-			else if (6.0 <= randomNum && randomNum <= 9.0) {
-				bestCourse = "b";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "エレ情(奇数)":
-
-			if (1.0 <= randomNum && randomNum < 4.5) {
-				bestCourse = "エレ情(偶数)";
-			}
-
-			else {
-				bestCourse = "エネ環";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "エレ情(偶数)":
-
-			if (1.0 <= randomNum && randomNum < 4.5) {
-				bestCourse = "エレ情(奇数)";
-			}
-
-			else {
-				bestCourse = "エネ環";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "エレ情":
-
-			bestCourse = "エネ環";
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		case "エネ環":
-
-			if (1.0 <= randomNum && randomNum < 3.0) {
-				bestCourse = "エレ情(奇数)";
-			}
-
-			else if (3.0 <= randomNum && randomNum < 6.0) {
-				bestCourse = "エレ情(偶数)";
-			}
-
-			else if (6.0 <= randomNum && randomNum <= 9.0) {
-				bestCourse = "エレ情";
-			}
-
-			elementNumber = getInTimeTable3Number(candidate, grade, semester,
-					bestCourse);
-			return elementNumber;
-
-		default:
-			return elementNumber;
-
-		}
+		return bestTimeTable;
 	}
 
 	/*
-	 * 推奨コースの要素番号を取得
+	 * 推奨コースの要素番号を3次の時間割から取得
 	 * 
 	 * @param candidate_number 候補の番号
 	 * 
@@ -1867,30 +1743,215 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	 * 
 	 * @return 既存の時間割のデータの要素番号
 	 */
-	private int getInTimeTable3Number(int candidate_number, int grade,
-			String semester, String course_class) {
+	private int getInTimeTable3BestNumber(int candidate_number, int grade,
+			String semester, String course_class, String best_course) {
 
 		// すべての要素が同じものを探す
 		for (int number = 0; number < f_CandidateNewTimeTableData3[candidate_number]
 				.size(); number++) {
 
-			// 同じ学年、同じ学期、選んでほしいコース・クラスが既存の時間割にあるとき
-			if (f_CandidateNewTimeTableData3[candidate_number].get(number)
-					.getClassOfGrade().getGrade() == grade
-					&& Objects.equals(
-							f_CandidateNewTimeTableData3[candidate_number]
-									.get(number).getClassOfGrade()
-									.getSemester(), semester)
-					&& Objects.equals(
-							f_CandidateNewTimeTableData3[candidate_number]
-									.get(number).getClassOfGrade()
-									.getCourseOrClass(), course_class)) {
+			for (int addPeriod = 0; addPeriod < f_CandidateNewTimeTableData3[candidate_number]
+					.get(number).getClassOfGrade().getNumber(); addPeriod++) {
 
-				return number;
+				// 2限目～4限目のとき
+				if (2 <= f_CandidateNewTimeTableData3[candidate_number].get(
+						number).getPeriod()
+						+ addPeriod
+						&& f_CandidateNewTimeTableData3[candidate_number].get(
+								number).getPeriod()
+								+ addPeriod <= 4) {
+
+					// 同じ学年、同じ学期、選んでほしいコース・クラスが既存の時間割にあるとき
+					if (f_CandidateNewTimeTableData3[candidate_number]
+							.get(number).getClassOfGrade().getGrade() == grade
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number).getClassOfGrade()
+											.getSemester(), semester)
+							&& Objects
+									.equals(f_CandidateNewTimeTableData3[candidate_number]
+											.get(number).getClassOfGrade()
+											.getCourseOrClass(), best_course)) {
+
+						// 3次の時間割に存在するかを確認
+						int elementNumber = getInTimeTable3Number(
+								candidate_number,
+								f_CandidateNewTimeTableData3[candidate_number]
+										.get(number).getDayOfWeek(),
+								f_CandidateNewTimeTableData3[candidate_number]
+										.get(number).getPeriod() + addPeriod,
+								grade, semester, course_class, true, false,
+								false, false);
+
+						if (elementNumber < 0) {
+							return number;
+						}
+					}
+				}
 			}
+
+		}
+		return -1;
+	}
+
+	/*
+	 * 指定したコース・クラスから重複しないコース・クラスを取得する
+	 * 
+	 * @param course_class コース・クラス
+	 * 
+	 * @param num 複数コースがある場合に使用(1クラスだけは何でもよい)
+	 * 
+	 * @return 重複しないコース・クラス
+	 */
+	private String getBestCourse(String course_class, int num) {
+
+		String bestCourse = null;
+
+		if (course_class == null) {
+			System.out.println("コースが" + course_class);
+			InOutPut.anyKey();
 		}
 
-		return -1;
+		switch (course_class) {
+
+		case "奇数":
+
+			if (num == 0) {
+				bestCourse = "エレ情(偶数)";
+			} else {
+				bestCourse = "偶数";
+			}
+
+			return bestCourse;
+
+		case "偶数":
+
+			if (num == 0) {
+				bestCourse = "エレ情(奇数)";
+			}
+
+			else {
+				bestCourse = "奇数";
+			}
+			return bestCourse;
+
+		case "ab":
+
+			if (num == 0) {
+				bestCourse = "bc";
+			}
+
+			else {
+				bestCourse = "c";
+			}
+
+			return bestCourse;
+
+		case "bc":
+
+			if (num == 0) {
+				bestCourse = "ab";
+			}
+
+			else {
+				bestCourse = "a";
+			}
+
+			return bestCourse;
+
+		case "a":
+
+			if (num == 0) {
+				bestCourse = "b";
+			}
+
+			else if (num == 1) {
+				bestCourse = "c";
+			}
+
+			else {
+				bestCourse = "bc";
+			}
+
+			return bestCourse;
+
+		case "b":
+
+			if (num == 0) {
+				bestCourse = "a";
+			}
+
+			else {
+				bestCourse = "c";
+			}
+
+			return bestCourse;
+
+		case "c":
+
+			if (num == 0) {
+				bestCourse = "ab";
+			}
+
+			else if (num == 1) {
+				bestCourse = "a";
+			}
+
+			else {
+				bestCourse = "b";
+			}
+
+			return bestCourse;
+
+		case "エレ情(奇数)":
+
+			if (num == 0) {
+				bestCourse = "エレ情(偶数)";
+			}
+
+			else {
+				bestCourse = "エネ環";
+			}
+
+			return bestCourse;
+
+		case "エレ情(偶数)":
+
+			if (num == 0) {
+				bestCourse = "エレ情(奇数)";
+			}
+
+			else {
+				bestCourse = "エネ環";
+			}
+
+			return bestCourse;
+
+		case "エレ情":
+
+			bestCourse = "エネ環";
+			return bestCourse;
+
+		case "エネ環":
+
+			if (num == 0) {
+				bestCourse = "エレ情(奇数)";
+			}
+
+			else if (num == 1) {
+				bestCourse = "エレ情(偶数)";
+			}
+
+			else {
+				bestCourse = "エレ情";
+			}
+
+			return bestCourse;
+
+		default:
+			bestCourse = "再履修";
+			return bestCourse;
+		}
 	}
 
 	/*
@@ -1907,40 +1968,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		// 1次の時間割と重複するとき
 		if (checkDuplication1(candidate, number)) {
 
-			if (DEBUG) {
-				System.out.println("1次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("1次と重複なし\n");
 		}
 
 		// 2次の時間割と重複するとき
 		if (checkDuplication2(candidate, number)) {
 
-			if (DEBUG) {
-				System.out.println("2次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("2次と重複なし\n");
 		}
 
 		// 3次の時間割と重複するとき
 		if (checkDuplication3(candidate, number)) {
 
-			if (DEBUG) {
-				System.out.println("3次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("3次と重複なし\n");
 		}
 
 		return false;
@@ -1993,9 +2033,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複");
-									}
 									return true;
 								}
 
@@ -2008,9 +2045,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getCourseOrClass())) {
 
-									if (DEBUG) {
-										System.out.println("コース・クラスと重複");
-									}
 									return true;
 								}
 							}
@@ -2036,9 +2070,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 
@@ -2048,10 +2079,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 										f_CandidateNewTimeTableData3[candidate]
 												.get(number).getClassOfGrade()
 												.getTeachers())) {
-
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
 
 									return true;
 								}
@@ -2063,10 +2090,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 										f_TimeTableData1.get(number1)
 												.getClassOfGrade()
 												.getTeachers())) {
-
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
 
 									return true;
 								}
@@ -2118,10 +2141,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									+ addPeriod == f_CandidateNewTimeTableData3[candidate]
 									.get(number).getPeriod()) {
 
-								if (DEBUG) {
-									System.out.println("学年が重複");
-								}
-
 								return true;
 							}
 						}
@@ -2146,9 +2165,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 
@@ -2209,6 +2225,21 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									+ addPeriod == f_CandidateNewTimeTableData3[candidate]
 									.get(number).getPeriod()) {
 
+								// 電気電子工学概論のとき
+								if ("電気電子工学概論"
+										.equals(f_CandidateNewTimeTableData3[candidate]
+												.get(number3).getClassOfGrade()
+												.getSubject())) {
+
+									// 電気電子工学概論のとき
+									if ("電気電子工学概論"
+											.equals(f_CandidateNewTimeTableData3[candidate]
+													.get(number)
+													.getClassOfGrade()
+													.getSubject())) {
+										continue;
+									}
+								}
 								// 同じ先生のとき
 								if (Objects.equals(
 										f_CandidateNewTimeTableData3[candidate]
@@ -2218,9 +2249,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複");
-									}
 									return true;
 								}
 
@@ -2233,9 +2261,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getCourseOrClass())) {
 
-									if (DEBUG) {
-										System.out.println("コース・クラスと重複");
-									}
 									return true;
 								}
 
@@ -2264,9 +2289,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number).getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 
@@ -2277,10 +2299,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 										f_CandidateNewTimeTableData3[candidate]
 												.get(number).getClassOfGrade()
 												.getTeachers())) {
-
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
 
 									return true;
 								}
@@ -2293,19 +2311,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.get(number3).getClassOfGrade()
 												.getTeachers())) {
 
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
-
 									return true;
 								}
-								// if (Objects
-								// .equals(f_CandidateNewTimeTableData3[candidate]
-								// .get(number3).getClassOfGrade()
-								// .getTeachers().getName(), "各先生")) {
-								//
-								// return true;
-								// }
 							}
 						}
 					}
@@ -2508,7 +2515,12 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		Evaluation evaluation = new Evaluation();
 
 		evaluation.setGeneration(0);
-		evaluation.setEvaluationValue(f_OldEvaluationValue);
+
+		for (int number = 0; number < f_EvaluationValues.size(); number++) {
+			evaluation.addEvaluationValues(f_EvaluationValues.get(number));
+		}
+
+		evaluation.setSumEvaluationValue(f_OldEvaluationValue);
 
 		f_EvaluationData.add(evaluation);
 
@@ -2544,67 +2556,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 	 */
 	private boolean checkFirstDuplication(int number) {
 
-		if (DEBUG) {
-
-			System.out.print(f_TimeTableData3.get(number).getDayOfWeek()
-					+ "曜日、");// 曜日
-			System.out.print(f_TimeTableData3.get(number).getPeriod() + "限目、");// 限目
-			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getNumber()
-					+ "コマ、");// コマ数
-			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getGrade()
-					+ "年、");// 学年
-			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getSemester()
-					+ "、");// 前期・後期
-			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getSubject()
-					+ "、");// 科目名
-			System.out.print(f_TimeTableData3.get(number).getClassOfGrade()
-					.getTeachers().getName()
-					+ "先生、");// 担当教員
-			System.out.print(f_TimeTableData3.get(number).getClassRoom()
-					+ "教室、");// 教室
-			System.out.println(f_TimeTableData3.get(number).getClassOfGrade()
-					.getCourseOrClass()
-					+ "クラス");// コース・クラス
-		}
-
 		// 1次の時間割と重複するとき
 		if (checkFirstDuplication1(number)) {
-			if (DEBUG) {
-				System.out.println("1次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("1次と重複なし\n");
 		}
 
 		// 2次の時間割と重複するとき
 		if (checkFirstDuplication2(number)) {
-			if (DEBUG) {
-				System.out.println("2次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("2次と重複なし\n");
 		}
 
 		// 3次の時間割と重複するとき
 		if (checkFirstDuplication3(number)) {
-			if (DEBUG) {
-				System.out.println("3次と重複あり\n");
-			}
 			return true;
-		}
-
-		if (DEBUG) {
-			System.out.println("3次と重複なし\n");
 		}
 
 		return false;
@@ -2654,9 +2618,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複");
-									}
 									return true;
 								}
 
@@ -2668,10 +2629,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 										f_TimeTableData3.get(number)
 												.getClassOfGrade()
 												.getCourseOrClass())) {
-
-									if (DEBUG) {
-										System.out.println("コース・クラスと重複");
-									}
 									return true;
 								}
 							}
@@ -2697,9 +2654,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 
@@ -2710,23 +2664,15 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers())) {
 
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
-
 									return true;
 								}
-								
+
 								// 特定の科目と重複するとき
 								if (checkDuplicationSubject(f_TimeTableData3
 										.get(number).getClassOfGrade(),
 										f_TimeTableData1.get(number1)
 												.getClassOfGrade()
 												.getTeachers())) {
-
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
 
 									return true;
 								}
@@ -2776,10 +2722,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									+ addPeriod == f_TimeTableData3.get(number)
 									.getPeriod()) {
 
-								if (DEBUG) {
-									System.out.println("限目と重複(同じ学年)");
-								}
-
 								return true;
 							}
 
@@ -2805,9 +2747,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 							}
@@ -2859,6 +2798,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 									+ addPeriod == f_TimeTableData3.get(number)
 									.getPeriod()) {
 
+								// 電気電子工学概論どうしのとき
+								if ("電気電子工学概論".equals(f_TimeTableData3
+										.get(number3).getClassOfGrade()
+										.getSubject())) {
+
+									// 電気電子工学概論のとき
+									if ("電気電子工学概論".equals(f_TimeTableData3
+											.get(number).getClassOfGrade()
+											.getSubject())) {
+										return false;
+									}
+								}
+
 								// 同じ先生のとき
 								if (Objects.equals(f_TimeTableData3
 										.get(number3).getClassOfGrade()
@@ -2867,9 +2819,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("同じ先生");
-									}
 									return true;
 								}
 
@@ -2882,9 +2831,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getCourseOrClass()) == true) {
 
-									if (DEBUG) {
-										System.out.println("コース・クラスと重複");
-									}
 									return true;
 								}
 							}
@@ -2910,9 +2856,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers().getName())) {
 
-									if (DEBUG) {
-										System.out.println("先生と重複(違う学年)");
-									}
 									return true;
 								}
 
@@ -2922,10 +2865,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 										f_TimeTableData3.get(number)
 												.getClassOfGrade()
 												.getTeachers())) {
-
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
 
 									return true;
 								}
@@ -2937,18 +2876,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 												.getClassOfGrade()
 												.getTeachers())) {
 
-									if (DEBUG) {
-										System.out.println("特定の科目と重複");
-									}
-
 									return true;
 								}
-								// if (Objects.equals(f_TimeTableData3
-								// .get(number3).getClassOfGrade()
-								// .getTeachers().getName(), "各先生")) {
-								//
-								// return true;
-								// }
 							}
 						}
 					}
@@ -2976,10 +2905,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		// 同じクラスのとき
 		if (course_or_class1.equals(course_or_class2)) {
 
-			if (DEBUG) {
-				System.out.println("同じクラス");
-			}
-
 			return true;
 		}
 
@@ -2996,9 +2921,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("abと重複");
-			}
 			return true;
 		}
 
@@ -3015,9 +2937,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("bcと重複");
-			}
 			return true;
 		}
 
@@ -3030,9 +2949,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("奇数と重複");
+			// エレ情(偶数)クラスのとき
+			if (course_or_class2.equals("エレ情(偶数)")) {
+				return false;
 			}
+
 			return true;
 		}
 
@@ -3045,9 +2966,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("偶数と重複");
+			// エレ情(偶数)クラスのとき
+			if (course_or_class2.equals("エレ情(奇数)")) {
+				return false;
 			}
+
 			return true;
 		}
 
@@ -3069,9 +2992,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("aと重複");
-			}
 			return true;
 		}
 
@@ -3086,10 +3006,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 			// cクラスのとき
 			if (course_or_class2.equals("c")) {
 				return false;
-			}
-
-			if (DEBUG) {
-				System.out.println("bと重複");
 			}
 
 			return true;
@@ -3114,14 +3030,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("cと重複");
-			}
 			return true;
 		}
 
 		// エレ情(奇数)クラスと被るとき
 		if (course_or_class1.equals("エレ情(奇数)")) {
+
+			// 偶数クラスのとき
+			if (course_or_class2.equals("偶数")) {
+				return false;
+			}
 
 			// エネ環クラスのとき
 			if (course_or_class2.equals("エネ環")) {
@@ -3133,14 +3051,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("エレ情(奇数)と重複");
-			}
 			return true;
 		}
 
 		// エレ情(偶数)クラスと被るとき
 		if (course_or_class1.equals("エレ情(偶数)")) {
+
+			// 奇数クラスのとき
+			if (course_or_class2.equals("奇数")) {
+				return false;
+			}
 
 			// エネ環クラスのとき
 			if (course_or_class2.equals("エネ環")) {
@@ -3152,9 +3072,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("エレ情(偶数)と重複");
-			}
 			return true;
 		}
 
@@ -3166,9 +3083,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("エレ情と重複");
-			}
 			return true;
 		}
 
@@ -3190,18 +3104,12 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 				return false;
 			}
 
-			if (DEBUG) {
-				System.out.println("エネ環と重複");
-			}
 			return true;
 		}
 
 		// 共通クラスと被るとき
 		if (course_or_class1.equals("共通")) {
 
-			if (DEBUG) {
-				System.out.println("共通と重複");
-			}
 			return true;
 
 		}
@@ -3214,10 +3122,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 
 				return false;
 
-			}
-
-			if (DEBUG) {
-				System.out.println("再履修と重複");
 			}
 
 			return true;
@@ -3697,11 +3601,23 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 		System.out.println("担当者が決まった3次のファイル" + EVALUATION_FILE + "に書き込みます。");
 
 		output.print("世代,");// 世代
+
+		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
+			output.print("候補" + (candidate + 1) + ",");
+		}
+
 		output.println("評価値");// 評価値
 
 		for (int number = 0; number < f_EvaluationData.size(); number++) {
 			output.print(f_EvaluationData.get(number).getGeneration() + ",");// 世代
-			output.println(f_EvaluationData.get(number).getEvaluationValue());// 評価値
+
+			for (int candidateNum = 0; candidateNum < f_EvaluationValues.size(); candidateNum++) {
+
+				output.print(f_EvaluationData.get(number).getEvaluationValues(
+						candidateNum)
+						+ ",");
+			}
+			output.println(f_EvaluationData.get(number).getSumEvaluationValue());// 評価値
 		}
 
 		output.close();
@@ -3757,6 +3673,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod {
 							for (int teacherNum = 0; teacherNum < f_TeacherData
 									.size(); teacherNum++) {
 
+								// 担当教員のデータに存在するとき
 								if (strData[6].equals(f_TeacherData
 										.get(teacherNum))) {
 									timeTableData.getClassOfGrade()
