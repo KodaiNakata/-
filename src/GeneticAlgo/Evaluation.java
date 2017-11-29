@@ -19,6 +19,7 @@ public class Evaluation {
 	public Evaluation() {
 		f_Generation = -1;
 		f_SumEvaluationValue = 0.0;
+		f_EvaluationValues.clear();
 	}
 
 	/*
