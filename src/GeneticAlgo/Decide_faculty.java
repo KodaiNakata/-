@@ -19,7 +19,7 @@ public class Decide_faculty implements iTimeTable {
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2 = new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3 = new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ
 	protected ArrayList<Teacher> f_TeacherData = new ArrayList<Teacher>();// 先生のデータ
-	protected int f_FacultyEvaluationValue;// 担当者決定の評価値
+	protected double f_FacultyEvaluationValue;// 担当者決定の評価値
 	protected static int PROG_COUNT;// プログラムを実行した回数
 
 	/*
@@ -40,7 +40,7 @@ public class Decide_faculty implements iTimeTable {
 	 */
 	public void calctTeacherEvaluationValue() {
 
-		int value = 0;
+		double value = 0.0;
 
 		// (担当教員数)-((持っているコマ数)/DEFINE_NUM^(新規コマ数))
 		// ---------------------------------------------------
@@ -51,11 +51,11 @@ public class Decide_faculty implements iTimeTable {
 				continue;
 			}
 
-			value += (( f_TeacherData.size() - ( f_TeacherData
+			value += (((double) f_TeacherData.size() - ((double) f_TeacherData
 					.get(teacherNum).getNumOfAllSubject() / Calculation
 					.getPowerRoot(DEFINE_NUM, f_TeacherData.get(teacherNum)
 							.getNumOfNewSubject()))) / Calculation
-					.getSqrt( f_TeacherData.get(teacherNum)
+					.getSqrt((double) f_TeacherData.get(teacherNum)
 							.getNumOfAllSubject()));
 		}
 

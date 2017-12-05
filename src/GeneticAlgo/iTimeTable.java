@@ -6,7 +6,7 @@ package GeneticAlgo;
  */
 public interface iTimeTable {
 
-	public final boolean DEBUG = true;// デバッグモード
+	public final boolean DEBUG = false;// デバッグモード
 
 	public final int MAX_GRADE=4;// 最高学年
 	public final String CONFERENCE_DAY = "木";// 会議の曜日
