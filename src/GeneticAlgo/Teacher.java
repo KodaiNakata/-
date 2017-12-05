@@ -26,7 +26,7 @@ public class Teacher implements iDayPeriod {
 
 	private int f_NumOfNewSubject;// 新規の科目のコマ数
 	private int f_NumOfAllSubject;// 全科目のコマ数
-	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
+//	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
 	private int[][] f_DayNumber = new int[2][MAX_DAY + 1];// 曜日のコマ数
 
 	/*
@@ -468,4 +468,5 @@ public class Teacher implements iDayPeriod {
 	public void addChargeOfSubject(String subject) {
 		f_ChargeOfSubjects.add(subject);
 	}
+
 }
