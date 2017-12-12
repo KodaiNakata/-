@@ -51,7 +51,7 @@ public class Decide_faculty implements iTimeTable {
 				continue;
 			}
 
-			value += ((f_TeacherData.size() - (f_TeacherData
+			value += (( f_TeacherData.size() - ( f_TeacherData
 					.get(teacherNum).getNumOfAllSubject() / Calculation
 					.getPowerRoot(DEFINE_NUM, f_TeacherData.get(teacherNum)
 							.getNumOfNewSubject()))) / Calculation
