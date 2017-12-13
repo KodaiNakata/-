@@ -34,6 +34,32 @@ public class Student implements iDayPeriod {
 	}
 
 	/*
+	 * コピーコンストラクタ
+	 *
+	 * @param student コピー元の生徒
+	 */
+	public Student(Student student) {
+
+		f_Grade = student.getGrade();
+		f_Semester = student.getSemester();
+		f_CourseOrClass = student.getCourseOrClass();
+
+		for (int candidate = 0; candidate < f_DayPeriodNumber.length; candidate++) {
+
+			for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
+
+				for (int period = 0; period < f_DayPeriodNumber[candidate][day].length; period++) {
+
+					f_DayPeriodNumber[candidate][day][period] = student
+							.getDayPeriodNumber(candidate, day, period);
+				}
+			}
+			f_DayPeriodEvaluationValue[candidate] = student
+					.getDayPeriodEvaluationValue(candidate);
+		}
+	}
+
+	/*
 	 * 曜日限目のコマ数をリセットする
 	 */
 	public void resetDayPeriodNumber() {
@@ -50,12 +76,49 @@ public class Student implements iDayPeriod {
 		}
 	}
 
+	/*
+	 * 曜日限目のコマ数を更新する
+	 *
+	 * @param candidate 候補番号
+	 *
+	 * @param day 曜日
+	 *
+	 * @param period 限目
+	 *
+	 * @param number コマ数
+	 */
+	public void updateDayPeriodNumber(int[][][] number1, int[][][] number2) {
+
+		for (int candidate = 0; candidate < f_DayPeriodNumber.length; candidate++) {
+
+			for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
+
+				for (int period = 0; period < f_DayPeriodNumber[candidate][day].length; period++) {
+
+					number1[candidate][day][period] = number2[candidate][day][period];
+				}
+			}
+		}
+	}
+
+	/*
+	 * 日程の評価値のセッター
+	 *
+	 * @param value 値
+	 */
+	public void updateDayPeriodEvaluationValue(int[] value1, int[] value2) {
+
+		for (int candidate = 0; candidate < f_DayPeriodEvaluationValue.length; candidate++) {
+			value1[candidate] = value2[candidate];
+		}
+	}
+
 	// ----------------------------//
 	// ---------ゲッター-----------//
 	// ----------------------------//
 	/*
 	 * 学年のゲッター
-	 * 
+	 *
 	 * @return 学年
 	 */
 	public int getGrade() {
@@ -64,7 +127,7 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * 学期のゲッター
-	 * 
+	 *
 	 * @return 前期or後期
 	 */
 	public String getSemester() {
@@ -73,7 +136,7 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * コース・クラスのゲッター
-	 * 
+	 *
 	 * @return コースorクラス
 	 */
 	public String getCourseOrClass() {
@@ -82,29 +145,34 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * ある曜日の限目のところのコマ数のゲッター
-	 * 
+	 *
+	 * @param candidate 候補番号
+	 *
 	 * @param day 曜日
-	 * 
+	 *
 	 * @param period 限目
-	 * 
+	 *
 	 * @return 指定した曜日と限目のコマ数
 	 */
 	public int getDayPeriodNumber(int candidate, int day, int period) {
-
-		if (MAX_DAY < day || MAX_PERIOD <= period) {
-			System.out.println(day + "曜日" + period + "限目");
-		}
-
-		else if (day < 0 || period < 0) {
-			System.out.println(day + "曜日" + period + "限目");
-		}
 
 		return f_DayPeriodNumber[candidate][day][period];
 	}
 
 	/*
+	 * 曜日限目のコマ数のゲッター
+	 *
+	 * @return 曜日限目のコマ数の配列
+	 */
+	public int[][][] getDayPeriodNumbers() {
+		return f_DayPeriodNumber;
+	}
+
+	/*
 	 * 日程の評価値のゲッター
-	 * 
+	 *
+	 * @param candidate 候補番号
+	 *
 	 * @return 日程の評価値
 	 */
 	public int getDayPeriodEvaluationValue(int candidate) {
@@ -112,12 +180,21 @@ public class Student implements iDayPeriod {
 	}
 
 	/*
+	 * 日程の評価値のゲッター
+	 *
+	 * @return 日程の評価値の配列
+	 */
+	public int[] getDayPeriodEvaluationValue() {
+		return f_DayPeriodEvaluationValue;
+	}
+
+	/*
 	 * ある候補のある曜日のコマ数の合計のゲッター
-	 * 
+	 *
 	 * @param candidate 候補番号
-	 * 
+	 *
 	 * @day 曜日
-	 * 
+	 *
 	 * @return ある候補のある曜日のコマ数の合計
 	 */
 	public int getSumNumberOfDayPeriod(int candidate, int day) {
@@ -133,21 +210,27 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * ある候補の最大コマ数のゲッター
-	 * 
+	 *
 	 * @param candidate 候補番号
-	 * 
-	 * @return ある候補のある曜日の最大コマ数
+	 *
+	 * @return ある候補の最大コマ数
 	 */
 	public int getMaxNumberOfDayPeriod(int candidate) {
 
-		int max = f_DayPeriodNumber[candidate][0][0];
+		int max=0;
 
 		for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
+
+			int sum = 0;
+
 			for (int period = 1; period <= f_DayPeriodNumber[candidate][day].length; period++) {
 
-				if (max < f_DayPeriodNumber[candidate][day][period - 1]) {
-					max = f_DayPeriodNumber[candidate][day][period - 1];
-				}
+				sum += f_DayPeriodNumber[candidate][day][period - 1];
+
+			}
+
+			if (max < sum) {
+				max = sum;
 			}
 		}
 
@@ -156,22 +239,26 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * ある候補の最小コマ数のゲッター
-	 * 
+	 *
 	 * @param candidate 候補番号
-	 * 
-	 * @return ある候補のある曜日の最小コマ数
+	 *
+	 * @return ある候補の最小コマ数
 	 */
 	public int getMinNumberOfDayPeriod(int candidate) {
 
-		int min = f_DayPeriodNumber[candidate][0][0];
+		int min=5;
 
 		for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
 
+			int sum = 0;
+
 			for (int period = 1; period <= f_DayPeriodNumber[candidate][day].length; period++) {
 
-				if (min > f_DayPeriodNumber[candidate][day][period - 1]) {
-					min = f_DayPeriodNumber[candidate][day][period - 1];
-				}
+				sum += f_DayPeriodNumber[candidate][day][period - 1];
+			}
+
+			if (min > sum) {
+				min = sum;
 			}
 		}
 
@@ -183,7 +270,7 @@ public class Student implements iDayPeriod {
 	// ----------------------------//
 	/*
 	 * 学年のセッター
-	 * 
+	 *
 	 * @param grade 学年
 	 */
 	public void setGrade(int grade) {
@@ -192,7 +279,7 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * 学期のセッター
-	 * 
+	 *
 	 * @param semester 学期
 	 */
 	public void setSemester(String semster) {
@@ -201,7 +288,7 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * コース・クラスのセッター
-	 * 
+	 *
 	 * @param course_class コースorクラス
 	 */
 	public void setCourseOrClass(String course_class) {
@@ -210,37 +297,32 @@ public class Student implements iDayPeriod {
 
 	/*
 	 * ある曜日の限目のところのコマ数のセッター
-	 * 
+	 *
 	 * @param candidate 候補番号
-	 * 
+	 *
 	 * @param day 曜日
-	 * 
+	 *
 	 * @param period 限目
-	 * 
-	 * @param number コマ数
 	 */
-	public void setDayPeriodNumber(int candidate, int day, int period,
-			int number) {
+	public void setDayPeriodNumber(int candidate, int day, int period) {
 
-		for (int addPeriod = 0; addPeriod < number; addPeriod++) {
-
-			if (f_DayPeriodNumber[candidate][day][period + addPeriod] <= 0) {
-				f_DayPeriodNumber[candidate][day][period + addPeriod] = 1;
-			}
+		if (f_DayPeriodNumber[candidate][day][period] <= 0) {
+			f_DayPeriodNumber[candidate][day][period] = 1;
 		}
-	}
-
-	public void updateDayPeriodNumber(int candidate, int day, int period,
-			int number) {
-		f_DayPeriodNumber[candidate][day][period] = number;
 	}
 
 	/*
 	 * 日程の評価値のセッター
-	 * 
+	 *
+	 * @param candidate 候補番号
+	 *
+	 * @param evaluation[] 評価値の配列
+	 *
 	 * @param value 値
 	 */
-	public void setDayPeriodEvaluationValue(int candidate, int value) {
-		f_DayPeriodEvaluationValue[candidate] = value;
+	public void setDayPeriodEvaluationValue(int candidate, int[] evaluation,
+			int value) {
+		evaluation[candidate] = value;
 	}
+
 }
