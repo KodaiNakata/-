@@ -1,38 +1,38 @@
 package GeneticAlgo;
 
 /*
- *  ŠÔŠ„‚ÌƒNƒ‰ƒX
+ *  æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹
  *  @author Nakata
  */
 public class TimeTable implements iDayPeriod{
 
-	private String f_FixedDayOfWeek;// ŒÅ’è‚Ì—j“ú
-	private int f_FixedPeriod;// ŒÅ’è‚ÌŒÀ–Ú
+	private String f_FixedDayOfWeek;// å›ºå®šã®æ›œæ—¥
+	private int f_FixedPeriod;// å›ºå®šã®é™ç›®
 	private String[] f_DayOfWeek=new String[CANDIDATE_NUM];
 	private int[] f_Period=new int[CANDIDATE_NUM];
-	private ClassOfGrade f_ClassOfGrade;// Šw”N‚²‚Æ‚Ìö‹Æ
-	private String f_ClassRoom;// ‹³º
+	private ClassOfGrade f_ClassOfGrade;// å­¦å¹´ã”ã¨ã®æˆæ¥­
+	private String f_ClassRoom;// æ•™å®¤
 
 	/*
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 */
 	public TimeTable() {
-		f_FixedDayOfWeek = "•s–¾";
+		f_FixedDayOfWeek = "ä¸æ˜";
 		f_FixedPeriod = 0;
 		
 		for(int candidate=0;candidate<f_DayOfWeek.length;candidate++) {
-			f_DayOfWeek[candidate]="•s–¾";
+			f_DayOfWeek[candidate]="ä¸æ˜";
 			f_Period[candidate]=0;
 		}
 		
 		f_ClassOfGrade = new ClassOfGrade();
-		f_ClassRoom = "•s–¾";
+		f_ClassRoom = "ä¸æ˜";
 	}
 
 	/*
-	 * ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 *
-	 * @param time_table ƒRƒs[Œ³‚ÌŠÔŠ„
+	 * @param time_table ã‚³ãƒ”ãƒ¼å…ƒã®æ™‚é–“å‰²
 	 */
 	public TimeTable(TimeTable time_table) {
 		f_FixedDayOfWeek = time_table.getFixedDayOfWeek();
@@ -47,15 +47,15 @@ public class TimeTable implements iDayPeriod{
 		f_ClassRoom = time_table.f_ClassRoom;
 	}
 	/*
-	 * ŠÔŠ„‚ÌƒNƒ‰ƒX‚Ì‘SƒtƒB[ƒ‹ƒh‚Éİ’è‚·‚é
+	 * æ™‚é–“å‰²ã®ã‚¯ãƒ©ã‚¹ã®å…¨ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã«è¨­å®šã™ã‚‹
 	 *
-	 * @param day_of_week —j“ú
+	 * @param day_of_week æ›œæ—¥
 	 *
-	 * @param period ŒÀ–Ú
+	 * @param period é™ç›®
 	 *
-	 * @param class_of_grade Šw”N‚²‚Æ‚Ìö‹Æ
+	 * @param class_of_grade å­¦å¹´ã”ã¨ã®æˆæ¥­
 	 *
-	 * @param class_room ‹³º
+	 * @param class_room æ•™å®¤
 	 */
 	public void setTimeTable(String day_of_week, int period, ClassOfGrade class_of_grade) {
 		f_FixedDayOfWeek = day_of_week;
@@ -65,40 +65,40 @@ public class TimeTable implements iDayPeriod{
 
 	public void resetDayPeriod(int candidate) {
 		
-		f_DayOfWeek[candidate]="•s–¾";
+		f_DayOfWeek[candidate]="ä¸æ˜";
 		f_Period[candidate]=0;
 	}
 	/*
-	 * —j“ú‚ğ”’l‚É•Ï‚¦‚é
+	 * æ›œæ—¥ã‚’æ•°å€¤ã«å¤‰ãˆã‚‹
 	 *
-	 * @param day_of_week —j“ú
+	 * @param day_of_week æ›œæ—¥
 	 *
-	 * @return —j“ú‚ğ”’l‚É•Ï‚¦‚½‚à‚Ì
+	 * @return æ›œæ—¥ã‚’æ•°å€¤ã«å¤‰ãˆãŸã‚‚ã®
 	 */
 	public static int changeDayToValue(String day_of_week) {
 
 		if (day_of_week == null) {
-			day_of_week = "•s–¾";
+			day_of_week = "ä¸æ˜";
 		}
 
 		switch (day_of_week) {
 
-		case "Œ":
+		case "æœˆ":
 			return 0;
 
-		case "‰Î":
+		case "ç«":
 			return 1;
 
-		case "…":
+		case "æ°´":
 			return 2;
 
-		case "–Ø":
+		case "æœ¨":
 			return 3;
 
-		case "‹à":
+		case "é‡‘":
 			return 4;
 
-		case "“y":
+		case "åœŸ":
 			return 5;
 
 		default:
@@ -107,43 +107,43 @@ public class TimeTable implements iDayPeriod{
 	}
 
 	/*
-	 * ’l‚ğ—j“ú‚É•Ï‚¦‚é
+	 * å€¤ã‚’æ›œæ—¥ã«å¤‰ãˆã‚‹
 	 *
-	 * @param value ’l
+	 * @param value å€¤
 	 *
-	 * @return ’l‚ğ—j“ú‚É•Ï‚¦‚½‚à‚Ì
+	 * @return å€¤ã‚’æ›œæ—¥ã«å¤‰ãˆãŸã‚‚ã®
 	 */
 	public static String changeValueToDay(int value) {
 
 		switch (value) {
 
 		case 0:
-			return "Œ";
+			return "æœˆ";
 
 		case 1:
-			return "‰Î";
+			return "ç«";
 
 		case 2:
-			return "…";
+			return "æ°´";
 
 		case 3:
-			return "–Ø";
+			return "æœ¨";
 
 		case 4:
-			return "‹à";
+			return "é‡‘";
 
 		case 5:
-			return "“y";
+			return "åœŸ";
 		}
-		return "•s–¾";
+		return "ä¸æ˜";
 	}
 
 //	/*
-//	 * ‹³º‚ğ”’l‚É•Ï‚¦‚é
+//	 * æ•™å®¤ã‚’æ•°å€¤ã«å¤‰ãˆã‚‹
 //	 *
-//	 * @param class_room ‹³º
+//	 * @param class_room æ•™å®¤
 //	 *
-//	 * @return ‹³º‚ğ”’l‚É•Ï‚¦‚½‚à‚Ì
+//	 * @return æ•™å®¤ã‚’æ•°å€¤ã«å¤‰ãˆãŸã‚‚ã®
 //	 */
 //	public static int changeRoomToValue(String class_room) {
 //
@@ -187,11 +187,11 @@ public class TimeTable implements iDayPeriod{
 //	}
 //
 //	/*
-//	 * ”’l‚ğ‹³º‚É•Ï‚¦‚é
+//	 * æ•°å€¤ã‚’æ•™å®¤ã«å¤‰ãˆã‚‹
 //	 *
-//	 * @param value ”’l
+//	 * @param value æ•°å€¤
 //	 *
-//	 * @return ”’l‚ğ‹³º‚É•Ï‚¦‚½‚à‚Ì
+//	 * @return æ•°å€¤ã‚’æ•™å®¤ã«å¤‰ãˆãŸã‚‚ã®
 //	 */
 //	public static String changeValueToRoom(int value) {
 //
@@ -231,99 +231,99 @@ public class TimeTable implements iDayPeriod{
 //		case 16:
 //			return "31-803";
 //		}
-//		return "•s–¾";
+//		return "ä¸æ˜";
 //	}
 
 	// -------------------------------//
-	// ------------ƒQƒbƒ^[-----------//
+	// ------------ã‚²ãƒƒã‚¿ãƒ¼-----------//
 	// -------------------------------//
 	/*
-	 * ŒÅ’è‚Ì—j“ú‚ÌƒQƒbƒ^[
+	 * å›ºå®šã®æ›œæ—¥ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ŒÅ’è‚Ì—j“ú
+	 * @return å›ºå®šã®æ›œæ—¥
 	 */
 	public String getFixedDayOfWeek() {
 		return f_FixedDayOfWeek;
 	}
 
 	/*
-	 * —j“ú‚Ì”z—ñ‚ÌƒQƒbƒ^[
+	 * æ›œæ—¥ã®é…åˆ—ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return —j“ú‚Ì”z—ñ
+	 * @return æ›œæ—¥ã®é…åˆ—
 	 */
 	public String[] getArrayOfDayOfWeek() {
 		return f_DayOfWeek;
 	}
 
 	/*
-	 * w’è‚µ‚½Œó•â‚Ì—j“ú‚ÌƒQƒbƒ^[
+	 * æŒ‡å®šã—ãŸå€™è£œã®æ›œæ—¥ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param candidate Œó•â”Ô†
+	 * @param candidate å€™è£œç•ªå·
 	 *
-	 * @return w’è‚µ‚½Œó•â‚Ì—j“ú
+	 * @return æŒ‡å®šã—ãŸå€™è£œã®æ›œæ—¥
 	 */
 	public String getDayOfWeek(int candidate) {
 		return f_DayOfWeek[candidate];
 	}
 
 	/*
-	 * ŒÅ’è‚ÌŒÀ–Ú‚ÌƒQƒbƒ^[
+	 * å›ºå®šã®é™ç›®ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ŒÅ’è‚ÌŒÀ–Ú
+	 * @return å›ºå®šã®é™ç›®
 	 */
 	public int getFixedPeriod() {
 		return f_FixedPeriod;
 	}
 
 	/*
-	 * ŒÀ–Ú‚Ì”z—ñ‚ÌƒQƒbƒ^[
+	 * é™ç›®ã®é…åˆ—ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ŒÀ–Ú‚Ì”z—ñ
+	 * @return é™ç›®ã®é…åˆ—
 	 */
 	public int[] getArrayOfPeriod() {
 		return f_Period;
 	}
 
 	/*
-	 * w’è‚µ‚½Œó•â‚ÌŒÀ–Ú‚ÌƒQƒbƒ^[
+	 * æŒ‡å®šã—ãŸå€™è£œã®é™ç›®ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param candidate Œó•â”Ô†
+	 * @param candidate å€™è£œç•ªå·
 	 *
-	 * @return w’è‚µ‚½Œó•â‚ÌŒÀ–Ú
+	 * @return æŒ‡å®šã—ãŸå€™è£œã®é™ç›®
 	 */
 	public int getPeriod(int candidate) {
 		return f_Period[candidate];
 	}
 
 	/*
-	 * Šw”N‚²‚Æ‚Ìö‹Æ‚ÌƒQƒbƒ^[
+	 * å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return Šw”N‚²‚Æ‚Ìö‹Æ
+	 * @return å­¦å¹´ã”ã¨ã®æˆæ¥­
 	 */
 	public ClassOfGrade getClassOfGrade() {
 		return f_ClassOfGrade;
 	}
 
 	/*
-	 * ‹³º‚ÌƒQƒbƒ^[
+	 * æ•™å®¤ã®ã‚²ãƒƒã‚¿ãƒ¼
 	 *
-	 * @return ‹³º
+	 * @return æ•™å®¤
 	 */
 	public String getClassRoom() {
 		return f_ClassRoom;
 	}
 
 	// -------------------------------//
-	// ------------ƒZƒbƒ^[-----------//
+	// ------------ã‚»ãƒƒã‚¿ãƒ¼-----------//
 	// -------------------------------//
 	/*
-	 * ŒÅ’è‚Ì—j“ú‚ÌƒZƒbƒ^[
+	 * å›ºå®šã®æ›œæ—¥ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param dayOfWeek —j“ú
+	 * @param dayOfWeek æ›œæ—¥
 	 */
 	public void setFixedDayOfWeek(String dayOfWeek) {
 
-		if ("•s–¾".equals(f_FixedDayOfWeek)) {
+		if ("ä¸æ˜".equals(f_FixedDayOfWeek)) {
 			f_FixedDayOfWeek = dayOfWeek;
 		}
 
@@ -333,53 +333,53 @@ public class TimeTable implements iDayPeriod{
 	}
 
 	/*
-	 * —j“ú‚ÌƒZƒbƒ^[
+	 * æ›œæ—¥ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param candidate Œó•â”Ô†
+	 * @param candidate å€™è£œç•ªå·
 	 *
-	 * @param array_day_of_week[] —j“ú‚Ì”z—ñ
+	 * @param array_day_of_week[] æ›œæ—¥ã®é…åˆ—
 	 *
-	 * @param day_of_week —j“ú
+	 * @param day_of_week æ›œæ—¥
 	 */
 	public void setDayOfWeek(int candidate,String[] array_day_of_week,String day_of_week) {
 		array_day_of_week[candidate]=day_of_week;
 	}
 
 	/*
-	 * ŒÅ’è‚ÌŒÀ–Ú‚ÌƒZƒbƒ^[
+	 * å›ºå®šã®é™ç›®ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param period ŒÀ–Ú
+	 * @param period é™ç›®
 	 */
 	public void setFixedPeriod(int period) {
 		f_FixedPeriod = period;
 	}
 
 	/*
-	 * ŒÀ–Ú‚ÌƒZƒbƒ^[
+	 * é™ç›®ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param candidate Œó•â”Ô†
+	 * @param candidate å€™è£œç•ªå·
 	 *
-	 * @param array_period ŒÀ–Ú‚Ì”z—ñ
+	 * @param array_period é™ç›®ã®é…åˆ—
 	 *
-	 * @param period ŒÀ–Ú
+	 * @param period é™ç›®
 	 */
 	public void setPeriod(int candidate,int[] array_period,int period) {
 		array_period[candidate]=period;
 	}
 
 	/*
-	 * Šw”N‚²‚Æ‚Ìö‹Æ‚ÌƒZƒbƒ^[
+	 * å­¦å¹´ã”ã¨ã®æˆæ¥­ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param class_of_grade Šw”N‚²‚Æ‚Ìö‹Æ
+	 * @param class_of_grade å­¦å¹´ã”ã¨ã®æˆæ¥­
 	 */
 	public void setClassOfGrade(ClassOfGrade class_of_grade) {
 		f_ClassOfGrade = class_of_grade;
 	}
 
 	/*
-	 * ‹³º‚ÌƒZƒbƒ^[
+	 * æ•™å®¤ã®ã‚»ãƒƒã‚¿ãƒ¼
 	 *
-	 * @param class_room ‹³º
+	 * @param class_room æ•™å®¤
 	 */
 	public void setClassRoom(String class_room) {
 		f_ClassRoom = class_room;

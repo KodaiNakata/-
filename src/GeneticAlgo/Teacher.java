@@ -26,7 +26,6 @@ public class Teacher implements iDayPeriod {
 
 	private int f_NumOfNewSubject;// 新規の科目のコマ数
 	private int f_NumOfAllSubject;// 全科目のコマ数
-	private double f_FacultyEvaluationValue;// 担当者決めに対する評価値
 	private int[][] f_DayNumber = new int[2][MAX_DAY + 1];// 曜日のコマ数
 
 	/*
@@ -66,47 +65,6 @@ public class Teacher implements iDayPeriod {
 			}
 		}
 	}
-
-	// /*
-	// * 値を名前に変える
-	// *
-	// * @return 担当教員の名前
-	// */
-	// public static final String changeValueToName(int value) {
-	//
-	// switch (value) {
-	//
-	// case 0:
-	// return "神戸 尚志";
-	//
-	// case 1:
-	// return "渥美 寿雄";
-	//
-	// case 2:
-	// return "中野 人志";
-	//
-	// case 3:
-	// return "橋新 裕一";
-	//
-	// case 4:
-	// return "吉田 実";
-	//
-	// case 5:
-	// return "前田 佳伸";
-	//
-	// case 6:
-	// return "神戸 尚志";
-	//
-	// case 7:
-	// return "神戸 尚志";
-	//
-	// case 8:
-	// return "神戸 尚志";
-	//
-	// default:
-	// return "不明";
-	// }
-	// }
 
 	// ---------------------------------//
 	// -------------ゲッター------------//
@@ -468,4 +426,5 @@ public class Teacher implements iDayPeriod {
 	public void addChargeOfSubject(String subject) {
 		f_ChargeOfSubjects.add(subject);
 	}
+
 }

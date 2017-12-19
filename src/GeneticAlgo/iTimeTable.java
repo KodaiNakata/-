@@ -12,7 +12,7 @@ public interface iTimeTable {
 	public final String CONFERENCE_DAY = "木";// 会議の曜日
 	public final int CONFERENCE_PERIOD = 3;// 会議の限目
 
-	public final int CHECK_NUM = 10000;// チェックする回数
+	public final int CHECK_NUM = 100000;// チェックする回数
 	public final int MUTATION_PROBABLITY = 1;// 突然変異率
 
 	public final int TEACHER_COLS = 43;// 先生のファイルの行
@@ -25,7 +25,7 @@ public interface iTimeTable {
 	public final String FILE1_NAME = "room_1.csv";// 1次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 
 	public final int ORDER2_COLS = 175;// 2次のデータの行
-	public final int ORDER2_DATA = 8;// 2次のデータの数
+	public final int ORDER2_DATA = 9;// 2次のデータの数
 	public final String FACULTY2_NAME = "faculty_2.csv";// 2次のファイル(担当者が決まったファイル)の名前
 	public final String FILE2_NAME = "room_2.csv";// 2次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 
