@@ -85,32 +85,27 @@ public class Student implements iDayPeriod {
 	 *
 	 * @param period 限目
 	 *
-	 * @param number コマ数
+	 * @param number[] コマ数の配列
 	 */
-	public void updateDayPeriodNumber(int[][][] number1, int[][][] number2) {
+	public void updateDayPeriodNumber(int candidate1,int day1,int period1,int[][][] number1,int candidate2,int day2,int period2, int[][][] number2) {
 
-		for (int candidate = 0; candidate < f_DayPeriodNumber.length; candidate++) {
-
-			for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
-
-				for (int period = 0; period < f_DayPeriodNumber[candidate][day].length; period++) {
-
-					number1[candidate][day][period] = number2[candidate][day][period];
-				}
-			}
-		}
+		number1[candidate1][day1][period1]=number2[candidate2][day2][period2];
 	}
 
 	/*
 	 * 日程の評価値のセッター
 	 *
-	 * @param value 値
+	 * @param candidate1 候補番号1
+	 *
+	 * @param value1[] 値の配列
+	 *
+	 * @param candidate2 候補番号2
+	 *
+	 * @param value2[] 値の配列
 	 */
-	public void updateDayPeriodEvaluationValue(int[] value1, int[] value2) {
+	public void updateDayPeriodEvaluationValue(int candidate1,int[] value1, int candidate2,int[] value2) {
 
-		for (int candidate = 0; candidate < f_DayPeriodEvaluationValue.length; candidate++) {
-			value1[candidate] = value2[candidate];
-		}
+		value1[candidate1] = value2[candidate2];
 	}
 
 	// ----------------------------//
