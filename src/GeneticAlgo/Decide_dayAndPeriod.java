@@ -3708,7 +3708,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile("room_3_" + (candidate + 1) + ".csv",
+			output = FileIO.writeFile(TIME_TABLE_PATH+"room_3_" + (candidate + 1) + ".csv",
 					false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
@@ -3763,7 +3763,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private void writeDayAndPeriodBestFile3() {
 
 		PrintWriter output;
-		output = FileIO.writeFile(FILE3_NAME, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH+FILE3_NAME, false);
 
 		System.out.println("担当者が決まった3次のファイル" + FILE3_NAME + "に書き込みます。");
 
@@ -3818,7 +3818,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 			PrintWriter output;
 			output = FileIO.writeFile(
-					"roomFirst_3_" + (candidate + 1) + ".csv", false);
+					TIME_TABLE_PATH+"roomFirst_3_" + (candidate + 1) + ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -3872,7 +3872,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private void writeFirstDayAndPeriodBestFile3() {
 
 		PrintWriter output;
-		output = FileIO.writeFile("roomFirst_3.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH+"roomFirst_3.csv", false);
 
 		System.out.println("初期集団の3次のファイル" + "roomFirst_3.csv" + "に書き込みます。");
 
@@ -3925,7 +3925,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private void writeEvaluationFile() {
 
 		PrintWriter output;
-		output = FileIO.writeFile(EVALUATION_FILE, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH+EVALUATION_FILE, false);
 
 		System.out.println("担当者が決まった3次のファイル" + EVALUATION_FILE + "に書き込みます。");
 
@@ -3959,7 +3959,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private void writeStudentDataBestFile() {
 
 		PrintWriter output;
-		output = FileIO.writeFile("studentBestData.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH+"studentBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル" + "studentBestData.csv"
 				+ "に書き込みます。");
@@ -4019,7 +4019,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile("studentData" + (candidate + 1) + ".csv",
+			output = FileIO.writeFile(TIME_TABLE_PATH+"studentData" + (candidate + 1) + ".csv",
 					false);
 
 			System.out.println("生徒のデータのファイル" + "studentData" + (candidate + 1)
@@ -4075,7 +4075,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private void writeFirstStudentDataBestFile() {
 
 		PrintWriter output;
-		output = FileIO.writeFile("studentFirstBestData.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH+"studentFirstBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル"
 				+ "studentFirstBestData.csv" + "に書き込みます。");
@@ -4135,7 +4135,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile("studentFirstData" + (candidate + 1)
+			output = FileIO.writeFile(TIME_TABLE_PATH+"studentFirstData" + (candidate + 1)
 					+ ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "studentFirstData"
@@ -4192,7 +4192,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[STUDENT_DATA_NUM];
 
-		BufferedReader input = FileIO.readFile(STUDENT_DATA_FILE);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+STUDENT_DATA_FILE);
 
 		try {
 			String line = new String();
@@ -4252,7 +4252,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER1_DATA];
 
-		BufferedReader input = FileIO.readFile(FILE1_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+FILE1_NAME);
 
 		try {
 			String line = new String();
@@ -4324,7 +4324,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER2_DATA];
 
-		BufferedReader input = FileIO.readFile(FILE2_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+FILE2_NAME);
 
 		try {
 			String line = new String();
@@ -4402,7 +4402,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER1_DATA];
 
-		BufferedReader input = FileIO.readFile(FACULTY1_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+FACULTY1_NAME);
 
 		try {
 			String line = new String();
@@ -4446,7 +4446,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER2_DATA];
 
-		BufferedReader input = FileIO.readFile(FACULTY2_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+FACULTY2_NAME);
 
 		try {
 			String line = new String();
@@ -4487,7 +4487,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER3_DATA];
 
-		BufferedReader input = FileIO.readFile(FACULTY3_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+FACULTY3_NAME);
 
 		try {
 			String line = new String();

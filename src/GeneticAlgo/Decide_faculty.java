@@ -204,7 +204,7 @@ public class Decide_faculty implements iTimeTable {
 
 		String[] strData = new String[TEACHER_DATA + SUBJECT_NUM];
 
-		BufferedReader input = FileIO.readFile(TEACHER_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+TEACHER_NAME);
 
 		try {
 			String line = new String();
