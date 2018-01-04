@@ -84,8 +84,7 @@ public class Calculation {
 
 		System.out.println(string);
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					System.in));
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			String str = br.readLine();
 			num = Integer.parseInt(str);
 		} catch (IOException e) {
@@ -104,8 +103,7 @@ public class Calculation {
 	 *
 	 * @param after:後の要素
 	 */
-	public static void exchangeInteger(ArrayList<Integer> arrayList,
-			int before, int after) {
+	public static void exchangeInteger(ArrayList<Integer> arrayList, int before, int after) {
 
 		int tmp = arrayList.get(before);
 		arrayList.set(before, arrayList.get(after));
@@ -122,8 +120,7 @@ public class Calculation {
 	 *
 	 * @param after:後の要素
 	 */
-	public static void exchangeString(ArrayList<String> arrayList, int before,
-			int after) {
+	public static void exchangeString(ArrayList<String> arrayList, int before, int after) {
 
 		String strTmp = arrayList.get(before);
 		arrayList.set(before, arrayList.get(after));
@@ -140,8 +137,7 @@ public class Calculation {
 	 *
 	 * @param after:後の要素
 	 */
-	public static <T> void exchangeArrayList(ArrayList<T> arrayList,
-			int before, int after) {
+	public static <T> void exchangeArrayList(ArrayList<T> arrayList, int before, int after) {
 
 		T tmp = arrayList.get(before);
 		arrayList.set(before, arrayList.get(after));
@@ -162,12 +158,10 @@ public class Calculation {
 	 *
 	 * @param afterRow:入れ替える列
 	 */
-	public static <T> void exchangeArrayArrayList(
-			ArrayList<ArrayList<T>> arrayArrayList, int beforeCol,
-			int beforeRow, int afterCol, int afterRow) {
+	public static <T> void exchangeArrayArrayList(ArrayList<ArrayList<T>> arrayArrayList, int beforeCol, int beforeRow,
+			int afterCol, int afterRow) {
 		T tmp = arrayArrayList.get(afterCol).get(afterRow);
-		arrayArrayList.get(beforeCol).set(beforeRow,
-				arrayArrayList.get(afterCol).get(afterRow));
+		arrayArrayList.get(beforeCol).set(beforeRow, arrayArrayList.get(afterCol).get(afterRow));
 		arrayArrayList.get(afterCol).set(afterRow, tmp);
 	}
 
@@ -185,8 +179,7 @@ public class Calculation {
 	 *
 	 * @param elementNumber:追加したい動的配列の要素番号
 	 */
-	public static void addStringArrayList(ArrayList<String> whichList,
-			ArrayList<String> arrayList, int elementNumber) {
+	public static void addStringArrayList(ArrayList<String> whichList, ArrayList<String> arrayList, int elementNumber) {
 		whichList.add(arrayList.get(elementNumber));
 	}
 
@@ -199,8 +192,8 @@ public class Calculation {
 	 *
 	 * @param elementNumber:追加したい動的配列の要素番号
 	 */
-	public static void addIntegerArrayList(ArrayList<Integer> whichList,
-			ArrayList<Integer> arrayList, int elementNumber) {
+	public static void addIntegerArrayList(ArrayList<Integer> whichList, ArrayList<Integer> arrayList,
+			int elementNumber) {
 		whichList.add(arrayList.get(elementNumber));
 	}
 
@@ -213,16 +206,14 @@ public class Calculation {
 	 *
 	 * @param elementNumber:追加したい動的配列の要素番号
 	 */
-	public static void addIntegerAndArrayList(ArrayList<Integer> whichList,
-			int elementNumber) {
+	public static void addIntegerAndArrayList(ArrayList<Integer> whichList, int elementNumber) {
 		whichList.add(elementNumber);
 	}
 
 	/*
 	 * 整数型の動的配列の中の値を1減らす arrayList:1減らしたい動的配列 number:要素番号
 	 */
-	public static void decrementArrayList(ArrayList<Integer> arrayList,
-			int number) {
+	public static void decrementArrayList(ArrayList<Integer> arrayList, int number) {
 		arrayList.set(number, arrayList.get(number) - 1);
 	}
 
@@ -235,8 +226,7 @@ public class Calculation {
 	 *
 	 * @param elementNumber:追加したい動的配列の要素番号
 	 */
-	public static <T> void addArrayList(ArrayList<T> whichList,
-			ArrayList<T> arrayList, int elementNumber) {
+	public static <T> void addArrayList(ArrayList<T> whichList, ArrayList<T> arrayList, int elementNumber) {
 		whichList.add(arrayList.get(elementNumber));
 	}
 
@@ -249,9 +239,8 @@ public class Calculation {
 	 *
 	 * @param number:整数値
 	 */
-	public static void addIntegerArrayArrayList(
-			ArrayList<ArrayList<Integer>> arraysList,
-			ArrayList<Integer> arrayList, int beforeRow, int col, int afterRow) {
+	public static void addIntegerArrayArrayList(ArrayList<ArrayList<Integer>> arraysList, ArrayList<Integer> arrayList,
+			int beforeRow, int col, int afterRow) {
 		arrayList.add(beforeRow);
 		arraysList.add(arrayList);
 	}
@@ -260,9 +249,8 @@ public class Calculation {
 	 * 多次元の動的配列の追加 arraysList:追加される2次元の動的配列 arrayList:追加する1次元の動的配列 col:何行目か
 	 * number:何番目の要素を追加するか
 	 */
-	public static <T> void addArrayArrayList(
-			ArrayList<ArrayList<T>> arraysList, ArrayList<T> arrayList,
-			int col, int row, int number) {
+	public static <T> void addArrayArrayList(ArrayList<ArrayList<T>> arraysList, ArrayList<T> arrayList, int col,
+			int row, int number) {
 		arraysList.get(col).set(row, arrayList.get(number));
 	}
 }
