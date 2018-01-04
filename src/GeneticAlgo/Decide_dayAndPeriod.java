@@ -20,10 +20,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	private int f_OldEvaluationValue;// 前の評価値
 	private int f_NewEvaluationValue;// 新しい評価値
-//	private String f_RandomDayOfWeek1;// ランダムの曜日
-//	private int f_RandomPeriod1;// ランダムの限目
-//	private String f_RandomDayOfWeek2;// ランダムの曜日
-//	private int f_RandomPeriod2;// ランダムの限目
+	private String f_RandomDayOfWeek1;// ランダムの曜日
+	private int f_RandomPeriod1;// ランダムの限目
+	private String f_RandomDayOfWeek2;// ランダムの曜日
+	private int f_RandomPeriod2;// ランダムの限目
 	private int f_CandidateRandomNumber1;// ランダムの候補の要素番号
 	private int f_RandomCrossNumber1;// 交叉する要素番号1
 	private int f_CandidateRandomNumber2;// 交換用の番目2
