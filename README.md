@@ -14,6 +14,10 @@ https://www.marineroad.com/staff-blog/16236.html
 
 http://gomafuace.seesaa.net/article/301560900.html
 
+http://tech.pjin.jp/blog/2015/06/10/git-on-eclipse-2-how-to-push-project-to-remote-repository/
+
+http://ziqoo.com/wiki/index.php?Git%20Eclipse%A4%AB%A4%E9%BB%C8%CD%D1%A4%B9%A4%EB%A1%A3
+
 ## 4.パッケージ・エクスプローラーからgithubに上げる方法
 
 - 左上の <>Code のところをクリック
@@ -39,5 +43,3 @@ http://gomafuace.seesaa.net/article/301560900.html
 ## 6.遺伝的アルゴリズムに関するURL
 
 - http://www.sist.ac.jp/~kanakubo/research/evolutionary_computing/ga_operators.html
-
-- http://ziqoo.com/wiki/index.php?Git%20Eclipse%A4%AB%A4%E9%BB%C8%CD%D1%A4%B9%A4%EB%A1%A3
