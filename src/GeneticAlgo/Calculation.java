@@ -41,6 +41,24 @@ public class Calculation {
 	}
 
 	/*
+	 * boolean型のランダムを取得
+	 * 
+	 * @return true
+	 * 
+	 * @return false
+	 */
+	public static boolean getRndBool() {
+
+		int num = getRnd(0, 1);
+
+		if (num == 1) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/*
 	 * minからmaxの間の整数値のいずれかを出力する一様乱数
 	 *
 	 * @param min:最小値
