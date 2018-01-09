@@ -37,5 +37,5 @@ public interface iTimeTable {
 
 	public final String FIRST_FILE3_NAME = "roomFirst_3.csv";// 最初の3次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 	
-	public final String TIME_TABLE_PATH="C:\\Users\\nakata\\Documents\\TimeTableFile\\";// 時間割のパス
+	public final String TIME_TABLE_PATH="C:\\Users\\NakataKodai\\Documents\\TimeTableFile\\";// 時間割のパス
 }
