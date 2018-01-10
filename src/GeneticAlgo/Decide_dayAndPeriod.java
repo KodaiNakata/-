@@ -20,10 +20,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	private int f_OldEvaluationValue;// 前の評価値
 	private int f_NewEvaluationValue;// 新しい評価値
-	private String f_RandomDayOfWeek1;// ランダムの曜日
-	private int f_RandomPeriod1;// ランダムの限目
-	private String f_RandomDayOfWeek2;// ランダムの曜日
-	private int f_RandomPeriod2;// ランダムの限目
 	private int f_CandidateRandomNumber1;// ランダムの候補の要素番号
 	private int f_RandomCrossNumber1;// 交叉する要素番号1
 	private int f_CandidateRandomNumber2;// 交換用の番目2
@@ -32,9 +28,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private ArrayList<Integer> f_MutationCandidateNumbers = new ArrayList<Integer>();// 突然変異の候補番号の動的配列
 	private ArrayList<Integer> f_MutationNumbers = new ArrayList<Integer>();// 突然変異の要素番号の動的配列
 	private ArrayList<Integer> f_MutationPeriods = new ArrayList<Integer>();// 突然変異の限目の動的配列
-	private ArrayList<Integer> f_EvaluationValues = new ArrayList<Integer>();// 評価値の動的配列
 	private ArrayList<String> f_MutationDayOfWeeks = new ArrayList<String>();// 突然変異の曜日の動的配列
 
+	private ArrayList<Integer> f_EvaluationValues = new ArrayList<Integer>();// 評価値の動的配列
 	private ArrayList<Evaluation> f_EvaluationData = new ArrayList<Evaluation>();// 評価値のデータ
 
 	private ArrayList<Student> f_NewStudentData = new ArrayList<Student>();// 新規の生徒のデータ
@@ -414,7 +410,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 			int sum = 0;
 
-			boolean duplication = false;
+			boolean duplication = false;// 重複しているか
 
 			for (int number = 0; number < f_NewTimeTableData3.size(); number++) {
 
@@ -873,18 +869,20 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	// ------------------------------------------------------//
 	/*
 	 * 3次の時間割の作成
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void makeTimeTable3() {
+	private void makeTimeTable3(int count) {
 
 		// super.calctTeacherEvaluationValue();// 担当者決定の評価値を計算する
 
 		setClassOfGrade3ToFirstTimeTable3();// 3次の学年ごとの授業を最初の時間割にセットする
 
 		if (DEBUG) {
-			writeDayAndPeriodFirstFile3();// 初期集団においての3次の科目のデータを書き込む
-			writeFirstDayAndPeriodBestFile3();// 初期集団においての3次の科目のデータを書き込む
-			writeFirstStudentDataFile();// 初期集団においての生徒のデータを書き込む
-			writeFirstStudentDataBestFile();// 初期集団においての生徒のデータを書き込む
+			writeDayAndPeriodFirstFile3(count);// 初期集団においての3次の科目のデータを書き込む
+			writeFirstDayAndPeriodBestFile3(count);// 初期集団においての3次の科目のデータを書き込む
+			writeFirstStudentDataFile(count);// 初期集団においての生徒のデータを書き込む
+			writeFirstStudentDataBestFile(count);// 初期集団においての生徒のデータを書き込む
 			// indicateTeacherDayNum();// 担当教員のコマ数を表示
 			// indicateTimeTableData3();// 3次の科目のデータの表示
 			indicateEvaluationValue();// 評価値の表示
@@ -2058,7 +2056,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 						continue;
 					}
 
-					else{
+					else {
 						randomDayOfWeek = day;
 						return randomDayOfWeek;
 					}
@@ -4059,7 +4057,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			System.out.println("回数：" + (count + 1) + "回目");
 
 			// プログラムを終えたとき
-			if (isFinishedProg()) {
+			if (isFinishedProg(count)) {
 				break;
 			}
 			count++;
@@ -4070,29 +4068,68 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	/*
 	 * プログラムを終了したか
 	 *
+	 * @param count プログラムの回数
+	 *
 	 * @return true:終了
+	 *
+	 * @return false:続行
 	 */
-	private boolean isFinishedProg() {
+	private boolean isFinishedProg(int count) {
+
+		// 最大回数を超えたとき
+		if (MAX_COUNT < count + 1) {
+			System.out.println(MAX_COUNT + "回を超えたため強制終了");
+			return true;
+		}
+
 		super.readTeacherFile();// 先生のファイルを読み込む
 		readFacultyFile();// 担当者が決まったファイルを読み込む(3次のファイル)
 		readRoomDayPeriodFile();// 教室と何曜日と何限目が決まったファイルを読み込む(1次と2次のファイル)
 		readStudentDataFile();// 生徒のデータのファイルを読み込む
-		countNumOfSubjectOfTeacher();// 先生のコマ数をカウントする
-		// super.calctTeacherEvaluationValue();// 担当者決めの評価値を計算する
-		makeTimeTable3();// 3次の時間割を作成
 
-		if (DEBUG) {
-			indicateData();// データの表示
+		makeTimeTable3(count);// 3次の時間割を作成
+
+		writeDayAndPeriodFile(count);// 何曜日と何限目が決まったファイルを書き込む
+		writeEvaluationFile(count);// 評価値のファイルを書き込む
+
+		clearAllField();// すべてのフィールドをクリアする
+
+		System.out.println((count + 1) + "回目終了\nOne More?(0未満:終了、1以上:続行)");
+
+		int answer = InOutPut.inputIntger();
+
+		// 1以上のとき
+		if (1 <= answer) {
+			return false;
 		}
-		return true;
+
+		// 0未満
+		else {
+			return true;
+
+		}
+	}
+
+	/*
+	 * すべてのフィールドをクリアする
+	 */
+	private void clearAllField() {
+		f_TeacherData.clear();
+		f_ClassOfGradeData3.clear();
+		f_TimeTableData1.clear();
+		f_TimeTableData2.clear();
+		f_NewStudentData.clear();
+		f_StudentData.clear();
+		f_TimeTableData3.clear();
+		f_NewTimeTableData3.clear();
+		f_EvaluationData.clear();
+		f_EvaluationValues.clear();
 	}
 
 	/*
 	 * 終了
 	 */
 	public void finish() {
-		writeDayAndPeriodFile();// 何曜日と何限目が決まったファイルを書き込む
-		writeEvaluationFile();// 評価値のファイルを書き込む
 		super.finish();
 	}
 
@@ -4123,14 +4160,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	// --------------------------------//
 	/*
 	 * 教室と何曜日と何限目が決まったファイルを書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	public void writeDayAndPeriodFile() {
+	public void writeDayAndPeriodFile(int count) {
 		// writeRoomAndDayAndPeriodFile1();// 1次のファイル(教室と何曜日と何限目が決まったファイル)を書き込む
 		// writeRoomAndDayAndPeriodFile2();// 2次のファイル(教室と何曜日と何限目が決まったファイル)を書き込む
-		writeDayAndPeriodFile3();// 3次のファイル(何曜日と何限目が決まったファイル)を書き込む
-		writeDayAndPeriodBestFile3();// 3次の最も評価値が高い時間割のファイルを書き込む
-		writeStudentDataFile();// 生徒のデータを書き込む
-		writeStudentDataBestFile();// 最も評価値が高い生徒のデータを書き込む
+		writeDayAndPeriodFile3(count);// 3次のファイル(何曜日と何限目が決まったファイル)を書き込む
+		writeDayAndPeriodBestFile3(count);// 3次の最も評価値が高い時間割のファイルを書き込む
+		writeStudentDataFile(count);// 生徒のデータを書き込む
+		writeStudentDataBestFile(count);// 最も評価値が高い生徒のデータを書き込む
 	}
 
 	/*
@@ -4195,14 +4234,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 3次のファイル(何曜日と何限目が決まったデータ)を書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void writeDayAndPeriodFile3() {
+	private void writeDayAndPeriodFile3(int count) {
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH + "room_3_"
-					+ (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+					+ "room_3_" + (candidate + 1) + ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -4252,11 +4293,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void writeDayAndPeriodBestFile3() {
+	private void writeDayAndPeriodBestFile3(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH + FILE3_NAME, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+				+ FILE3_NAME, false);
 
 		System.out.println("担当者が決まった3次のファイル" + FILE3_NAME + "に書き込みます。");
 
@@ -4305,13 +4349,15 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 最初の3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void writeDayAndPeriodFirstFile3() {
+	private void writeDayAndPeriodFirstFile3(int count) {
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH + "roomFirst_3_"
-					+ (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+					+ "roomFirst_3_" + (candidate + 1) + ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -4361,11 +4407,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団の3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void writeFirstDayAndPeriodBestFile3() {
+	private void writeFirstDayAndPeriodBestFile3(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH + "roomFirst_3.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+				+ "roomFirst_3.csv", false);
 
 		System.out.println("初期集団の3次のファイル" + "roomFirst_3.csv" + "に書き込みます。");
 
@@ -4414,11 +4463,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 評価値のファイルを書き込む
+	 *
+	 * @param count プログラムの回数
 	 */
-	private void writeEvaluationFile() {
+	private void writeEvaluationFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH + EVALUATION_FILE, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+				+ EVALUATION_FILE, false);
 
 		System.out.println("担当者が決まった3次のファイル" + EVALUATION_FILE + "に書き込みます。");
 
@@ -4448,12 +4500,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 最もよかった候補の時間割の生徒のデータのファイルを書き込む
+	 *
+	 *  @param count プログラムの回数
 	 */
-	private void writeStudentDataBestFile() {
+	private void writeStudentDataBestFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH + "studentBestData.csv",
-				false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+				+ "studentBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル" + "studentBestData.csv"
 				+ "に書き込みます。");
@@ -4507,14 +4561,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータのファイルを書き込む
+	 *
+	 *  @param count プログラムの回数
 	 */
-	private void writeStudentDataFile() {
+	private void writeStudentDataFile(int count) {
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH + "studentData"
-					+ (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+					+ "studentData" + (candidate + 1) + ".csv", false);
 
 			System.out.println("生徒のデータのファイル" + "studentData" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -4565,12 +4621,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団の最もよかった候補の時間割の生徒のデータのファイルを書き込む
+	 *
+	 *  @param count プログラムの回数
 	 */
-	private void writeFirstStudentDataBestFile() {
+	private void writeFirstStudentDataBestFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH + "studentFirstBestData.csv",
-				false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+				+ "studentFirstBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル"
 				+ "studentFirstBestData.csv" + "に書き込みます。");
@@ -4624,14 +4682,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団においての生徒のデータのファイルを書き込む
+	 *
+	 *  @param count プログラムの回数
 	 */
-	private void writeFirstStudentDataFile() {
+	private void writeFirstStudentDataFile(int count) {
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH + "studentFirstData"
-					+ (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + (count + 1) + "回目\\"
+					+ "studentFirstData" + (candidate + 1) + ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "studentFirstData"
 					+ (candidate + 1) + ".csv" + "に書き込みます。");
@@ -4682,6 +4742,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータのファイルを読み込む
+	 *
+	 *  @param count プログラムの回数
 	 */
 	private void readStudentDataFile() {
 

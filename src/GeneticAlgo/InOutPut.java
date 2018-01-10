@@ -33,8 +33,35 @@ public class InOutPut {
 	}
 
 	/*
+	 * 整数値の入力
+	 *
+	 * @return 入力した整数値
+	 */
+	public static int inputIntger() {
+		InputStreamReader inputReader = new InputStreamReader(System.in);
+
+		BufferedReader br = new BufferedReader(inputReader);
+
+		String buf = null;
+
+		try {
+			buf = br.readLine();
+		}
+
+		catch (IOException e) {
+			System.out.println("整数以外が入力されました。");
+		}
+
+		int x = Integer.parseInt(buf);
+
+		return x;
+	}
+
+	/*
 	 * 最小値と最大値の領域内で整数値を入力する
+	 *
 	 * @param min:最小値
+	 *
 	 * @param max:最大値
 	 */
 	public static int getnCheck(int min, int max) {
@@ -57,8 +84,11 @@ public class InOutPut {
 
 	/*
 	 * メニューを取得
+	 *
 	 * @param str:出力する文字列
+	 *
 	 * @param min:最小値
+	 *
 	 * @param max:最大値
 	 */
 	public static int getMenu(String str, int min, int max) {
@@ -71,7 +101,9 @@ public class InOutPut {
 
 	/*
 	 * デコレーション
+	 *
 	 * @param str:出力する文字列
+	 *
 	 * @param chara:出力する文字
 	 */
 	public static void decoration(String str, char chara) {
