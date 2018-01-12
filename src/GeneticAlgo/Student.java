@@ -301,6 +301,8 @@ public class Student implements iDayPeriod {
 	 */
 	public void setDayPeriodNumber(int candidate, int day, int period) {
 
+//		System.out.print(candidate+","+day+","+period+"\n");
+		
 		if (f_DayPeriodNumber[candidate][day][period] <= 0) {
 			f_DayPeriodNumber[candidate][day][period] = 1;
 		}

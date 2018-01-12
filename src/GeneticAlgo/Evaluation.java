@@ -10,8 +10,8 @@ public class Evaluation implements iDayPeriod{
 
 	private int f_Generation;// 世代
 //	private ArrayList<Integer> f_EvaluationValues=new ArrayList<Integer>();
-	private int[] f_EvaluationValues=new int[CANDIDATE_NUM];
-	private int f_SumEvaluationValue;// 評価値
+	private long[] f_EvaluationValues=new long[CANDIDATE_NUM];
+	private long f_SumEvaluationValue;// 評価値
 
 	/*
 	 * コンストラクタ
@@ -59,11 +59,11 @@ public class Evaluation implements iDayPeriod{
 //		return f_EvaluationValues.get(number);
 //	}
 
-	public int[] getArrayOfEvaluationValues(){
+	public long[] getArrayOfEvaluationValues(){
 		return f_EvaluationValues;
 	}
 
-	public int getEvaluationValues(int candidate){
+	public long getEvaluationValues(int candidate){
 		return f_EvaluationValues[candidate];
 	}
 
@@ -72,7 +72,7 @@ public class Evaluation implements iDayPeriod{
 	 *
 	 * @return 評価値
 	 */
-	public int getSumEvaluationValue() {
+	public long getSumEvaluationValue() {
 		return f_SumEvaluationValue;
 	}
 
@@ -88,7 +88,7 @@ public class Evaluation implements iDayPeriod{
 		f_Generation = generation;
 	}
 
-	public void setEvaluationValues(int candidate,int[] evaluation,int value){
+	public void setEvaluationValues(int candidate,long[] evaluation,long value){
 		evaluation[candidate]=value;
 	}
 
@@ -97,7 +97,7 @@ public class Evaluation implements iDayPeriod{
 	 *
 	 * @param value 値
 	 */
-	public void setSumEvaluationValue(int value) {
+	public void setSumEvaluationValue(long value) {
 		f_SumEvaluationValue = value;
 	}
 

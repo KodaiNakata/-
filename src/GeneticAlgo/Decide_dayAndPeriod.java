@@ -804,7 +804,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	 */
 	private int getBestTimeTable() {
 
-		int biggestValue = 0;
+		long biggestValue = 0;
 		int bestCandidate = 0;
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
@@ -833,13 +833,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	 *
 	 * @return 指定した要素番号までの評価値の合計
 	 */
-	private int getSumEvaluationValue(int num) {
+	private long getSumEvaluationValue(int num) {
 
 		if (num < 0) {
 			return 0;
 		}
 
-		int sum = f_EvaluationData.get(f_EvaluationData.size() - 1)
+		long sum = f_EvaluationData.get(f_EvaluationData.size() - 1)
 				.getEvaluationValues(num);
 
 		return sum + getSumEvaluationValue(num - 1);
@@ -1064,11 +1064,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		System.out.println("ルーレット選択");
 
-		int sum = f_OldEvaluationValue;// 合計の評価値を取得
+		long sum = f_OldEvaluationValue;// 合計の評価値を取得
 
 		for (int candidate = 0; candidate < num; candidate++) {
 
-			int randomNum = Calculation.getRnd(0, sum);// 0.0から候補の数だけの評価値の合計までランダムで選ぶ
+			long randomNum = Calculation.getLRnd(0, sum);// 0.0から候補の数だけの評価値の合計までランダムで選ぶ
 
 			for (int number = 0; number < f_EvaluationValues.size(); number++) {
 

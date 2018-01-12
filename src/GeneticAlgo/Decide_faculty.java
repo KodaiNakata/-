@@ -15,6 +15,9 @@ public class Decide_faculty implements iTimeTable {
 	private static StringBuffer TITLE = new StringBuffer("遺伝的アルゴリズムを用いた時間割提案作成");
 	private static final double DEFINE_NUM = 0.6;// 評価式のある定数
 	private static final int SUBJECT_NUM = 10;// 科目数
+
+	protected final String TIME_TABLE_PATH="C:\\Users\\NakataKodai\\Documents\\TimeTableFile\\";// 時間割のパス
+
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1 = new ArrayList<ClassOfGrade>();// 1次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2 = new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3 = new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ

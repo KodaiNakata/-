@@ -75,6 +75,18 @@ public class Calculation {
 	}
 
 	/*
+	 * minからmaxの間の整数値のいずれかを出力する一様乱数
+	 *
+	 * @param min:最小値
+	 *
+	 * @param max:最大値
+	 */
+	public static long getLRnd(long min,long max){
+		
+		return (long)(Math.random() * (max - min + 1) + min);
+	}
+	
+	/*
 	 * minからmaxの間の実数値のいずれかを出力する一様乱数
 	 *
 	 * @param min:最小値
