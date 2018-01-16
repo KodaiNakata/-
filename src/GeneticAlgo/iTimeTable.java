@@ -29,7 +29,7 @@ public interface iTimeTable {
 	public final String FACULTY2_NAME = "faculty_2.csv";// 2次のファイル(担当者が決まったファイル)の名前
 	public final String FILE2_NAME = "room_2.csv";// 2次のファイル(教室と何曜日と何限目が決まったファイル)の名前
 
-	public final int ORDER3_COLS = 167;// 3次のデータの行
+	public final int ORDER3_COLS = 112;// 3次のデータの行
 	public final int ORDER3_DATA = 8;// 3次のデータの数
 	public final String SUBJECT3_NAME = "subject_3.csv";// 3次の教科のファイルの名前
 	public final String FACULTY3_NAME = "faculty_3.csv";// 3次のファイル(担当者が決まったファイル)の名前
