@@ -18,8 +18,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private static final int STUDENT_DATA_NUM = 3;// 生徒のデータの項目数
 	private static final String STUDENT_DATA_FILE = "studentData.csv";// 生徒のデータのファイル
 
-	private int f_OldEvaluationValue;// 前の評価値
-	private int f_NewEvaluationValue;// 新しい評価値
+	private long f_OldEvaluationValue;// 前の評価値
+	private long f_NewEvaluationValue;// 新しい評価値
 	private int f_CandidateRandomNumber1;// ランダムの候補の要素番号
 	private int f_RandomCrossNumber1;// 交叉する要素番号1
 	private int f_CandidateRandomNumber2;// 交換用の番目2
@@ -30,7 +30,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	private ArrayList<Integer> f_MutationPeriods = new ArrayList<Integer>();// 突然変異の限目の動的配列
 	private ArrayList<String> f_MutationDayOfWeeks = new ArrayList<String>();// 突然変異の曜日の動的配列
 
-	private ArrayList<Integer> f_EvaluationValues = new ArrayList<Integer>();// 評価値の動的配列
+	private ArrayList<Long> f_EvaluationValues = new ArrayList<Long>();// 評価値の動的配列
 	private ArrayList<Evaluation> f_EvaluationData = new ArrayList<Evaluation>();// 評価値のデータ
 
 	private ArrayList<Student> f_NewStudentData = new ArrayList<Student>();// 新規の生徒のデータ
@@ -49,7 +49,6 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		super();
 		f_NumOfDuplication = 0;
 	}
-
 
 	/*
 	 * 担当教員の曜日のコマ数をリセット
@@ -112,22 +111,20 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 						f_NewStudentData.get(studentNum)
 								.getDayPeriodEvaluationValue());
 			}
-
 		}
-
 	}
 
 	/*
 	 * 生徒のデータを更新
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param do_update 更新するか
 	 */
 	private void updateStudentData(int candidate, boolean do_update) {
 
 		// 更新するとき
-		if (do_update) {
+		if (do_update == true) {
 
 			for (int studentNum = 0; studentNum < f_StudentData.size(); studentNum++) {
 
@@ -202,6 +199,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 時間割3の曜日と限目をリセットする
+	 * 
+	 * @param candidate 候補番号
 	 */
 	private void resetNewTimeTableData3(int candidate) {
 
@@ -215,9 +214,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	// ------------------------------------------------------//
 	/*
 	 * より大きい曜日と限目の評価値かを取得
-	 *
+	 * 
 	 * @return true より大きい
-	 *
+	 * 
 	 * @return false 以下
 	 */
 	private boolean isBiggerDayPeriodEvaluationValue() {
@@ -226,7 +225,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
-			int sum = 0;
+			long sum = 0;
 
 			boolean duplication = false;// 重複しているか
 
@@ -242,6 +241,8 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 			// 重複しているとき
 			if (duplication == true) {
+				resetNewTimeTableData3(candidate, true);// 時間割をリセットする
+				updateStudentData(candidate, false);// 生徒のデータをリセットする
 				continue;
 			}
 
@@ -268,6 +269,35 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 				// 親の遺伝子の評価値以下のとき
 				else {
+
+					for (int mutationNum = f_MutationDayOfWeeks.size() - 1; mutationNum >= 0; mutationNum--) {
+
+						if (f_MutationCandidateNumbers.get(mutationNum) == candidate) {
+
+							f_NewTimeTableData3
+									.get(f_MutationNumbers.get(mutationNum))
+									.setDayOfWeek(
+											f_MutationCandidateNumbers
+													.get(mutationNum),
+											f_NewTimeTableData3.get(
+													f_MutationNumbers
+															.get(mutationNum))
+													.getArrayOfDayOfWeek(),
+											f_MutationDayOfWeeks
+													.get(mutationNum));
+							f_NewTimeTableData3
+									.get(f_MutationNumbers.get(mutationNum))
+									.setPeriod(
+											f_MutationCandidateNumbers
+													.get(mutationNum),
+											f_NewTimeTableData3.get(
+													f_MutationNumbers
+															.get(mutationNum))
+													.getArrayOfPeriod(),
+											f_MutationPeriods.get(mutationNum));
+						}
+					}
+
 					resetNewTimeTableData3(candidate, true);// 時間割をリセットする
 					updateStudentData(candidate, false);// 生徒のデータをリセットする
 				}
@@ -304,7 +334,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
-			int sum = 0;
+			long sum = 0;
 
 			for (int number = 0; number < f_NewStudentData.size(); number++) {
 
@@ -321,9 +351,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータから評価値を計算
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param number 要素番号
 	 */
 	private void calcEvaluationValueOfStudent(int candidate, int number) {
@@ -362,13 +392,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 指定した曜日のコマ数をカウント
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param number 要素番号
-	 *
+	 * 
 	 * @param day 曜日
-	 *
+	 * 
 	 * @return ある生徒の曜日のコマ数
 	 */
 	private int getDayOfWeekNumOfStudent(int candidate, int number, int day) {
@@ -389,10 +419,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		return num;
 	}
 
-
 	/*
 	 * 評価値の合計を取得
-	 *
+	 * 
 	 * @return 評価値の合計
 	 */
 	private int getSumEvaluationValue() {
@@ -410,7 +439,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * もっとも評価値が高い時間割の番号を取得
-	 *
+	 * 
 	 * @return 最も評価値が高い候補番号
 	 */
 	private int getBestTimeTable() {
@@ -439,9 +468,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 指定した要素番号までの評価値の合計
-	 *
+	 * 
 	 * @param num 要素番号
-	 *
+	 * 
 	 * @return 指定した要素番号までの評価値の合計
 	 */
 	private long getSumEvaluationValue(int num) {
@@ -480,12 +509,10 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	// ------------------------------------------------------//
 	/*
 	 * 3次の時間割の作成
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void makeTimeTable3(int count) {
-
-		// super.calctTeacherEvaluationValue();// 担当者決定の評価値を計算する
 
 		setClassOfGrade3ToFirstTimeTable3();// 3次の学年ごとの授業を最初の時間割にセットする
 
@@ -500,7 +527,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			InOutPut.anyKey();
 		}
 
-		exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
+		// exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
 
 		System.out.println("遺伝的アルゴリズム終了");
 
@@ -543,28 +570,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			if (mutationOfSimple()) {
 				wasMutated = true;
 			}
-//			if (num <= (CHECK_NUM / 2) - 1) {
-//
-//			}
-//
-//			else {
-//
-//				// 突然変異するとき
-//				if (mutation()) {
-//					wasMutated = true;
-//				}
-//			}
 
 			// 新しい評価値が上のとき
 			if (isBiggerDayPeriodEvaluationValue()) {
-
-				// updateStudentData();// 生徒のデータを更新する
-				// resetNewTimeTableData3(false);// 時間割を更新する
-
-				if (DEBUG) {
-					System.out.println("評価値が更新された。");
-					System.out.println("評価値:" + f_OldEvaluationValue);
-				}
 
 				updateNum++;
 
@@ -582,35 +590,37 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			// 新しい評価値以下のとき
 			else {
 
-				// 突然変異したとき
-				if (wasMutated == true) {
+				// // 突然変異したとき
+				// if (wasMutated == true) {
+				//
+				// for (int mutationNum = f_MutationDayOfWeeks.size() - 1;
+				// mutationNum >= 0; mutationNum--) {
+				//
+				// f_NewTimeTableData3
+				// .get(f_MutationNumbers.get(mutationNum))
+				// .setDayOfWeek(
+				// f_MutationCandidateNumbers
+				// .get(mutationNum),
+				// f_NewTimeTableData3.get(
+				// f_MutationNumbers
+				// .get(mutationNum))
+				// .getArrayOfDayOfWeek(),
+				// f_MutationDayOfWeeks.get(mutationNum));
+				// f_NewTimeTableData3.get(
+				// f_MutationNumbers.get(mutationNum)).setPeriod(
+				// f_MutationCandidateNumbers.get(mutationNum),
+				// f_NewTimeTableData3.get(
+				// f_MutationNumbers.get(mutationNum))
+				// .getArrayOfPeriod(),
+				// f_MutationPeriods.get(mutationNum));
+				// }
+				// }
 
-					for (int mutationNum = f_MutationDayOfWeeks.size() - 1; mutationNum >= 0; mutationNum--) {
-
-						f_NewTimeTableData3
-								.get(f_MutationNumbers.get(mutationNum))
-								.setDayOfWeek(
-										f_MutationCandidateNumbers
-												.get(mutationNum),
-										f_NewTimeTableData3.get(
-												f_MutationNumbers
-														.get(mutationNum))
-												.getArrayOfDayOfWeek(),
-										f_MutationDayOfWeeks.get(mutationNum));
-						f_NewTimeTableData3.get(
-								f_MutationNumbers.get(mutationNum)).setPeriod(
-								f_MutationCandidateNumbers.get(mutationNum),
-								f_NewTimeTableData3.get(
-										f_MutationNumbers.get(mutationNum))
-										.getArrayOfPeriod(),
-								f_MutationPeriods.get(mutationNum));
-					}
-				}
-
-				for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
-					updateStudentData(candidate, false);
-					resetNewTimeTableData3(candidate, true);// 時間割をリセットする
-				}
+				// for (int candidate = 0; candidate < CANDIDATE_NUM;
+				// candidate++) {
+				// updateStudentData(candidate, false);
+				// resetNewTimeTableData3(candidate, true);// 時間割をリセットする
+				// }
 			}
 
 		}
@@ -621,7 +631,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 元の時間割にリセットする
-	 *
+	 * 
 	 * @param doReset リセットするか
 	 */
 	private void resetNewTimeTableData3(int candidate, boolean doReset) {
@@ -633,9 +643,12 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 			for (int number = 0; number < f_TimeTableData3.size(); number++) {
 
+				// 曜日をリセットする
 				f_NewTimeTableData3.get(number).setDayOfWeek(candidate,
 						f_NewTimeTableData3.get(number).getArrayOfDayOfWeek(),
 						f_TimeTableData3.get(number).getDayOfWeek(candidate));
+
+				// 限目をリセットする
 				f_NewTimeTableData3.get(number).setPeriod(candidate,
 						f_NewTimeTableData3.get(number).getArrayOfPeriod(),
 						f_TimeTableData3.get(number).getPeriod(candidate));
@@ -667,7 +680,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * どの時間割を選ぶかをルーレット選択
-	 *
+	 * 
 	 * @param num 選択する数
 	 */
 	private void rouletteChoice(int num) {
@@ -1102,23 +1115,23 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 既存の時間割のデータの何番目に入っているか
-	 *
+	 * 
 	 * @param candidate 候補の番号
-	 *
+	 * 
 	 * @param day_of_week 曜日
-	 *
+	 * 
 	 * @param period 限目
-	 *
+	 * 
 	 * @param grade 学年
-	 *
+	 * 
 	 * @param semester 学期
-	 *
+	 * 
 	 * @param lookForAll すべての要素が同じものを探すか
-	 *
+	 * 
 	 * @param lookForSameDayPeriodSemester 曜日、限目、学期が同じものを探すか
-	 *
+	 * 
 	 * @param lookForSameDayPeriod 曜日、限目が同じものを探すか
-	 *
+	 * 
 	 * @return 既存の時間割のデータの要素番号
 	 */
 	private int getInTimeTable3Number(int candidate, String day_of_week,
@@ -1203,9 +1216,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 突然変異
-	 *
+	 * 
 	 * @return true 突然変異あり
-	 *
+	 * 
 	 * @return false 突然変異なし
 	 */
 	private boolean mutationOfSimple() {
@@ -1370,9 +1383,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 突然変異
-	 *
+	 * 
 	 * @return true 突然変異あり
-	 *
+	 * 
 	 * @return false 突然変異なし
 	 */
 	private boolean mutation() {
@@ -1559,15 +1572,15 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータから追加の確率を取得
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param semester 学期
-	 *
+	 * 
 	 * @param grade 学年
-	 *
+	 * 
 	 * @param day 曜日
-	 *
+	 * 
 	 * @return 追加確率
 	 */
 	private int getAddProbablityFromStudentData(int candidate, int semester,
@@ -1600,9 +1613,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 時間割から生徒のデータの番号を取得
-	 *
+	 * 
 	 * @param time_table 時間割
-	 *
+	 * 
 	 * @return 生徒のデータの番号
 	 */
 	private int getStudentNumber(TimeTable time_table) {
@@ -1642,11 +1655,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * ランダムな曜日を取得
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param student_num 生徒の番号
-	 *
+	 * 
 	 * @return ランダムな曜日
 	 */
 	private int getRandomDayOfWeek(int candidate, int student_num) {
@@ -1689,11 +1702,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * ランダムな限目を取得
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param day_of_week 曜日
-	 *
+	 * 
 	 * @param student_num 生徒の番号
 	 */
 	private int getRandomPeriod(int number3, int candidate, int day_of_week,
@@ -1821,11 +1834,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 別の候補の時間割3の中から同じものを探す
-	 *
+	 * 
 	 * @param candidate1 候補番号1
-	 *
+	 * 
 	 * @param candidate2 候補番号2
-	 *
+	 * 
 	 * @param number 要素番号
 	 */
 	private int getNumberInTimeTable3(int candidate1, int candidate2, int number) {
@@ -2105,21 +2118,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		return -1;
 	}
 
-
-
 	/*
 	 * 指定した候補、学期、曜日、限目、学年から時間割3の要素番号を取得
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param semester 学期
-	 *
+	 * 
 	 * @param day 曜日
-	 *
+	 * 
 	 * @param period 限目
-	 *
+	 * 
 	 * @param grade 学年
-	 *
+	 * 
 	 * @return 時間割3の要素番号
 	 */
 	private int getNumberInNewTimeTable3(int candidate, String semester,
@@ -2157,14 +2168,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		return number3;
 	}
 
-
 	/*
 	 * 重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication(int candidate, int number) {
@@ -2192,13 +2202,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 1次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param candidate 候補の番号
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication1(int candidate, int number) {
@@ -2222,71 +2232,59 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 							.getGrade() == f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getGrade()) {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+						for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
+								.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
 
-							for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
-									.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
+							// 同じ限目のとき
+							if (f_TimeTableData1.get(number1).getFixedPeriod()
+									+ addPeriod1 == f_NewTimeTableData3.get(
+									number).getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_TimeTableData1.get(number1)
-										.getFixedPeriod() + addPeriod1 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
+								// 担当教員と重複するとき
+								if (checkDuplicationTeacher(f_TimeTableData1
+										.get(number1).getClassOfGrade()
+										.getTeachers().getName(),
+										f_NewTimeTableData3.get(number)
+												.getClassOfGrade()
+												.getTeachers().getName())) {
+									return true;
+								}
 
-									// 担当教員と重複するとき
-									if (checkDuplicationTeacher(
-											f_TimeTableData1.get(number1)
-													.getClassOfGrade()
-													.getTeachers().getName(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getTeachers().getName())) {
-										return true;
-									}
+								// コース・クラスと重複するとき
+								if (checkDuplicationCouseOrClass(
+										f_TimeTableData1.get(number1)
+												.getClassOfGrade()
+												.getCourseOrClass(),
+										f_NewTimeTableData3.get(number)
+												.getClassOfGrade()
+												.getCourseOrClass())) {
 
-									// コース・クラスと重複するとき
-									if (checkDuplicationCouseOrClass(
-											f_TimeTableData1.get(number1)
-													.getClassOfGrade()
-													.getCourseOrClass(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getCourseOrClass())) {
-
-										return true;
-									}
+									return true;
 								}
 							}
 						}
 					}
+				}
 
-					// 違う学年のとき
-					else {
+				// 違う学年のとき
+				else {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+					for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
+							.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
 
-							for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
-									.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
+						// 同じ限目のとき
+						if (f_TimeTableData1.get(number1).getFixedPeriod()
+								+ addPeriod1 == f_NewTimeTableData3.get(number)
+								.getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_TimeTableData1.get(number1)
-										.getFixedPeriod() + addPeriod1 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
-
-									// 担当教員と重複するとき
-									if (checkDuplicationTeacher(
-											f_TimeTableData1.get(number1)
-													.getClassOfGrade()
-													.getTeachers().getName(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getTeachers().getName())) {
-										return true;
-									}
-								}
+							// 担当教員と重複するとき
+							if (checkDuplicationTeacher(
+									f_TimeTableData1.get(number1)
+											.getClassOfGrade().getTeachers()
+											.getName(), f_NewTimeTableData3
+											.get(number).getClassOfGrade()
+											.getTeachers().getName())) {
+								return true;
 							}
 						}
 					}
@@ -2298,13 +2296,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 2次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param candidate 候補の番号
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication2(int candidate, int number) {
@@ -2328,81 +2326,70 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 							.getGrade() == f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getGrade()) {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+						for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
+								.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
 
-							for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
-									.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
+							// 同じ限目のとき
+							if (f_TimeTableData2.get(number2).getFixedPeriod()
+									+ addPeriod2 == f_NewTimeTableData3.get(
+									number).getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_TimeTableData2.get(number2)
-										.getFixedPeriod() + addPeriod2 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
+								// // 科学技術英語1のとき
+								// if (f_TimeTableData2.get(number2)
+								// .getClassOfGrade().getSubject()
+								// .equals("科学技術英語1")) {
+								//
+								// // 担当教員と重複するとき
+								// if (checkDuplicationTeacher(
+								// f_TimeTableData2.get(number2)
+								// .getClassOfGrade()
+								// .getTeachers().getName(),
+								// f_NewTimeTableData3.get(number)
+								// .getClassOfGrade()
+								// .getTeachers().getName())) {
+								// return true;
+								// }
+								//
+								// // コース・クラスと重複するとき
+								// if (checkDuplicationCouseOrClass(
+								// f_TimeTableData2.get(number2)
+								// .getClassOfGrade()
+								// .getCourseOrClass(),
+								// f_NewTimeTableData3.get(number)
+								// .getClassOfGrade()
+								// .getCourseOrClass())) {
+								//
+								// return true;
+								// }
+								//
+								// return false;
+								// }
 
-									// // 科学技術英語1のとき
-									// if (f_TimeTableData2.get(number2)
-									// .getClassOfGrade().getSubject()
-									// .equals("科学技術英語1")) {
-									//
-									// // 担当教員と重複するとき
-									// if (checkDuplicationTeacher(
-									// f_TimeTableData2.get(number2)
-									// .getClassOfGrade()
-									// .getTeachers().getName(),
-									// f_NewTimeTableData3.get(number)
-									// .getClassOfGrade()
-									// .getTeachers().getName())) {
-									// return true;
-									// }
-									//
-									// // コース・クラスと重複するとき
-									// if (checkDuplicationCouseOrClass(
-									// f_TimeTableData2.get(number2)
-									// .getClassOfGrade()
-									// .getCourseOrClass(),
-									// f_NewTimeTableData3.get(number)
-									// .getClassOfGrade()
-									// .getCourseOrClass())) {
-									//
-									// return true;
-									// }
-									//
-									// return false;
-									// }
-
-									return true;
-								}
+								return true;
 							}
 						}
 					}
+				}
 
-					// 違う学年のとき
-					else {
+				// 違う学年のとき
+				else {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+					for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
+							.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
 
-							for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
-									.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
+						// 同じ限目のとき
+						if (f_TimeTableData2.get(number2).getFixedPeriod()
+								+ addPeriod2 == f_NewTimeTableData3.get(number)
+								.getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_TimeTableData2.get(number2)
-										.getFixedPeriod() + addPeriod2 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
-
-									// 担当教員と重複するとき
-									if (checkDuplicationTeacher(
-											f_TimeTableData2.get(number2)
-													.getClassOfGrade()
-													.getTeachers().getName(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getTeachers().getName())) {
-										return true;
-									}
-								}
+							// 担当教員と重複するとき
+							if (checkDuplicationTeacher(
+									f_TimeTableData2.get(number2)
+											.getClassOfGrade().getTeachers()
+											.getName(), f_NewTimeTableData3
+											.get(number).getClassOfGrade()
+											.getTeachers().getName())) {
+								return true;
 							}
 						}
 					}
@@ -2414,11 +2401,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 3次の時間割と重複がないかのチェック
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkDuplication3(int candidate, int number) {
@@ -2461,89 +2448,62 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 							.getGrade() == f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getGrade()) {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+						for (int addPeriod3 = 0; addPeriod3 < f_NewTimeTableData3
+								.get(number3).getClassOfGrade().getNumber(); addPeriod3++) {
 
-							for (int addPeriod3 = 0; addPeriod3 < f_NewTimeTableData3
-									.get(number3).getClassOfGrade().getNumber(); addPeriod3++) {
+							// 同じ限目のとき
+							if (f_NewTimeTableData3.get(number3).getPeriod(
+									candidate)
+									+ addPeriod3 == f_NewTimeTableData3.get(
+									number).getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_NewTimeTableData3.get(number3).getPeriod(
-										candidate)
-										+ addPeriod3 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
-
-									// 電気電子工学概論のとき
-									if ("電気電子工学概論".equals(f_NewTimeTableData3
-											.get(number3).getClassOfGrade()
-											.getSubject())) {
-
-										// 電気電子工学概論のとき
-										if ("電気電子工学概論"
-												.equals(f_NewTimeTableData3
-														.get(number)
-														.getClassOfGrade()
-														.getSubject())) {
-											continue;
-										}
-									}
-
-									// 担当教員と重複するとき
-									if (checkDuplicationTeacher(
-											f_NewTimeTableData3.get(number3)
-													.getClassOfGrade()
-													.getTeachers().getName(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getTeachers().getName())) {
-										return true;
-									}
-
-									// コース・クラスと重複するとき
-									if (checkDuplicationCouseOrClass(
-											f_NewTimeTableData3.get(number3)
-													.getClassOfGrade()
-													.getCourseOrClass(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getCourseOrClass())) {
-
-										return true;
-									}
-
+								// 担当教員と重複するとき
+								if (checkDuplicationTeacher(f_NewTimeTableData3
+										.get(number3).getClassOfGrade()
+										.getTeachers().getName(),
+										f_NewTimeTableData3.get(number)
+												.getClassOfGrade()
+												.getTeachers().getName())) {
+									return true;
 								}
+
+								// コース・クラスと重複するとき
+								if (checkDuplicationCouseOrClass(
+										f_NewTimeTableData3.get(number3)
+												.getClassOfGrade()
+												.getCourseOrClass(),
+										f_NewTimeTableData3.get(number)
+												.getClassOfGrade()
+												.getCourseOrClass())) {
+
+									return true;
+								}
+
 							}
 						}
 					}
+				}
 
-					// 違う学年のとき
-					else {
+				// 違う学年のとき
+				else {
 
-						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
-								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
+					for (int addPeriod3 = 0; addPeriod3 < f_NewTimeTableData3
+							.get(number3).getClassOfGrade().getNumber(); addPeriod3++) {
 
-							for (int addPeriod3 = 0; addPeriod3 < f_NewTimeTableData3
-									.get(number3).getClassOfGrade().getNumber(); addPeriod3++) {
+						// 同じ限目のとき
+						if (f_NewTimeTableData3.get(number3).getPeriod(
+								candidate)
+								+ addPeriod3 == f_NewTimeTableData3.get(number)
+								.getPeriod(candidate)) {
 
-								// 同じ限目のとき
-								if (f_NewTimeTableData3.get(number3).getPeriod(
-										candidate)
-										+ addPeriod3 == f_NewTimeTableData3
-										.get(number).getPeriod(candidate)
-										+ addPeriod) {
-
-									// 担当教員と重複するとき
-									if (checkDuplicationTeacher(
-											f_NewTimeTableData3.get(number3)
-													.getClassOfGrade()
-													.getTeachers().getName(),
-											f_NewTimeTableData3.get(number)
-													.getClassOfGrade()
-													.getTeachers().getName())) {
-										return true;
-									}
-								}
+							// 担当教員と重複するとき
+							if (checkDuplicationTeacher(f_NewTimeTableData3
+									.get(number3).getClassOfGrade()
+									.getTeachers().getName(),
+									f_NewTimeTableData3.get(number)
+											.getClassOfGrade().getTeachers()
+											.getName())) {
+								return true;
 							}
 						}
 					}
@@ -2595,10 +2555,19 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 								tmpPeriod = f_TimeTableData1.get(number1)
 										.getFixedPeriod() + addPeriod - 1;
 
-								// 生徒の曜日限目のコマ数に入れる
-								f_NewStudentData.get(studentNum)
-										.setDayPeriodNumber(0, tmpDayOfWeek,
-												tmpPeriod);
+								for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
+
+									// 生徒の曜日限目のコマ数に入れる
+									f_NewStudentData
+											.get(studentNum)
+											.setDayPeriodNumber(
+													candidate,
+													tmpDayOfWeek,
+													tmpPeriod,
+													f_NewStudentData
+															.get(studentNum)
+															.getDayPeriodNumbers());
+								}
 							}
 						}
 					}
@@ -2663,45 +2632,54 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 							// continue;
 							// }
 
-							f_NewStudentData.get(studentNum)
-									.setDayPeriodNumber(0, tmpDayOfWeek,
-											tmpPeriod);
+							for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
+
+								f_NewStudentData.get(studentNum)
+										.setDayPeriodNumber(
+												0,
+												tmpDayOfWeek,
+												tmpPeriod,
+												f_NewStudentData
+														.get(studentNum)
+														.getDayPeriodNumbers());
+							}
 						}
 					}
 				}
 			}
 		}
 
-		// ほかの候補もカウント
-		for (int candidate = 1; candidate < CANDIDATE_NUM; candidate++) {
-
-			for (int studentNum = 0; studentNum < f_NewStudentData.size(); studentNum++) {
-
-				for (int day = 0; day <= MAX_DAY; day++) {
-
-					for (int period = 1; period <= MAX_PERIOD; period++) {
-
-						// 他の候補の生徒のデータに更新する
-						f_NewStudentData.get(studentNum).updateDayPeriodNumber(
-								candidate,
-								day,
-								period - 1,
-								f_NewStudentData.get(studentNum)
-										.getDayPeriodNumbers(),
-								0,
-								day,
-								period - 1,
-								f_NewStudentData.get(studentNum)
-										.getDayPeriodNumbers());
-					}
-				}
-			}
-		}
+		// // ほかの候補もカウント
+		// for (int candidate = 1; candidate < CANDIDATE_NUM; candidate++) {
+		//
+		// for (int studentNum = 0; studentNum < f_NewStudentData.size();
+		// studentNum++) {
+		//
+		// for (int day = 0; day <= MAX_DAY; day++) {
+		//
+		// for (int period = 1; period <= MAX_PERIOD; period++) {
+		//
+		// // 他の候補の生徒のデータに更新する
+		// f_NewStudentData.get(studentNum).updateDayPeriodNumber(
+		// candidate,
+		// day,
+		// period - 1,
+		// f_NewStudentData.get(studentNum)
+		// .getDayPeriodNumbers(),
+		// 0,
+		// day,
+		// period - 1,
+		// f_NewStudentData.get(studentNum)
+		// .getDayPeriodNumbers());
+		// }
+		// }
+		// }
+		// }
 	}
 
 	/*
 	 * 指定した候補の3次の科目の生徒のコマ数をカウントする
-	 *
+	 * 
 	 * @param candidate 候補番号
 	 */
 	private void countNewTimeTable3NumOfStudent(int candidate) {
@@ -2742,8 +2720,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 								// 生徒の曜日限目のコマ数に入れる
 								f_NewStudentData.get(studentNum)
-										.setDayPeriodNumber(candidate,
-												tmpDayOfWeek, tmpPeriod);
+										.setDayPeriodNumber(
+												candidate,
+												tmpDayOfWeek,
+												tmpPeriod,
+												f_NewStudentData
+														.get(studentNum)
+														.getDayPeriodNumbers());
 							}
 						}
 					}
@@ -2759,20 +2742,20 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 		resetNumOfStudent();// 生徒のコマ数をリセットする
 
-		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
-			countNewTimeTable3NumOfStudent(candidate);// 初期集団生成後の3次の科目の生徒のコマ数をカウント
-		}
+		// for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
+		// countNewTimeTable3NumOfStudent(candidate);// 生成後の3次の科目の生徒のコマ数をカウント
+		// }
 	}
 
 	/*
 	 * コース・クラスが含まれているかチェック
-	 *
+	 * 
 	 * @param course_or_class 科目のデータに記載されるコース・クラス
-	 *
+	 * 
 	 * @param courses_or_classes 生徒のデータに記載されるコース・クラス
-	 *
+	 * 
 	 * @return true 含む
-	 *
+	 * 
 	 * @return false 含まない
 	 */
 	private boolean checkIncludeCourseOrClass(String course_or_class,
@@ -2786,6 +2769,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// aクラスのとき
 		if (course_or_class.equals("a")) {
 
+			// a(を含むとき
 			if (courses_or_classes.contains("a(")) {
 
 				return true;
@@ -2797,6 +2781,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// bクラスのとき
 		if (course_or_class.equals("b")) {
 
+			// b(を含むとき
 			if (courses_or_classes.contains("b(")) {
 
 				return true;
@@ -2808,6 +2793,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// cクラスのとき
 		if (course_or_class.equals("c")) {
 
+			// c(を含むとき
 			if (courses_or_classes.contains("c(")) {
 
 				return true;
@@ -2819,13 +2805,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// abクラスのとき
 		if (course_or_class.equals("ab")) {
 
+			// aを含むとき
 			if (courses_or_classes.contains("a")) {
 
 				return true;
 			}
 
+			// bを含むとき
 			if (courses_or_classes.contains("b")) {
 
+				// aを含むとき
 				if (courses_or_classes.contains("a")) {
 					return true;
 				}
@@ -2837,13 +2826,16 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// bcクラスのとき
 		if (course_or_class.equals("bc")) {
 
+			// cを含むとき
 			if (courses_or_classes.contains("c")) {
 
 				return true;
 			}
 
+			// bを含むとき
 			if (courses_or_classes.contains("b")) {
 
+				// cを含むとき
 				if (courses_or_classes.contains("c")) {
 					return true;
 				}
@@ -2855,6 +2847,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// 奇数クラスのとき
 		if (course_or_class.equals("奇数")) {
 
+			// 奇数を含むとき
 			if (courses_or_classes.contains("奇数")) {
 
 				return true;
@@ -2866,6 +2859,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// 偶数クラスのとき
 		if (course_or_class.equals("偶数")) {
 
+			// 偶数を含むとき
 			if (courses_or_classes.contains("偶数")) {
 
 				return true;
@@ -2877,6 +2871,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// エレ情クラスのとき
 		if (course_or_class.equals("エレ情")) {
 
+			// エレ情を含むとき
 			if (courses_or_classes.contains("エレ情")) {
 				return true;
 			}
@@ -2887,6 +2882,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// エレ情(奇数)クラスのとき
 		if (course_or_class.equals("エレ情(奇数)")) {
 
+			// エレ情(奇数)を含むとき
 			if (courses_or_classes.contains("エレ情(奇数)")) {
 
 				return true;
@@ -2898,6 +2894,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// エレ情(偶数)クラスのとき
 		if (course_or_class.equals("エレ情(偶数)")) {
 
+			// エレ情(偶数)を含むとき
 			if (courses_or_classes.contains("エレ情(偶数)")) {
 
 				return true;
@@ -2909,6 +2906,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 		// エネ環クラスのとき
 		if (course_or_class.equals("エネ環")) {
 
+			// エネ環を含むとき
 			if (courses_or_classes.contains("エネ環")) {
 
 				return true;
@@ -3100,7 +3098,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 					// 重複している回数があまりにも多いとき
 					if (10000 < f_NumOfDuplication) {
-						resetNewTimeTableData3(candidate);
+						resetNewTimeTableData3(candidate);// 3次の時間割のデータをリセットする
 						break;
 					}
 
@@ -3123,7 +3121,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			f_TimeTableData3.add(new TimeTable(timeTable));
 		}
 
-		countNumOfStudent();// 生徒のコマ数をカウント
+		countFirstNumOfStudent();// 生徒のコマ数をカウント
 
 		calcDayPeriodFirstEvaluationValue();// 評価値の計算をする
 
@@ -3154,9 +3152,9 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 最初の3次の時間割を決める
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param number 番目
 	 */
 	private void makeFirstTimeTable3(int candidate, int number) {
@@ -3181,13 +3179,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 重複がないかのチェック
-	 *
+	 * 
 	 * @param candidate 候補番号
-	 *
+	 * 
 	 * @param number 番目(3次の時間割)
-	 *
+	 * 
 	 * @return true 重複あり
-	 *
+	 * 
 	 * @return false 重複なし
 	 */
 	private boolean checkFirstDuplication(int candidate, int number) {
@@ -3215,13 +3213,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 担当教員が重複しているかのチェック
-	 *
+	 * 
 	 * @param teacher1 教員1
-	 *
+	 * 
 	 * @param teacher2 教員2
-	 *
+	 * 
 	 * @return true 重複している
-	 *
+	 * 
 	 * @return false 重複していない
 	 */
 	private boolean checkDuplicationTeacher(String teacher1, String teacher2) {
@@ -3258,13 +3256,13 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * コース・クラスと重複しているかのチェック
-	 *
+	 * 
 	 * @param course_or_class1 コースクラス１
-	 *
+	 * 
 	 * @param course_or_class2 コースクラス２
-	 *
+	 * 
 	 * @return true 重複している
-	 *
+	 * 
 	 * @return false 重複していない
 	 */
 	private boolean checkDuplicationCouseOrClass(String course_or_class1,
@@ -3520,11 +3518,11 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * プログラムを終了したか
-	 *
+	 * 
 	 * @param count プログラムの回数
-	 *
+	 * 
 	 * @return true:終了
-	 *
+	 * 
 	 * @return false:続行
 	 */
 	private boolean isFinishedProg(int count) {
@@ -3535,10 +3533,12 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 			return true;
 		}
 
-		super.readTeacherFile();// 先生のファイルを読み込む
-		readFacultyFile();// 担当者が決まったファイルを読み込む(3次のファイル)
-		readRoomDayPeriodFile();// 教室と何曜日と何限目が決まったファイルを読み込む(1次と2次のファイル)
-		readStudentDataFile();// 生徒のデータのファイルを読み込む
+		if (count < 1) {
+			super.readTeacherFile();// 先生のファイルを読み込む
+			readFacultyFile();// 担当者が決まったファイルを読み込む(3次のファイル)
+			readRoomDayPeriodFile();// 教室と何曜日と何限目が決まったファイルを読み込む(1次と2次のファイル)
+			readStudentDataFile();// 生徒のデータのファイルを読み込む
+		}
 
 		makeTimeTable3(count);// 3次の時間割を作成
 
@@ -3567,14 +3567,14 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	 * すべてのフィールドをクリアする
 	 */
 	private void clearAllField() {
-		f_TeacherData.clear();
-		f_ClassOfGradeData3.clear();
-		f_TimeTableData1.clear();
-		f_TimeTableData2.clear();
-		f_NewStudentData.clear();
-		f_StudentData.clear();
-		f_TimeTableData3.clear();
-		f_NewTimeTableData3.clear();
+		// f_TeacherData.clear();
+		// f_ClassOfGradeData3.clear();
+		// f_TimeTableData1.clear();
+		// f_TimeTableData2.clear();
+		// f_NewStudentData.clear();
+		// f_StudentData.clear();
+		// f_TimeTableData3.clear();
+		// f_NewTimeTableData3.clear();
 		f_EvaluationData.clear();
 		f_EvaluationValues.clear();
 	}
@@ -3588,7 +3588,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 実行する処理
-	 *
+	 * 
 	 * @return 0:終了
 	 */
 	public int exe() {
@@ -3613,7 +3613,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 	// --------------------------------//
 	/*
 	 * 教室と何曜日と何限目が決まったファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	public void writeDayAndPeriodFile(int count) {
@@ -3687,7 +3687,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 3次のファイル(何曜日と何限目が決まったデータ)を書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeDayAndPeriodFile3(int count) {
@@ -3746,7 +3746,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeDayAndPeriodBestFile3(int count) {
@@ -3802,7 +3802,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 最初の3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeDayAndPeriodFirstFile3(int count) {
@@ -3860,7 +3860,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団の3次のファイル(教室と何曜日と何限目が決まったデータ)を書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeFirstDayAndPeriodBestFile3(int count) {
@@ -3916,7 +3916,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 評価値のファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeEvaluationFile(int count) {
@@ -3953,7 +3953,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 最もよかった候補の時間割の生徒のデータのファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeStudentDataBestFile(int count) {
@@ -4014,7 +4014,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータのファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeStudentDataFile(int count) {
@@ -4074,7 +4074,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団の最もよかった候補の時間割の生徒のデータのファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeFirstStudentDataBestFile(int count) {
@@ -4135,7 +4135,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 初期集団においての生徒のデータのファイルを書き込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void writeFirstStudentDataFile(int count) {
@@ -4195,7 +4195,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 	/*
 	 * 生徒のデータのファイルを読み込む
-	 *
+	 * 
 	 * @param count プログラムの回数
 	 */
 	private void readStudentDataFile() {
@@ -4228,7 +4228,7 @@ public class Decide_dayAndPeriod extends Decide_faculty implements iDayPeriod,
 
 							studentData.setCourseOrClass(strData[2]);// コース・クラス
 
-							f_NewStudentData.add(new Student(studentData));// 新規の生徒のデータの動的配列に追加
+							f_NewStudentData.add(studentData);// 新規の生徒のデータの動的配列に追加
 						}
 					}
 				}

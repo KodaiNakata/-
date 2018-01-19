@@ -10,7 +10,7 @@ public class Student implements iDayPeriod {
 	private String f_Semester;// 学期
 	private String f_CourseOrClass;// コース・クラス
 	private int[][][] f_DayPeriodNumber = new int[CANDIDATE_NUM][MAX_DAY + 1][MAX_PERIOD];// ある曜日の限目のコマ数
-	private int[] f_DayPeriodEvaluationValue = new int[CANDIDATE_NUM];// 日程の評価値
+	private long[] f_DayPeriodEvaluationValue = new long[CANDIDATE_NUM];// 日程の評価値
 
 	/*
 	 * コンストラクタ
@@ -87,9 +87,24 @@ public class Student implements iDayPeriod {
 	 *
 	 * @param number[] コマ数の配列
 	 */
-	public void updateDayPeriodNumber(int candidate1,int day1,int period1,int[][][] number1,int candidate2,int day2,int period2, int[][][] number2) {
+	public void updateDayPeriodNumber(int candidate1, int day1, int period1,
+			int[][][] number1, int candidate2, int day2, int period2,
+			int[][][] number2) {
 
-		number1[candidate1][day1][period1]=number2[candidate2][day2][period2];
+		number1=number2.clone();
+
+		for(int candidate=0;candidate<number2.length;candidate++){
+			number1[candidate]=number2[candidate].clone();
+		}
+
+		for(int candidate=0;candidate<number2.length;candidate++){
+
+			for(int day=0;day<number2[candidate].length;day++){
+
+				number1[candidate][day]=number2[candidate][day].clone();
+			}
+		}
+//		number1[candidate1][day1][period1] = number2[candidate2][day2][period2];
 	}
 
 	/*
@@ -103,7 +118,8 @@ public class Student implements iDayPeriod {
 	 *
 	 * @param value2[] 値の配列
 	 */
-	public void updateDayPeriodEvaluationValue(int candidate1,int[] value1, int candidate2,int[] value2) {
+	public void updateDayPeriodEvaluationValue(int candidate1, long[] value1,
+			int candidate2, long[] value2) {
 
 		value1[candidate1] = value2[candidate2];
 	}
@@ -170,7 +186,7 @@ public class Student implements iDayPeriod {
 	 *
 	 * @return 日程の評価値
 	 */
-	public int getDayPeriodEvaluationValue(int candidate) {
+	public long getDayPeriodEvaluationValue(int candidate) {
 		return f_DayPeriodEvaluationValue[candidate];
 	}
 
@@ -179,7 +195,7 @@ public class Student implements iDayPeriod {
 	 *
 	 * @return 日程の評価値の配列
 	 */
-	public int[] getDayPeriodEvaluationValue() {
+	public long[] getDayPeriodEvaluationValue() {
 		return f_DayPeriodEvaluationValue;
 	}
 
@@ -212,7 +228,7 @@ public class Student implements iDayPeriod {
 	 */
 	public int getMaxNumberOfDayPeriod(int candidate) {
 
-		int max=0;
+		int max = 0;
 
 		for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
 
@@ -241,7 +257,7 @@ public class Student implements iDayPeriod {
 	 */
 	public int getMinNumberOfDayPeriod(int candidate) {
 
-		int min=5;
+		int min = 5;
 
 		for (int day = 0; day < f_DayPeriodNumber[candidate].length; day++) {
 
@@ -299,13 +315,13 @@ public class Student implements iDayPeriod {
 	 *
 	 * @param period 限目
 	 */
-	public void setDayPeriodNumber(int candidate, int day, int period) {
+	public void setDayPeriodNumber(int candidate, int day, int period,
+			int[][][] day_period_numbers) {
 
-//		System.out.print(candidate+","+day+","+period+"\n");
-		
-		if (f_DayPeriodNumber[candidate][day][period] <= 0) {
-			f_DayPeriodNumber[candidate][day][period] = 1;
+		if (day_period_numbers[candidate][day][period] <= 0) {
+			day_period_numbers[candidate][day][period] = 1;
 		}
+
 	}
 
 	/*
@@ -317,8 +333,8 @@ public class Student implements iDayPeriod {
 	 *
 	 * @param value 値
 	 */
-	public void setDayPeriodEvaluationValue(int candidate, int[] evaluation,
-			int value) {
+	public void setDayPeriodEvaluationValue(int candidate, long[] evaluation,
+			long value) {
 		evaluation[candidate] = value;
 	}
 
