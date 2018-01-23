@@ -91,20 +91,7 @@ public class Student implements iDayPeriod {
 			int[][][] number1, int candidate2, int day2, int period2,
 			int[][][] number2) {
 
-		number1=number2.clone();
-
-		for(int candidate=0;candidate<number2.length;candidate++){
-			number1[candidate]=number2[candidate].clone();
-		}
-
-		for(int candidate=0;candidate<number2.length;candidate++){
-
-			for(int day=0;day<number2[candidate].length;day++){
-
-				number1[candidate][day]=number2[candidate][day].clone();
-			}
-		}
-//		number1[candidate1][day1][period1] = number2[candidate2][day2][period2];
+		number1[candidate1][day1][period1] = number2[candidate2][day2][period2];
 	}
 
 	/*
