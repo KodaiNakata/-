@@ -202,18 +202,22 @@ public class Decide_faculty implements iTimeTable {
 	// ------------------------------------------//
 	/*
 	 * 先生のファイルを読み込む
+	 * 
+	 * @param department 学科名
+	 * 
+	 * @param file_col ファイルの行
 	 */
-	public void readTeacherFile() {
+	public void readTeacherFile(String department,int file_col) {
 
 		String[] strData = new String[TEACHER_DATA + SUBJECT_NUM];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+TEACHER_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+department+"\\"+department+TEACHER_NAME);
 
 		try {
 			String line = new String();
 
 			// 一番上から一番下の行まで読み込む
-			for (int cols = 0; cols < TEACHER_COLS; cols++) {
+			for (int cols = 0; cols < file_col; cols++) {
 
 				// 読み込んだ1行が空白でないとき
 				if ((line = input.readLine()) != null) {
@@ -226,51 +230,51 @@ public class Decide_faculty implements iTimeTable {
 						if (strData[0] != null) {
 							Teacher teacherData = new Teacher();
 							teacherData.setName(strData[0]);// 先生の名前
-							teacherData.setNumOfBasicSeminar1(Integer
-									.parseInt(strData[1]));// 基礎ゼミ1のコマ数
-							teacherData.setNumOfBasicSeminar2(Integer
-									.parseInt(strData[2]));// 基礎ゼミ2のコマ数
-							teacherData.setNumOfOddEETraining(Integer
-									.parseInt(strData[3]));// 電電実習(奇数)のコマ数
-							teacherData.setNumOfEvenEETraining(Integer
-									.parseInt(strData[4]));// 電電実習(偶数)のコマ数
-							teacherData.setNumOfOddEEExperiment(Integer
-									.parseInt(strData[5]));// 電電実験(奇数)のコマ数
-							teacherData.setNumOfEvenEEExperiment(Integer
-									.parseInt(strData[6]));// 電電実験(偶数)のコマ数
-							teacherData
-									.setNumOfOddEngineeringDesignExperiment(Integer
-											.parseInt(strData[7]));// エンデザ実験(奇数)のコマ数
-							teacherData
-									.setNumOfEvenEngineeringDesignExperiment(Integer
-											.parseInt(strData[8]));// エンデザ実験(偶数)のコマ数
-							teacherData
-									.setNumOfEleInfoCommunicationExperiment(Integer
-											.parseInt(strData[9]));// エレ情実験のコマ数
-							teacherData
-									.setNumOfEnergyEnvironmentExperiment(Integer
-											.parseInt(strData[10]));// エネ環実験のコマ数
-							teacherData.setNumOfGraduateStudySeminar(Integer
-									.parseInt(strData[11]));// 卒研ゼミのコマ数
-							teacherData.setHasGraduateStudy(Integer
-									.parseInt(strData[12]));// 卒研ありか
-							teacherData.setLab(strData[13]);// 研究室
-
-							for (int subjectNum = TEACHER_DATA; subjectNum < strData.length; subjectNum++) {
-
-								// 担当科目があるとき
-								if (strData[subjectNum] != null) {
-									teacherData
-											.addChargeOfSubject(strData[subjectNum]);// 担当科目を追加
-								}
-
-								// 担当科目がないとき
-								else {
-									// teacherData.addChargeOfSubject("科目なし");
-									break;
-								}
-
-							}
+//							teacherData.setNumOfBasicSeminar1(Integer
+//									.parseInt(strData[1]));// 基礎ゼミ1のコマ数
+//							teacherData.setNumOfBasicSeminar2(Integer
+//									.parseInt(strData[2]));// 基礎ゼミ2のコマ数
+//							teacherData.setNumOfOddEETraining(Integer
+//									.parseInt(strData[3]));// 電電実習(奇数)のコマ数
+//							teacherData.setNumOfEvenEETraining(Integer
+//									.parseInt(strData[4]));// 電電実習(偶数)のコマ数
+//							teacherData.setNumOfOddEEExperiment(Integer
+//									.parseInt(strData[5]));// 電電実験(奇数)のコマ数
+//							teacherData.setNumOfEvenEEExperiment(Integer
+//									.parseInt(strData[6]));// 電電実験(偶数)のコマ数
+//							teacherData
+//									.setNumOfOddEngineeringDesignExperiment(Integer
+//											.parseInt(strData[7]));// エンデザ実験(奇数)のコマ数
+//							teacherData
+//									.setNumOfEvenEngineeringDesignExperiment(Integer
+//											.parseInt(strData[8]));// エンデザ実験(偶数)のコマ数
+//							teacherData
+//									.setNumOfEleInfoCommunicationExperiment(Integer
+//											.parseInt(strData[9]));// エレ情実験のコマ数
+//							teacherData
+//									.setNumOfEnergyEnvironmentExperiment(Integer
+//											.parseInt(strData[10]));// エネ環実験のコマ数
+//							teacherData.setNumOfGraduateStudySeminar(Integer
+//									.parseInt(strData[11]));// 卒研ゼミのコマ数
+//							teacherData.setHasGraduateStudy(Integer
+//									.parseInt(strData[12]));// 卒研ありか
+//							teacherData.setLab(strData[13]);// 研究室
+//
+//							for (int subjectNum = TEACHER_DATA; subjectNum < strData.length; subjectNum++) {
+//
+//								// 担当科目があるとき
+//								if (strData[subjectNum] != null) {
+//									teacherData
+//											.addChargeOfSubject(strData[subjectNum]);// 担当科目を追加
+//								}
+//
+//								// 担当科目がないとき
+//								else {
+//									// teacherData.addChargeOfSubject("科目なし");
+//									break;
+//								}
+//
+//							}
 							f_TeacherData.add(teacherData);// 先生のデータの動的配列に追加
 						}
 					}
@@ -457,48 +461,48 @@ public class Decide_faculty implements iTimeTable {
 	// }
 	// }
 	//
-	/*
-	 * 3次の教科のファイルを読み込む
-	 */
-	private void readSubjectFile3() {
-
-		String[] strData = new String[ORDER3_DATA - 2];
-
-		BufferedReader input = FileIO.readFile(SUBJECT3_NAME);
-
-		ClassOfGrade classOfGradeData = new ClassOfGrade();
-
-		try {
-			String line = new String();
-
-			// 一番上から一番下の行まで読み込む
-			for (int cols = 0; cols < ORDER3_COLS; cols++) {
-
-				// 読み込んだ1行が空白でないとき
-				if ((line = input.readLine()) != null) {
-
-					// 上から1行以上のとき
-					if (1 <= cols) {
-						strData = line.split(",");
-
-						classOfGradeData
-								.setNumber(Integer.parseInt(strData[0]));// コマ数
-						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
-						classOfGradeData.setSemester(strData[2]);// 前期後期
-						classOfGradeData.setSubject(strData[3]);// 科目名
-						classOfGradeData.setCourseOrClass(strData[4]);// コース・クラス
-						classOfGradeData
-								.setNeedPC(Integer.parseInt(strData[5]));// PCが必要か
-
-						f_ClassOfGradeData3.add(classOfGradeData);// 3次の時間割の動的配列に追加
-					}
-				}
-			}
-			input.close();
-		} catch (IOException error_report) {
-			System.out.println(error_report);
-		}
-	}
+//	/*
+//	 * 3次の教科のファイルを読み込む
+//	 */
+//	private void readSubjectFile3() {
+//
+//		String[] strData = new String[ORDER3_DATA - 2];
+//
+//		BufferedReader input = FileIO.readFile(SUBJECT3_NAME);
+//
+//		ClassOfGrade classOfGradeData = new ClassOfGrade();
+//
+//		try {
+//			String line = new String();
+//
+//			// 一番上から一番下の行まで読み込む
+//			for (int cols = 0; cols < ORDER3_COLS; cols++) {
+//
+//				// 読み込んだ1行が空白でないとき
+//				if ((line = input.readLine()) != null) {
+//
+//					// 上から1行以上のとき
+//					if (1 <= cols) {
+//						strData = line.split(",");
+//
+//						classOfGradeData
+//								.setNumber(Integer.parseInt(strData[0]));// コマ数
+//						classOfGradeData.setGrade(Integer.parseInt(strData[1]));// 学年
+//						classOfGradeData.setSemester(strData[2]);// 前期後期
+//						classOfGradeData.setSubject(strData[3]);// 科目名
+//						classOfGradeData.setCourseOrClass(strData[4]);// コース・クラス
+//						classOfGradeData
+//								.setNeedPC(Integer.parseInt(strData[5]));// PCが必要か
+//
+//						f_ClassOfGradeData3.add(classOfGradeData);// 3次の時間割の動的配列に追加
+//					}
+//				}
+//			}
+//			input.close();
+//		} catch (IOException error_report) {
+//			System.out.println(error_report);
+//		}
+//	}
 
 	/*
 	 * メニュー
@@ -555,8 +559,8 @@ public class Decide_faculty implements iTimeTable {
 	 * プログラムを終了したか
 	 */
 	private boolean isFinishedProg() {
-		readTeacherFile();// 先生のファイルを読み込む
-		readSubjectFile3();// 3次の科目のファイルを読み込む
+//		readTeacherFile();// 先生のファイルを読み込む
+//		readSubjectFile3();// 3次の科目のファイルを読み込む
 		decideFirstFaculty();// 最初の担当者をランダムで決定
 		// result();// 結果の表示
 		return true;

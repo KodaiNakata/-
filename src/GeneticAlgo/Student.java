@@ -305,6 +305,19 @@ public class Student implements iDayPeriod {
 	public void setDayPeriodNumber(int candidate, int day, int period,
 			int[][][] day_period_numbers) {
 
+		if(candidate<0){
+			System.out.println("候補が負の数");
+		}
+		
+		if(day<0){
+			
+			System.out.println("候補"+candidate+"の曜日が"+day);
+		}
+		
+		if(period<0){
+			System.out.println("限目が負の数");
+		}
+		
 		if (day_period_numbers[candidate][day][period] <= 0) {
 			day_period_numbers[candidate][day][period] = 1;
 		}
