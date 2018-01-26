@@ -15,8 +15,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		iTimeTable {
 
 	private final int TEACHER_COLS = 23;// 先生のファイルの行
-	private static final String DEPARTMENT="Info";// 学科名
-	private static final String DEPARTMENT_PATH=DEPARTMENT+"\\";// 学科名
+	private static final String DEPARTMENT = "Info";// 学科名
+	private static final String DEPARTMENT_PATH = DEPARTMENT + "\\";// 学科名
 	private static final String EVALUATION_FILE = "DayPeriodEvaluationData.csv";// 日程の評価値のデータのファイル
 	private static final int STUDENT_COLS = 21;// 生徒のデータの行
 	private static final int STUDENT_DATA_NUM = 3;// 生徒のデータの項目数
@@ -24,7 +24,7 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private final int ORDER1_COLS = 17;// 1次のデータの行
 	private final int ORDER2_COLS = 175;// 2次のデータの行
 	private final int ORDER3_COLS = 112;// 3次のデータの行
-	
+
 	private long f_OldEvaluationValue;// 前の評価値
 	private long f_NewEvaluationValue;// 新しい評価値
 	private int f_CandidateRandomNumber1;// ランダムの候補の要素番号
@@ -55,6 +55,15 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	public Decide_infomatics() {
 		super();
 		f_NumOfDuplication = 0;
+	}
+
+	private void indicateTimeTableData1() {
+
+		for (int number1 = 0; number1 < f_TimeTableData1.size(); number1++) {
+
+			System.out.println(f_TimeTableData1.get(number1).getClassOfGrade()
+					.getCourseOrClass());
+		}
 	}
 
 	/*
@@ -531,7 +540,7 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 			InOutPut.anyKey();
 		}
 
-		// exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
+		exeGeneticAlgo();// 遺伝的アルゴリズムを実行する
 
 		System.out.println("遺伝的アルゴリズム終了");
 
@@ -2348,34 +2357,40 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 							.getGrade() == f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getGrade()) {
 
-						for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
-								.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
+						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
+								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ限目のとき
-							if (f_TimeTableData1.get(number1).getFixedPeriod()
-									+ addPeriod1 == f_NewTimeTableData3.get(
-									number).getPeriod(candidate)) {
+							for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
+									.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
 
-								// 担当教員と重複するとき
-								if (checkDuplicationTeacher(f_TimeTableData1
-										.get(number1).getClassOfGrade()
-										.getTeachers().getName(),
-										f_NewTimeTableData3.get(number)
-												.getClassOfGrade()
-												.getTeachers().getName())) {
-									return true;
-								}
+								// 同じ限目のとき
+								if (f_TimeTableData1.get(number1)
+										.getFixedPeriod() + addPeriod1 == f_NewTimeTableData3
+										.get(number).getPeriod(candidate)
+										+ addPeriod) {
 
-								// コース・クラスと重複するとき
-								if (checkDuplicationCouseOrClass(
-										f_TimeTableData1.get(number1)
-												.getClassOfGrade()
-												.getCourseOrClass(),
-										f_NewTimeTableData3.get(number)
-												.getClassOfGrade()
-												.getCourseOrClass())) {
+									// 担当教員と重複するとき
+									if (checkDuplicationTeacher(
+											f_TimeTableData1.get(number1)
+													.getClassOfGrade()
+													.getTeachers().getName(),
+											f_NewTimeTableData3.get(number)
+													.getClassOfGrade()
+													.getTeachers().getName())) {
+										return true;
+									}
 
-									return true;
+									// コース・クラスと重複するとき
+									if (checkDuplicationCouseOrClass(
+											f_TimeTableData1.get(number1)
+													.getClassOfGrade()
+													.getCourseOrClass(),
+											f_NewTimeTableData3.get(number)
+													.getClassOfGrade()
+													.getCourseOrClass())) {
+
+										return true;
+									}
 								}
 							}
 						}
@@ -2384,22 +2399,52 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 					// 違う学年のとき
 					else {
 
-						for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
-								.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
+						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
+								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ限目のとき
-							if (f_TimeTableData1.get(number1).getFixedPeriod()
-									+ addPeriod1 == f_NewTimeTableData3.get(
-									number).getPeriod(candidate)) {
+							for (int addPeriod1 = 0; addPeriod1 < f_TimeTableData1
+									.get(number1).getClassOfGrade().getNumber(); addPeriod1++) {
 
-								// 担当教員と重複するとき
-								if (checkDuplicationTeacher(f_TimeTableData1
-										.get(number1).getClassOfGrade()
-										.getTeachers().getName(),
-										f_NewTimeTableData3.get(number)
-												.getClassOfGrade()
-												.getTeachers().getName())) {
-									return true;
+								// 同じ限目のとき
+								if (f_TimeTableData1.get(number1)
+										.getFixedPeriod() + addPeriod1 == f_NewTimeTableData3
+										.get(number).getPeriod(candidate)
+										+ addPeriod) {
+
+									// 担当教員と重複するとき
+									if (checkDuplicationTeacher(
+											f_TimeTableData1.get(number1)
+													.getClassOfGrade()
+													.getTeachers().getName(),
+											f_NewTimeTableData3.get(number)
+													.getClassOfGrade()
+													.getTeachers().getName())) {
+										return true;
+									}
+									
+									// 再履修クラスのとき
+									if (f_NewTimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass().equals("再履修")) {
+
+										// 科目がオブジェクト指向設計のとき
+										if (f_NewTimeTableData3.get(number)
+												.getClassOfGrade().getSubject()
+												.equals("オブジェクト指向設計")) {
+
+											// 再履修のオブジェクト指向設計の対象学年以上のとき
+											if (f_NewTimeTableData3
+													.get(number)
+													.getClassOfGrade()
+													.getGrade() <= f_TimeTableData1
+													.get(number1)
+													.getClassOfGrade()
+													.getGrade()) {
+
+												return true;
+											}
+										}
+									}
 								}
 							}
 						}
@@ -2443,46 +2488,20 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 							.getGrade() == f_NewTimeTableData3.get(number)
 							.getClassOfGrade().getGrade()) {
 
-						for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
-								.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
+						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
+								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ限目のとき
-							if (f_TimeTableData2.get(number2).getFixedPeriod()
-									+ addPeriod2 == f_NewTimeTableData3.get(
-									number).getPeriod(candidate)) {
+							for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
+									.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
 
-								// // 科学技術英語1のとき
-								// if (f_TimeTableData2.get(number2)
-								// .getClassOfGrade().getSubject()
-								// .equals("科学技術英語1")) {
-								//
-								// // 担当教員と重複するとき
-								// if (checkDuplicationTeacher(
-								// f_TimeTableData2.get(number2)
-								// .getClassOfGrade()
-								// .getTeachers().getName(),
-								// f_NewTimeTableData3.get(number)
-								// .getClassOfGrade()
-								// .getTeachers().getName())) {
-								// return true;
-								// }
-								//
-								// // コース・クラスと重複するとき
-								// if (checkDuplicationCouseOrClass(
-								// f_TimeTableData2.get(number2)
-								// .getClassOfGrade()
-								// .getCourseOrClass(),
-								// f_NewTimeTableData3.get(number)
-								// .getClassOfGrade()
-								// .getCourseOrClass())) {
-								//
-								// return true;
-								// }
-								//
-								// return false;
-								// }
+								// 同じ限目のとき
+								if (f_TimeTableData2.get(number2)
+										.getFixedPeriod() + addPeriod2 == f_NewTimeTableData3
+										.get(number).getPeriod(candidate)
+										+ addPeriod) {
 
-								return true;
+									return true;
+								}
 							}
 						}
 					}
@@ -2490,22 +2509,52 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 					// 違う学年のとき
 					else {
 
-						for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
-								.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
+						for (int addPeriod = 0; addPeriod < f_NewTimeTableData3
+								.get(number).getClassOfGrade().getNumber(); addPeriod++) {
 
-							// 同じ限目のとき
-							if (f_TimeTableData2.get(number2).getFixedPeriod()
-									+ addPeriod2 == f_NewTimeTableData3.get(
-									number).getPeriod(candidate)) {
+							for (int addPeriod2 = 0; addPeriod2 < f_TimeTableData2
+									.get(number2).getClassOfGrade().getNumber(); addPeriod2++) {
 
-								// 担当教員と重複するとき
-								if (checkDuplicationTeacher(f_TimeTableData2
-										.get(number2).getClassOfGrade()
-										.getTeachers().getName(),
-										f_NewTimeTableData3.get(number)
-												.getClassOfGrade()
-												.getTeachers().getName())) {
-									return true;
+								// 同じ限目のとき
+								if (f_TimeTableData2.get(number2)
+										.getFixedPeriod() + addPeriod2 == f_NewTimeTableData3
+										.get(number).getPeriod(candidate)
+										+ addPeriod) {
+
+									// 担当教員と重複するとき
+									if (checkDuplicationTeacher(
+											f_TimeTableData2.get(number2)
+													.getClassOfGrade()
+													.getTeachers().getName(),
+											f_NewTimeTableData3.get(number)
+													.getClassOfGrade()
+													.getTeachers().getName())) {
+										return true;
+									}
+									
+									// 再履修クラスのとき
+									if (f_NewTimeTableData3.get(number)
+											.getClassOfGrade()
+											.getCourseOrClass().equals("再履修")) {
+
+										// 科目がオブジェクト指向設計のとき
+										if (f_NewTimeTableData3.get(number)
+												.getClassOfGrade().getSubject()
+												.equals("オブジェクト指向設計")) {
+
+											// 再履修のオブジェクト指向設計の対象学年以上のとき
+											if (f_NewTimeTableData3
+													.get(number)
+													.getClassOfGrade()
+													.getGrade() <= f_TimeTableData2
+													.get(number2)
+													.getClassOfGrade()
+													.getGrade()) {
+
+												return true;
+											}
+										}
+									}
 								}
 							}
 						}
@@ -2532,8 +2581,24 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		if (f_NewTimeTableData3.get(number).getDayOfWeek(candidate)
 				.equals(CONFERENCE_DAY)) {
 
-			// 会議の限目のとき
-			if (f_NewTimeTableData3.get(number).getPeriod(candidate) == CONFERENCE_PERIOD) {
+			for (int addPeriod = 0; addPeriod < f_NewTimeTableData3.get(number)
+					.getClassOfGrade().getNumber(); addPeriod++) {
+
+				// 会議の限目のとき
+				if (f_NewTimeTableData3.get(number).getPeriod(candidate)
+						+ addPeriod == CONFERENCE_PERIOD) {
+					return true;
+				}
+			}
+		}
+
+		for (int addPeriod = 0; addPeriod < f_NewTimeTableData3.get(number)
+				.getClassOfGrade().getNumber(); addPeriod++) {
+
+			if (MAX_PERIOD < f_NewTimeTableData3.get(number).getPeriod(
+					candidate)
+					+ addPeriod) {
+
 				return true;
 			}
 		}
@@ -2874,15 +2939,19 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 										.get(number3).getPeriod(candidate)
 										+ addPeriod - 1;
 
-								// 生徒の曜日限目のコマ数に入れる
-								f_NewStudentData.get(studentNum)
-										.setDayPeriodNumber(
-												candidate,
-												tmpDayOfWeek,
-												tmpPeriod,
-												f_NewStudentData
-														.get(studentNum)
-														.getDayPeriodNumbers());
+								if (tmpPeriod < MAX_PERIOD) {
+
+									// 生徒の曜日限目のコマ数に入れる
+									f_NewStudentData
+											.get(studentNum)
+											.setDayPeriodNumber(
+													candidate,
+													tmpDayOfWeek,
+													tmpPeriod,
+													f_NewStudentData
+															.get(studentNum)
+															.getDayPeriodNumbers());
+								}
 							}
 						}
 					}
@@ -2922,16 +2991,19 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 											number3).getPeriod(candidate)
 											+ addPeriod - 1;
 
-									// 生徒の曜日限目のコマ数に入れる
-									f_NewStudentData
-											.get(studentNum)
-											.setDayPeriodNumber(
-													candidate,
-													tmpDayOfWeek,
-													tmpPeriod,
-													f_NewStudentData
-															.get(studentNum)
-															.getDayPeriodNumbers());
+									if (tmpPeriod < MAX_PERIOD) {
+
+										// 生徒の曜日限目のコマ数に入れる
+										f_NewStudentData
+												.get(studentNum)
+												.setDayPeriodNumber(
+														candidate,
+														tmpDayOfWeek,
+														tmpPeriod,
+														f_NewStudentData
+																.get(studentNum)
+																.getDayPeriodNumbers());
+									}
 								}
 							}
 						}
@@ -3020,10 +3092,11 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 			// bを含むとき
 			if (courses_or_classes.contains("b")) {
 
-				// aを含むとき
-				if (courses_or_classes.contains("a")) {
-					return true;
-				}
+				return true;
+				// // aを含むとき
+				// if (courses_or_classes.contains("a")) {
+				// return true;
+				// }
 			}
 
 			return false;
@@ -3074,10 +3147,10 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 			return false;
 		}
 
-		// エレ情クラスのとき
+		// 情報システムクラスのとき
 		if (course_or_class.equals("シ")) {
 
-			// エレ情を含むとき
+			// 情報システムを含むとき
 			if (courses_or_classes.contains("シ")) {
 				return true;
 			}
@@ -3085,10 +3158,10 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 			return false;
 		}
 
-		// エレ情(奇数)クラスのとき
+		// 情報メディアクラスのとき
 		if (course_or_class.equals("メ")) {
 
-			// エレ情(奇数)を含むとき
+			// 情報メディアを含むとき
 			if (courses_or_classes.contains("メ")) {
 
 				return true;
@@ -3328,6 +3401,9 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 			f_TimeTableData3.add(new TimeTable(timeTable));
 		}
+
+		// indicateTimeTableData1();
+		// InOutPut.anyKey();
 
 		countNumOfStudent();// 生徒のコマ数をカウント
 
@@ -3657,7 +3733,7 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		}
 
 		if (count < 1) {
-			super.readTeacherFile(DEPARTMENT,TEACHER_COLS);// 先生のファイルを読み込む
+			super.readTeacherFile(DEPARTMENT, TEACHER_COLS);// 先生のファイルを読み込む
 			readFacultyFile();// 担当者が決まったファイルを読み込む(3次のファイル)
 			readRoomDayPeriodFile();// 教室と何曜日と何限目が決まったファイルを読み込む(1次と2次のファイル)
 			readStudentDataFile();// 生徒のデータのファイルを読み込む
@@ -3696,8 +3772,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		// f_TimeTableData2.clear();
 		// f_NewStudentData.clear();
 		// f_StudentData.clear();
-		// f_TimeTableData3.clear();
-		// f_NewTimeTableData3.clear();
+		f_TimeTableData3.clear();
+		f_NewTimeTableData3.clear();
 		f_EvaluationData.clear();
 		f_EvaluationValues.clear();
 	}
@@ -3818,8 +3894,9 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-					+ "room_3_" + (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+					+ (count + 1) + "回目\\" + "room_3_" + (candidate + 1)
+					+ ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -3875,8 +3952,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private void writeDayAndPeriodBestFile3(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-				+ FILE3_NAME, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+				+ (count + 1) + "回目\\" + FILE3_NAME, false);
 
 		System.out.println("担当者が決まった3次のファイル" + FILE3_NAME + "に書き込みます。");
 
@@ -3932,8 +4009,9 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-					+ "roomFirst_3_" + (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+					+ (count + 1) + "回目\\" + "roomFirst_3_" + (candidate + 1)
+					+ ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "room_3_" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -3989,8 +4067,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private void writeFirstDayAndPeriodBestFile3(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-				+ "roomFirst_3.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+				+ (count + 1) + "回目\\" + "roomFirst_3.csv", false);
 
 		System.out.println("初期集団の3次のファイル" + "roomFirst_3.csv" + "に書き込みます。");
 
@@ -4045,8 +4123,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private void writeEvaluationFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-				+ EVALUATION_FILE, false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+				+ (count + 1) + "回目\\" + EVALUATION_FILE, false);
 
 		System.out.println("担当者が決まった3次のファイル" + EVALUATION_FILE + "に書き込みます。");
 
@@ -4082,8 +4160,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private void writeStudentDataBestFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-				+ "studentBestData.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+				+ (count + 1) + "回目\\" + "studentBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル" + "studentBestData.csv"
 				+ "に書き込みます。");
@@ -4145,8 +4223,9 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-					+ "studentData" + (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+					+ (count + 1) + "回目\\" + "studentData" + (candidate + 1)
+					+ ".csv", false);
 
 			System.out.println("生徒のデータのファイル" + "studentData" + (candidate + 1)
 					+ ".csv" + "に書き込みます。");
@@ -4203,8 +4282,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 	private void writeFirstStudentDataBestFile(int count) {
 
 		PrintWriter output;
-		output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-				+ "studentFirstBestData.csv", false);
+		output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+				+ (count + 1) + "回目\\" + "studentFirstBestData.csv", false);
 
 		System.out.println("もっとも評価値が高いときの生徒のデータのファイル"
 				+ "studentFirstBestData.csv" + "に書き込みます。");
@@ -4266,8 +4345,9 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 		for (int candidate = 0; candidate < CANDIDATE_NUM; candidate++) {
 
 			PrintWriter output;
-			output = FileIO.writeFile(TIME_TABLE_PATH+DEPARTMENT_PATH + (count + 1) + "回目\\"
-					+ "studentFirstData" + (candidate + 1) + ".csv", false);
+			output = FileIO.writeFile(TIME_TABLE_PATH + DEPARTMENT_PATH
+					+ (count + 1) + "回目\\" + "studentFirstData"
+					+ (candidate + 1) + ".csv", false);
 
 			System.out.println("担当者が決まった3次のファイル" + "studentFirstData"
 					+ (candidate + 1) + ".csv" + "に書き込みます。");
@@ -4325,8 +4405,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[STUDENT_DATA_NUM];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH
-				+ STUDENT_DATA_FILE);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + STUDENT_DATA_FILE);
 
 		try {
 			String line = new String();
@@ -4362,10 +4442,6 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 			System.out.println(error_report);
 		}
 
-		// f_StudentData=new ArrayList<Student>(f_NewStudentData);
-
-		// f_StudentData=(ArrayList<Student>)f_NewStudentData.clone();
-
 		// 生徒のデータをコピー
 		for (Student student : f_NewStudentData) {
 
@@ -4390,7 +4466,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER1_DATA];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH + FILE1_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + FILE1_NAME);
 
 		try {
 			String line = new String();
@@ -4462,7 +4539,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER2_DATA];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH + FILE2_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + FILE2_NAME);
 
 		try {
 			String line = new String();
@@ -4540,7 +4618,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER1_DATA];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH + FACULTY1_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + FACULTY1_NAME);
 
 		try {
 			String line = new String();
@@ -4584,7 +4663,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER2_DATA];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH + FACULTY2_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + FACULTY2_NAME);
 
 		try {
 			String line = new String();
@@ -4625,7 +4705,8 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 
 		String[] strData = new String[ORDER3_DATA];
 
-		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH+DEPARTMENT_PATH + FACULTY3_NAME);
+		BufferedReader input = FileIO.readFile(TIME_TABLE_PATH
+				+ DEPARTMENT_PATH + FACULTY3_NAME);
 
 		try {
 			String line = new String();
@@ -4667,10 +4748,10 @@ public class Decide_infomatics extends Decide_faculty implements iDayPeriod,
 						}
 
 						classOfGradeData.setCourseOrClass(strData[5]);// コース・クラス
-//						classOfGradeData.getTeachers().setNumOfNewSubject(
-//								Integer.parseInt(strData[6]));// 新規の科目
-//						classOfGradeData
-//								.setNeedPC(Integer.parseInt(strData[7]));// PCの必要性
+						// classOfGradeData.getTeachers().setNumOfNewSubject(
+						// Integer.parseInt(strData[6]));// 新規の科目
+						// classOfGradeData
+						// .setNeedPC(Integer.parseInt(strData[7]));// PCの必要性
 						f_ClassOfGradeData3.add(classOfGradeData);// 3次の学年ごとの授業の動的配列に追加
 					}
 				}
