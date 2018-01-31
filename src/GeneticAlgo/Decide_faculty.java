@@ -19,7 +19,7 @@ public class Decide_faculty implements iTimeTable {
 	protected final String TIME_TABLE_PATH="C:\\Users\\"+USER+"\\Documents\\TimeTableFile\\";// 時間割のパス
 	protected final String FIRST_PATH="初期\\";// 初期集団のパス
 	protected final String GA_PATH="GA\\";// 遺伝的アルゴリズムのパス
-	
+
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData1 = new ArrayList<ClassOfGrade>();// 1次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData2 = new ArrayList<ClassOfGrade>();// 2次の学年ごとの授業のデータ
 	protected ArrayList<ClassOfGrade> f_ClassOfGradeData3 = new ArrayList<ClassOfGrade>();// 3次の学年ごとの授業のデータ
@@ -32,12 +32,6 @@ public class Decide_faculty implements iTimeTable {
 	 */
 	public Decide_faculty() {
 
-		// for (int day = 0; day < MAX_DAY; day++) {
-		// for (int period = 0; period < MAX_PERIOD; period++) {
-		// f_PreviousTimeTables[day][period] = new TimeTable();
-		// f_LatterTimeTables[day][period] = new TimeTable();
-		// }
-		// }
 	}
 
 	/*
@@ -204,9 +198,9 @@ public class Decide_faculty implements iTimeTable {
 	// ------------------------------------------//
 	/*
 	 * 先生のファイルを読み込む
-	 * 
+	 *
 	 * @param department 学科名
-	 * 
+	 *
 	 * @param file_col ファイルの行
 	 */
 	public void readTeacherFile(String department,int file_col) {
